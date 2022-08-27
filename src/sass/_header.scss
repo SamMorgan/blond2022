@@ -1,0 +1,91 @@
+@import "vars";
+
+.site-header {
+    position: fixed;
+    width: 100%;
+    padding: 0.5625rem 1.1875rem;
+    min-height: 3.875rem;
+    background: #fff;
+    z-index: 2;
+    top:0;
+    left:0;
+    display: flex;
+    justify-content: space-between;
+    h1 a {
+        color:$grey;
+        transition: color .3;
+    }
+    ul {
+        display: flex;
+        li {
+            display: block;
+            margin: 0 0 0 .5em;
+            a {
+                transition: color .3s;
+                color: $grey;
+            }
+            &.current-menu-item a,
+            a.active {
+                color: $orange;
+            }
+        }
+    }
+    &.main-header {
+        h1,
+        ul {
+            opacity: 1;
+            visibility: visible;
+            transition: opacity .3s .3s, visibility 0s .6s;
+        }               
+    }
+    &.secondary-header {
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity .3s, visibility 0s .3s;
+        .show-menu {
+            cursor: pointer;
+        }
+        ul {
+            display: flex;
+            flex: 1;
+            flex-wrap: wrap;
+            li {
+                margin: 0 .3em 0 0;
+            }
+        }
+    }
+}
+
+.show-secondary-header {
+    .site-header {
+        &.main-header {
+            h1,
+            ul {
+                opacity: 0;
+                visibility: hidden;
+                transition: opacity .3s, visibility 0s .3s;            
+            }
+        }    
+        &.secondary-header {
+            opacity: 1;
+            visibility: visible;
+            transition: opacity .3s .3s, visibility 0s .3s;
+        }    
+    }    
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .site-header {
+        h1 a:hover,
+        ul.menu li a:hover {
+            color: $orange;
+        }
+    }
+}
+
+@media only screen and (max-width: 750px) {
+    .site-header {
+        padding: 0.4375rem $mobile-margin;
+        min-height: 3rem;
+    }
+}    

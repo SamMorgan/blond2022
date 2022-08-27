@@ -1,0 +1,105 @@
+@import 'vars';
+.work-index,
+.labs-index {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 3.875rem 0.75rem 0;
+}
+.work-card,
+.labs-card {
+    max-width:100%;
+    margin: 0 0.4375rem 0.875rem;
+    a {
+        position: relative;
+        display: block;
+        overflow: hidden;   
+        // img {
+        //     width: 100%;
+        //     height:100%;
+        //     object-fit: cover;
+        //     object-position: center;
+        //     position: absolute;
+        //     top:0;
+        //     left:0;
+        //     display: block;
+        //     filter:url('#bleach');  
+        // }
+    }
+    .blond-img {
+        position: relative;
+    }    
+    &.landscape {
+        width: calc(50% - 0.875rem);
+        .blond-img {
+            padding: 0 0 67.6659528907923%;
+        }
+    }
+    &.portrait {
+        width: calc(33.33% - 0.875rem);
+        .blond-img {
+            padding: 0 0 150%;
+            position: relative;
+        }
+    }
+    h3 {
+        padding: 0.875rem;
+        color:$grey;
+    }
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .work-card,
+    .labs-card {
+        a {
+            // div:before,
+            // div:after {
+            //     transition: opacity .4s;
+            // }
+            // &:hover {
+            //     div:before,
+            //     div:after {
+            //         opacity: 0;
+            //     }
+            // }
+            h3 {
+                position: absolute;
+                bottom: 0;
+                left:0;
+            }
+            .blond-img div:last-child,
+            h3 {
+                opacity: 0;
+                transition: opacity .4s;
+            }
+            &:hover {
+                .blond-img div:last-child,
+                h3 {
+                    opacity: 1;
+                }
+            }
+        }    
+    }
+}
+
+@media only screen and (max-width: 750px) {
+    .work-index,
+    .labs-index {
+        padding: 3rem $mobile-margin 7.5rem;  
+    }
+    .work-card,
+    .labs-card {
+        width:100%;
+        margin: 0 0 1.25rem;
+        &.landscape,
+        &.portrait  {
+            width: 100%;
+        }
+        a h3 {
+            padding: 0.4375rem 0 0;
+            position: relative;
+            top:auto;
+            left:auto;
+            opacity: 1;
+        }
+    }
+}    

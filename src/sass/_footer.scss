@@ -1,0 +1,139 @@
+@import "vars";
+
+.site-footer {
+    padding: 15.125rem 1.1875rem 1.1875rem;
+    display: flex;
+    justify-content: space-between;
+    & > div {
+        width: calc(50% - 0.4375rem);
+        p:last-of-type {
+            margin: 0;
+        }
+        position: relative;
+        .copy {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+        }
+        ul {
+            margin: 0 0 1.05em;
+        }
+    }
+    a {
+        color:$grey;
+    }
+}
+
+input,
+button {
+    background: none;
+    padding: 0;
+    border: none;
+    margin: 0;
+    -webkit-appearance: none;
+    font:inherit;
+    display: block;
+}
+button[type="submit"]{
+    text-align: left;
+    color: $orange;
+}
+input {
+    &::-webkit-input-placeholder { /* Edge */
+        color: $orange;
+        opacity: 1;
+        transition: opacity .3s;
+    } 
+    &:-ms-input-placeholder { /* Internet Explorer 10-11 */
+        color: $orange;
+        opacity: 1;
+        transition: opacity .3s;
+    }
+    &::placeholder {
+        color: $orange;
+        opacity: 1;
+        transition: opacity .3s;
+    }
+    &:focus {
+        &::-webkit-input-placeholder { /* Edge */
+            opacity: 0;
+        }
+          
+        &:-ms-input-placeholder { /* Internet Explorer 10-11 */
+            opacity: 0;
+        }
+          
+        &::placeholder {
+            opacity: 0;
+        }
+    }
+}
+.newsletter {
+    position: relative;
+    height: 1.05em;
+    span {
+        opacity: 1;
+        visibility: visible;
+        transition: opacity .3s .3s, visibility 0s .6s;
+    }
+    form {
+        position: absolute;
+        height: 1.05em;
+        left:0;
+        top:0;
+        border-bottom: .05em solid $orange;
+        display: flex;
+        width: 100%;
+        input {
+            flex:1;
+            color:$orange;
+        }
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity .3s, visibility 0s .3s;
+    }
+    &:hover {
+        span {
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity .3s, visibility 0s .3s;  
+        }
+        form {
+            opacity: 1;
+            visibility: visible;
+            transition: opacity .3s .3s, visibility 0s .3s;
+        }
+    } 
+}
+
+@media only screen and (max-width: 750px) {
+    .site-footer {
+        display: block;
+        padding: 5rem $mobile-margin $mobile-margin;
+        & > div {
+            width: 100%;
+            .copy {
+                position: relative;
+                bottom: auto;
+                right:auto;
+                margin: 1.05em 0 0;
+            }
+        }
+        .col-2 {
+            display: flex;
+            flex-direction: column;
+            ul {
+                order:1;
+            }
+            .privacy-link {
+                order:2;
+            }
+            .newsletter {
+                order:3;
+            }
+            .copy {
+                order:4;
+            }
+        }
+    }
+}    

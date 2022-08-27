@@ -1,0 +1,36 @@
+@use "sass:math";
+@import "vars";
+
+html {
+    font-size: math.div(16,1920)*100vw;
+}
+
+body {
+    font-family:"ABCMonumentGrotesk-Regular";
+    font-size: 2.625rem;
+    line-height: 1.05;
+    letter-spacing: -.02em;
+    color: #504F4F;
+}
+
+a {
+    text-decoration: none;
+    color:$orange;
+}
+p {
+    margin: 0 0 1.05em;
+}
+
+
+@media only screen and (max-width: 1440px) {
+
+}    
+
+@media only screen and (max-width: 750px) {
+    html {
+        font-size: math.div(16,433)*100vw;
+    }
+    body {
+        font-size: 1.75rem;
+    }
+}    
