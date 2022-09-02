@@ -1,0 +1,27 @@
+@import 'vars';
+
+.single-work-header {
+    h1 {
+        position: absolute;
+        visibility: visible;
+        opacity: 1;
+        transition: opacity $transitionDur $transitionDelay, visibility 0s $transitionDelay;
+    }
+    ul {
+        visibility: hidden;
+        opacity: 0;
+        transition: opacity $transitionDur, visibility 0s $transitionDur;
+    }
+    &.index-inview {
+        h1 {
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity $transitionDur, visibility 0s $transitionDur; 
+        }
+        ul {
+            visibility: visible;
+            opacity: 1;
+            transition: opacity $transitionDur $transitionDelay, visibility 0s $transitionDelay;
+        }        
+    }
+}

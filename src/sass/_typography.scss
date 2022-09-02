@@ -3,6 +3,7 @@
 
 html {
     font-size: math.div(16,1920)*100vw;
+    //font-size: 16px;
 }
 
 body {
@@ -15,7 +16,15 @@ body {
 
 a {
     text-decoration: none;
-    color:$orange;
+    color: inherit;
+}
+@media (hover: hover) and (pointer: fine) {
+    a {
+        transition: color .3s;
+        &:hover {
+            color: $orange;
+        }
+    }
 }
 p {
     margin: 0 0 1.05em;

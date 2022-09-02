@@ -8,6 +8,10 @@
     //height: -webkit-fill-available;
     padding: 3.875rem 1.1875rem 0;
     margin: 0 0 .875rem;
+    cursor: none !important;
+    & > * {
+        cursor: none !important;
+    }
 }
 .info-slider {
     height: 100%;
@@ -19,7 +23,20 @@
         object-position: center;
     }
 }
+@media (hover: none) and (pointer: coarse) {
+    .info-slider-wrap {
+        .custom-cursor {
+            display: block;
+            position: absolute;
+            top:auto;
+            bottom: 1.5rem;
+            left:50%;
+            transform: translateX(-50%);
+        }
+    }    
+} 
 .info-section {
+    scroll-snap-align: start;
     &.clients,
     &.awards,
     &.press {

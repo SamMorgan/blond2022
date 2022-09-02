@@ -83,33 +83,71 @@ barba.init({
 
                 if(!is_touch_enabled()){
 
-                    let customCursorWrap = data.next.container.querySelector('.custom-cursor-wrap')
-                    let customCursorEl = customCursorWrap.querySelector('.custom-cursor')
-                    
-                    customCursorWrap.addEventListener('mouseenter',()=>{
-                        customCursorEl.style.display = "block"
-                    })
-                    
-                    customCursorWrap.addEventListener('mousemove',(e)=>{
+                    let customCursorWrap
+                    let customCursorEl
+
+                    const customCursorOn = (e) => {
                         const mouseY = e.clientY;
                         const mouseX = e.clientX;
                     
-                        if(document.body.classList.contains('scrolled')){
-                            customCursorEl.innerHTML = "click"
-                        }else{
-                            customCursorEl.innerHTML = "scroll"
-                        }
+                        // if(document.body.classList.contains('scrolled')){
+                        //     customCursorEl.innerHTML = "click"
+                        // }else{
+                        //     customCursorEl.innerHTML = "scroll"
+                        // }
+
+                        console.log(e.target)
                         
                         customCursorEl.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0)`;
-                    })
-                    
-                    customCursorWrap.addEventListener('mouseleave',()=>{
+                    }
+                    const customCursorOff = (e) => {
                         customCursorEl.style.display = "none"
+                        document.body.style.cursor = 'default'
+                        e.target.removeEventListener('mousemove',customCursorOn)
+                    }    
+                    data.next.container.querySelectorAll('.custom-cursor-wrap').forEach(customCursorWrap => {
+                        
+                        customCursorWrap.addEventListener('mouseover',(e)=>{
+                            // if(e.target.nodeName !== 'P'){
+                            //     customCursorEl.style.display = "block"
+                            //     document.body.style.cursor = 'none'
+
+                            //     customCursorWrap.addEventListener('mousemove',customCursorOn)
+                                
+                            //     customCursorWrap.addEventListener('mouseleave',customCursorOff)
+                            // }else{
+                            //     customCursorOff()
+                            // }
+                            customCursorEl = customCursorWrap.querySelector('.custom-cursor')
+                            customCursorEl.style.display = "block"
+                            document.body.style.cursor = 'none'
+
+                            customCursorWrap.addEventListener('mousemove',customCursorOn)
+
+                            customCursorWrap.addEventListener('mouseleave',customCursorOff)
+                        })
+                        customCursorWrap.addEventListener('mouseleave',customCursorOff)
+                    })    
+                }
+                let scrollDown = data.next.container.querySelector('.scrolldown')
+                if(scrollDown){
+                    scrollDown.addEventListener('click',()=>{
+                        gsap.to(window,{
+                            scrollTo: window.innerHeight, 
+                            duration: 1
+                        });
                     })
-                }    
+                }
+                const spacer = () => {
+                    data.next.container.querySelector('.intro').style.marginBottom = data.next.container.querySelector('.intro-text').getBoundingClientRect().height + "px"
+                }
+                spacer()
+                window.addEventListener('resize',spacer)
+                  
             },
             afterLeave() {    
                 document.removeEventListener('scroll', homePageScroll) 
+                window.removeEventListener('resize',spacer)
             }     
         },
         {
@@ -128,6 +166,18 @@ barba.init({
             beforeEnter(data) {
                 window.addEventListener('scroll',secondaryNavScroll)
                 secondaryNavClick(data.next.container.querySelector('.show-menu'))
+
+                ScrollTrigger.create({
+                    trigger: data.next.container.querySelector('.work-index'),
+                    start: "top top",
+                    end: "bottom bottom",
+                    onEnter: () => {
+                        data.next.container.querySelector('.single-work-header').classList.add('index-inview')
+                    },
+                    onEnterBack: () => {
+                        data.next.container.querySelector('.single-work-header').classList.remove('index-inview')
+                    }
+                });
             },
             afterLeave() {    
                 window.removeEventListener('scroll',secondaryNavScroll) 
@@ -190,25 +240,48 @@ barba.init({
                     });
                 });
 
+                // if(!is_touch_enabled()){
+
+                //     let customCursorWrap = data.next.container.querySelector('.custom-cursor-wrap')
+                //     let customCursorEl = customCursorWrap.querySelector('.custom-cursor')
+                    
+                //     customCursorWrap.addEventListener('mouseenter',()=>{
+                //         customCursorEl.style.display = "block"
+                //     })
+                    
+                //     customCursorWrap.addEventListener('mousemove',(e)=>{
+                //         const mouseY = e.clientY;
+                //         const mouseX = e.clientX;
+                        
+                //         customCursorEl.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0)`;
+                //     })
+                    
+                //     customCursorWrap.addEventListener('mouseleave',()=>{
+                //         customCursorEl.style.display = "none"
+                //     })
+                // }
                 if(!is_touch_enabled()){
 
                     let customCursorWrap = data.next.container.querySelector('.custom-cursor-wrap')
                     let customCursorEl = customCursorWrap.querySelector('.custom-cursor')
-                    
-                    customCursorWrap.addEventListener('mouseenter',()=>{
-                        customCursorEl.style.display = "block"
-                    })
-                    
-                    customCursorWrap.addEventListener('mousemove',(e)=>{
+
+                    const customCursorOn = (e) => {
                         const mouseY = e.clientY;
                         const mouseX = e.clientX;
-                        
+                        document.body.style.cursor = "none"
+                        customCursorEl.style.display = "block";
                         customCursorEl.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0)`;
-                    })
-                    
-                    customCursorWrap.addEventListener('mouseleave',()=>{
+                        customCursorWrap.addEventListener('mousemove',customCursorOn)
+                    }
+                    const customCursorOff = (e) => {
                         customCursorEl.style.display = "none"
-                    })
+                        document.body.style.cursor = 'default'
+                        customCursorWrap.removeEventListener('mousemove',customCursorOn)
+                    }    
+                    
+                    customCursorWrap.addEventListener('mouseover',customCursorOn)
+                    
+                    customCursorWrap.addEventListener('mouseleave',customCursorOff)
                 }
             },
             afterLeave() {    
@@ -229,6 +302,27 @@ barba.init({
             },   
             enter(data) {   
                 return gsap.from(data.next.container, { opacity: 0 });
+            }
+        }, 
+        {
+            sync: false,
+            name: 'work-filtering',
+            from: { 
+                namespace: ['work']
+            },
+            to: { 
+                namespace: ['work']
+            },
+            leave(data) {
+                return gsap.to(data.current.container.querySelector('.work-index'), { opacity: 0 });
+            }, 
+            afterLeave(data){
+                data.current.container.style.display = "none";
+                document.body.classList.add('show-secondary-header')
+                //document.body.classList.remove('show-secondary-header')
+            },  
+            enter(data) {
+                return gsap.from(data.current.container.querySelector('.work-index'), { opacity: 0 });
             }
         },       
     ]

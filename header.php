@@ -20,7 +20,7 @@
 <div data-barba="container" data-barba-namespace="<?php 
     if(is_home()){
         echo "home";
-    }elseif(is_page('work')){   
+    }elseif(is_page('work') || is_tax('work-category')){   
         echo "work"; 
     }elseif(is_singular('work')){   
         echo "single-work"; 

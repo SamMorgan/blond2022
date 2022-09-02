@@ -23,7 +23,14 @@
         color:$grey;
     }
 }
-
+@media (hover: hover) and (pointer: fine) {
+    .site-footer a {
+        transition: color .3s;
+        &:hover {
+            color:$orange;
+        }
+    }
+}
 input,
 button {
     background: none;
@@ -74,7 +81,7 @@ input {
     span {
         opacity: 1;
         visibility: visible;
-        transition: opacity .3s .3s, visibility 0s .6s;
+        transition: opacity $transitionDur $transitionDelay, visibility 0s $transitionDelay;
     }
     form {
         position: absolute;
@@ -87,21 +94,22 @@ input {
         input {
             flex:1;
             color:$orange;
+            width: 100%;
         }
         opacity: 0;
         visibility: hidden;
-        transition: opacity .3s, visibility 0s .3s;
+        transition: opacity $transitionDur, visibility 0s $transitionDur;
     }
     &:hover {
         span {
             opacity: 0;
             visibility: hidden;
-            transition: opacity .3s, visibility 0s .3s;  
+            transition: opacity $transitionDur, visibility 0s $transitionDur;  
         }
         form {
             opacity: 1;
             visibility: visible;
-            transition: opacity .3s .3s, visibility 0s .3s;
+            transition: opacity $transitionDur $transitionDelay, visibility 0s $transitionDelay;
         }
     } 
 }

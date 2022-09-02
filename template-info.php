@@ -3,7 +3,7 @@ get_header(); ?>
 <?php if (have_posts()) : while (have_posts()) : the_post();?>
     <div class="secondary-header site-header">
         <ul class="scrollto-links">
-            <li><a href="#about">About</a></li>
+            <li><a href="#about" class="active">About</a></li>
             <li><a href="#clients">Clients</a></li>
             <li><a href="#awards">Awards</a></li>
             <li><a href="#press">Press</a></li>
@@ -16,7 +16,7 @@ get_header(); ?>
             <?php if( have_rows('about') ): 
                 while( have_rows('about') ): the_row(); 
 
-                    $images = get_sub_field('gallery');
+                    $images = get_field('gallery');
                     $content = get_sub_field('content');
                     if( $images ): ?>
                         <div class="info-slider-wrap custom-cursor-wrap">

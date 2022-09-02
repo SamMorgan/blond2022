@@ -1,5 +1,5 @@
 @use "sass:math";
-@use "vars";
+@import "vars";
 
 [data-barba-namespace="home"]{
     .site-header {
@@ -7,13 +7,29 @@
         opacity: 0;
         background: transparent;
     }
+    .site-footer {
+        display: none;
+    }
 }
 
 .intro {
-    padding: 0.5625rem 1.1875rem;
     position: relative;
     z-index: 2;
-    height: 200vh;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    .intro-text {
+        padding: 0.5625rem 1.1875rem;
+        p:last-of-type {
+            margin: 0;
+        }
+        a {
+            color: $orange;
+        }
+    }
+    .scrolldown {
+        flex:1;
+    }
 }
 
 .home-slider {
@@ -50,7 +66,7 @@
     // }
     .blond-img {
         div:last-child {
-            transition: opacity .4s;
+            transition: opacity 1s;
         }
     }
     .swiper-button-prev,
@@ -85,13 +101,10 @@
     }
 }
 
-
-@media (hover: hover) and (pointer: fine) {
-
-}
-
 @media only screen and (max-width: 750px) {
     .intro {
-        padding: .8125rem;
+        .intro-text {
+            padding: .8125rem;
+        }
     }
 }    

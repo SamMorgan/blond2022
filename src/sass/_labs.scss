@@ -1,0 +1,9 @@
+@import 'vars';
+
+@media only screen and (max-width: 750px) {
+    .labs-card {
+        a {
+            color: $lightgrey;
+        }
+    }
+}    
