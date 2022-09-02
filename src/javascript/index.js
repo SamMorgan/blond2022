@@ -48,6 +48,25 @@ const secondaryNavClick = (btn) => {
     })
 }
 
+const resizeVideos = (doc) => {
+    const videos = doc.querySelectorAll('.vimeo-iframe')
+    if(videos){
+        videos.forEach(video => {
+            fetch('//vimeo.com/api/oembed.json?url=' + video.src)
+            .then((response) => response.json())
+            .then((data) => {
+                    video.setAttribute('height',data.height)
+                    video.setAttribute('width',data.width)
+                    video.style.aspectRatio = data.width/data.height
+                    if(data.width < data.height){
+                        video.classList.add('portrait')
+                    }
+                }
+            )
+        })
+    }
+}
+
 
 // const customCursorFunc = (e) => {
 //     customCursor(e)
@@ -329,6 +348,26 @@ barba.init({
 });
 
 
+
+const lazyImages = () => {
+    let lazy = new LazyLoad({
+        callback_loaded: (el) => {
+            let wrap = el.parentElement.parentElement.parentElement
+            if(wrap && wrap.classList.contains('work-card')){
+                wrap.classList.add('animate-in')
+                wrap.classList.remove('loading')
+                setTimeout(()=>{
+                    wrap.classList.remove('animate-in')
+                },1000);
+            }
+            // if(el.tagName === 'IFRAME'){
+            //     resizeVideos(el.parentElement)
+            // }
+        }
+    })
+}  
+lazyImages()  
+
 barba.hooks.beforeLeave((data) => {
     scrollValues[data.current.url.href] =  window.scrollY;
 });
@@ -336,4 +375,6 @@ barba.hooks.beforeLeave((data) => {
 barba.hooks.beforeEnter((data) => {
     const scrollPos = scrollValues[data.next.url.href] ? scrollValues[data.next.url.href] : 0;
     document.documentElement.scrollTop = scrollPos;
+
+    lazyImages()
 });

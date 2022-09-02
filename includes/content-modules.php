@@ -7,7 +7,7 @@ if( have_rows('content') ):
             $image = get_sub_field('image');
             if($image) :
                 $ratio = $image['width']/$image['height'];
-                echo '<div class="module-full-width-img"><img src="'.$image['url'].'" style="aspect-ratio:'.$ratio.'"></div>';
+                echo '<div class="module-full-width-img"><img class="lazy" data-src="'.$image['url'].'" style="aspect-ratio:'.$ratio.'"></div>';
             endif;
 
         elseif( get_row_layout() == 'two_images' ): 
@@ -16,12 +16,12 @@ if( have_rows('content') ):
             echo '<div class="module-two-imgs"><div class="imgwrap">';
                 if($image_1) :
                     $ratio_1 = $image_1['width']/$image_1['height'];
-                    echo '<img src="'.$image_1['url'].'" style="aspect-ratio:'.$ratio_1.'">';
+                    echo '<img class="lazy" data-src="'.$image_1['url'].'" style="aspect-ratio:'.$ratio_1.'">';
                 endif;
             echo '</div><div class="imgwrap">';
                 if($image_2):
                     $ratio_2 = $image_2['width']/$image_2['height'];
-                    echo '<img src="'.$image_2['url'].'" style="aspect-ratio:'.$ratio_2.'">';
+                    echo '<img class="lazy" data-src="'.$image_2['url'].'" style="aspect-ratio:'.$ratio_2.'">';
                 endif;
             echo '</div></div>';
 
@@ -32,17 +32,17 @@ if( have_rows('content') ):
             echo '<div class="module-three-imgs"><div class="imgwrap">';
                 if($image_1):
                     $ratio_1 = $image_1['width']/$image_1['height'];
-                    echo '<img src="'.$image_1['url'].'" style="aspect-ratio:'.$ratio_1.'">';
+                    echo '<img class="lazy" data-src="'.$image_1['url'].'" style="aspect-ratio:'.$ratio_1.'">';
                 endif;
             echo '</div><div class="imgwrap">';
                 if($image_2):
                     $ratio_2 = $image_2['width']/$image_2['height'];
-                    echo '<img src="'.$image_2['url'].'" style="aspect-ratio:'.$ratio_2.'">';
+                    echo '<img class="lazy" data-src="'.$image_2['url'].'" style="aspect-ratio:'.$ratio_2.'">';
                 endif; 
             echo '</div><div class="imgwrap">';
                 if($image_3):
                     $ratio_3 = $image_3['width']/$image_3['height'];
-                    echo '<img src="'.$image_3['url'].'" style="aspect-ratio:'.$ratio_3.'">';
+                    echo '<img class="lazy" data-src="'.$image_3['url'].'" style="aspect-ratio:'.$ratio_3.'">';
                 endif; 
             echo '</div></div>';          
 
@@ -62,6 +62,22 @@ if( have_rows('content') ):
 
         elseif( get_row_layout() == 'space' ): 
             echo '<div class="module-space"></div>';
+            
+        elseif( get_row_layout() == 'video' ): 
+            $video_type = get_sub_field('video_type');
+            echo '<div class="module-video">';
+                if($video_type === "link"){
+                    $video_link = get_sub_field('link');
+                    echo '<video class="lazy" data-src="'.$video_link.'" playsinline muted loop autoplay></video>';
+                }
+                if($video_type === "file"){
+                    $video_link = get_sub_field('file');
+                    echo '<video class="lazy" data-src="'.$video_link.'" playsinline muted loop autoplay></video>';
+                }
+                if($video_type === "embed"){
+                    echo vimeo_markup(get_sub_field('embed'));
+                }
+            echo '</div>';
 
         endif;
 

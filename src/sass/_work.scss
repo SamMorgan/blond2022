@@ -9,6 +9,10 @@
 .labs-card {
     max-width:100%;
     margin: 0 0.4375rem 0.875rem;
+    transition: opacity .4s;
+    &.loading {
+        opacity: 0;
+    }
     a {
         position: relative;
         display: block;
@@ -39,6 +43,14 @@
             position: absolute;
             mix-blend-mode: screen;
             transition: filter 1s;
+        }
+    }
+    &.animate-in {
+        .blond-img {
+            background: #eb8351;
+            img {
+                filter: grayscale(1) contrast(1.5) brightness(10) blur(0.5rem);
+            }
         }
     } 
     // .blond-img div:last-child {
@@ -93,12 +105,12 @@
                 //.blond-img div:last-child,
                 .blond-img {
                     background: #eb8351;
+                    img {
+                        filter: grayscale(1) contrast(1.5) brightness(10) blur(0.5rem);
+                    }
                 }
                 h3 {
                     opacity: 1;
-                }
-                img {
-                    filter: grayscale(1) contrast(1.5) brightness(10) blur(0.5rem);
                 }
             }
         }    

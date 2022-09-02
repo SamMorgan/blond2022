@@ -343,3 +343,33 @@ function my_remove_admin_menus() {
     remove_menu_page( 'edit-comments.php' );
 }
 add_action( 'admin_init', 'my_remove_admin_menus' );
+
+
+function vimeo_markup($iframe){
+
+    preg_match('/src="(.+?)"/', $iframe, $matches);
+    $src = $matches[1];
+
+    // Add extra parameters to src and replace HTML.
+    $params = array(
+        'controls'  => 0,
+        'muted' =>1,
+        'autoplay' => 1,
+        'loop' => 1,
+        'autopause' => 0,
+        'title' => 0,
+        'byline' => 0,
+        'portrait' => 0,
+        'sidedock' => 0,
+        'playsinline' => 1
+    );
+    $new_src = add_query_arg($params, $src);
+    $iframe = str_replace($src, $new_src, $iframe);
+
+    $attributes = 'frameborder="0" allow="autoplay" allowfullscreen class="vimeo-iframe"';
+    $iframe = str_replace('></iframe>', ' ' . $attributes . '></iframe>', $iframe);
+
+    // Display customized HTML.
+    return $iframe;
+    //return '<iframe src="'.$src.'?muted=1&autoplay=1&loop=1&autopause=0&title=0&byline=0&portrait=0&sidedock=0&controls=0" width="640" height="360" frameborder="0" allow="autoplay" allowfullscreen></iframe>';
+}

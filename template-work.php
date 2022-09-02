@@ -24,5 +24,5 @@ get_header();?>
         ) );
         
         include('includes/work-index.php');
-    ?>
-<?php get_footer(); ?>
+    
+get_footer(); ?>

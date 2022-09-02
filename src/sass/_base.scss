@@ -99,13 +99,14 @@ body {
     }
 }
 .module-full-width-img,
-.module-text {
+.module-text,
+.module-video {
     padding: 0 1.1875rem 0.875rem;
 }
-.module-full-width-img {
-    img {
-        width: 100%;
-    }
+.module-full-width-img img,
+.module-video video {
+    width: 100%;
+    display: block;
 }
 .module-two-imgs {
     .imgwrap {
@@ -150,6 +151,14 @@ body {
     z-index: 999;
     color: $orange;
     pointer-events: none;
+}
+
+img.lazy {
+    opacity: 0;
+    transition: opacity .4s;
+    &.loaded {
+        opacity: 1;
+    }
 }
 
 @media (hover: hover) and (pointer: fine) {
