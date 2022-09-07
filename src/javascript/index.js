@@ -6,6 +6,7 @@ import { gsap } from "gsap";
 import { ScrollToPlugin } from "gsap/ScrollToPlugin.js";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Swiper, { Lazy, Pagination, Navigation, Autoplay} from 'swiper';
+import imagesLoaded from "imagesloaded";
 
 Swiper.use([Lazy, Pagination, Navigation, Autoplay]);
 
@@ -21,17 +22,17 @@ function is_touch_enabled() {
            ( navigator.msMaxTouchPoints > 0 );
 }
 
-const homePageScroll = () => {
-    let documentHeight = document.body.scrollHeight;
-    let currentScroll = window.scrollY + window.innerHeight;
-    // When the user is [modifier]px from the bottom, fire the event.
-    let modifier = 10; 
-    if(currentScroll + modifier > documentHeight) {
-        document.body.classList.add('scrolled')
-    }else{
-        document.body.classList.remove('scrolled')
-    }
-}
+// const homePageScroll = () => {
+//     let documentHeight = document.body.scrollHeight;
+//     let currentScroll = window.scrollY + window.innerHeight;
+//     // When the user is [modifier]px from the bottom, fire the event.
+//     let modifier = 10; 
+//     if(currentScroll + modifier > documentHeight) {
+//         document.body.classList.add('scrolled')
+//     }else{
+//         document.body.classList.remove('scrolled')
+//     }
+// }
 
 
 const secondaryNavScroll = () => {
@@ -72,7 +73,9 @@ const resizeVideos = (doc) => {
 //     customCursor(e)
 // }
 
-
+const spacer = (data) => {
+    data.next.container.querySelector('.intro').style.marginBottom = data.next.container.querySelector('.intro-text').getBoundingClientRect().height + "px"
+}
 
 let scrollValues = {};
 
@@ -96,14 +99,30 @@ barba.init({
                             prevEl: ".swiper-button-prev",
                         }
                     })  
-                } 
+                }
+                
+                // let lazy = new LazyLoad({
+                //     elements_selector: ".intro-image"
+                // })
 
-                document.addEventListener('scroll', homePageScroll) 
+                //document.addEventListener('scroll', homePageScroll) 
+                let introWrap = data.next.container.querySelector('.intro-wrap')
+                introWrap.addEventListener('scroll',(e)=>{
+                    let documentHeight = introWrap.scrollHeight;
+                    let currentScroll = introWrap.scrollTop + window.innerHeight;
+                    // When the user is [modifier]px from the bottom, fire the event.
+                    let modifier = 10; 
+                    if(currentScroll + modifier > documentHeight) {
+                        document.body.classList.add('scrolled')
+                    }else{
+                        document.body.classList.remove('scrolled')
+                    }
+                })
 
                 if(!is_touch_enabled()){
 
-                    let customCursorWrap
-                    let customCursorEl
+                    let customCursorEl = data.next.container.querySelector('.custom-cursor')
+                    let customCursorWrap = data.next.container.querySelector('.custom-cursor-wrap') 
 
                     const customCursorOn = (e) => {
                         const mouseY = e.clientY;
@@ -114,59 +133,55 @@ barba.init({
                         // }else{
                         //     customCursorEl.innerHTML = "scroll"
                         // }
-
-                        console.log(e.target)
-                        
+    
                         customCursorEl.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0)`;
                     }
                     const customCursorOff = (e) => {
                         customCursorEl.style.display = "none"
                         document.body.style.cursor = 'default'
                         e.target.removeEventListener('mousemove',customCursorOn)
-                    }    
-                    data.next.container.querySelectorAll('.custom-cursor-wrap').forEach(customCursorWrap => {
-                        
-                        customCursorWrap.addEventListener('mouseover',(e)=>{
-                            // if(e.target.nodeName !== 'P'){
-                            //     customCursorEl.style.display = "block"
-                            //     document.body.style.cursor = 'none'
-
-                            //     customCursorWrap.addEventListener('mousemove',customCursorOn)
-                                
-                            //     customCursorWrap.addEventListener('mouseleave',customCursorOff)
-                            // }else{
-                            //     customCursorOff()
-                            // }
-                            customCursorEl = customCursorWrap.querySelector('.custom-cursor')
+                    } 
+                                              
+                    customCursorWrap.addEventListener('mouseover',(e)=>{
+                        if(e.target.classList.contains('intro-text') || e.target.nodeName === 'P' || e.target.nodeName === 'A'){
+                            customCursorOff()
+                        }else{
                             customCursorEl.style.display = "block"
                             document.body.style.cursor = 'none'
 
                             customCursorWrap.addEventListener('mousemove',customCursorOn)
-
+                            
                             customCursorWrap.addEventListener('mouseleave',customCursorOff)
-                        })
+                        }
+                        
+                        customCursorEl.style.display = "block"
+                        document.body.style.cursor = 'none'
+
+                        customCursorWrap.addEventListener('mousemove',customCursorOn)
+
                         customCursorWrap.addEventListener('mouseleave',customCursorOff)
-                    })    
+                    })
+                    customCursorWrap.addEventListener('mouseleave',customCursorOff)
+   
                 }
                 let scrollDown = data.next.container.querySelector('.scrolldown')
                 if(scrollDown){
                     scrollDown.addEventListener('click',()=>{
-                        gsap.to(window,{
+                        gsap.to(introWrap,{
                             scrollTo: window.innerHeight, 
                             duration: 1
                         });
                     })
                 }
-                const spacer = () => {
-                    data.next.container.querySelector('.intro').style.marginBottom = data.next.container.querySelector('.intro-text').getBoundingClientRect().height + "px"
-                }
-                spacer()
+
+                spacer(data)
                 window.addEventListener('resize',spacer)
                   
             },
             afterLeave() {    
-                document.removeEventListener('scroll', homePageScroll) 
+                //document.removeEventListener('scroll', homePageScroll) 
                 window.removeEventListener('resize',spacer)
+                document.body.classList.remove('scrolled')
             }     
         },
         {
@@ -350,23 +365,81 @@ barba.init({
 
 
 const lazyImages = () => {
-    let lazy = new LazyLoad({
-        callback_loaded: (el) => {
-            let wrap = el.parentElement.parentElement.parentElement
-            if(wrap && wrap.classList.contains('work-card')){
-                wrap.classList.add('animate-in')
-                wrap.classList.remove('loading')
-                setTimeout(()=>{
-                    wrap.classList.remove('animate-in')
-                },1000);
-            }
-            // if(el.tagName === 'IFRAME'){
-            //     resizeVideos(el.parentElement)
-            // }
-        }
-    })
+    // let lazy = new LazyLoad({
+    //     callback_loaded: (el) => {
+    //         // let wrap = el.parentElement.parentElement.parentElement
+    //         // if(wrap && wrap.classList.contains('work-card')){
+    //         //     wrap.classList.add('animate-in')
+    //         //     wrap.classList.remove('loading')
+    //         //     setTimeout(()=>{
+    //         //         wrap.classList.remove('animate-in')
+    //         //     },1000);
+    //         // }
+
+    //         // if(el.tagName === 'IFRAME'){
+    //         //     resizeVideos(el.parentElement)
+    //         // }
+    //     }
+    // })
+    let lazy = new LazyLoad()
 }  
 lazyImages()  
+
+
+// Parallax //
+function fadeInUp(elems) {
+    elems.forEach(function(elem) {
+
+        gsap.set(elems, {
+            y: 100,
+            opacity: 0,
+        });
+
+        ScrollTrigger.batch(elems, {
+            onEnter: batch => gsap.to(batch, {opacity: 1, y: 0, stagger: 0.15}),
+            // onLeave: batch => gsap.to(batch, {opacity: 0, y: 24}),
+            // onEnterBack: batch => gsap.to(batch, {opacity: 1, y: 0, stagger: 0.15}),
+            // onLeaveBack: batch => gsap.to(batch, {opacity: 0, y: 24}),
+          
+            start: "top 80%",
+            end: "bottom 20%",
+            //markers: true,
+        });
+    });
+}
+
+fadeInUp(document.querySelectorAll(".anim-fade-in-up"))
+
+const workCardsFunc = (workCards) => {
+    if(workCards){
+        workCards.forEach(workCard =>{
+            imagesLoaded( workCard, () => {
+                workCard.classList.remove('loading')
+                
+                setTimeout(()=>{
+                    workCard.classList.add('loaded')
+                },1000);
+            }) 
+        })
+
+        // gsap.set(workCards, {
+        //     y: 100,
+        //     opacity: 0,
+        // });
+
+        // ScrollTrigger.batch(workCards, {
+        //     onEnter: batch => gsap.to(batch, {opacity: 1, y: 0, stagger: 0.15}),
+        //     // onLeave: batch => gsap.to(batch, {opacity: 0, y: 24}),
+        //     // onEnterBack: batch => gsap.to(batch, {opacity: 1, y: 0, stagger: 0.15}),
+        //     // onLeaveBack: batch => gsap.to(batch, {opacity: 0, y: 24}),
+          
+        //     start: "top 80%",
+        //     end: "bottom 20%",
+        //     //markers: true,
+        // });
+    }
+}
+workCardsFunc(document.querySelectorAll('.work-card'))
 
 barba.hooks.beforeLeave((data) => {
     scrollValues[data.current.url.href] =  window.scrollY;
@@ -377,4 +450,9 @@ barba.hooks.beforeEnter((data) => {
     document.documentElement.scrollTop = scrollPos;
 
     lazyImages()
+
+    fadeInUp(data.next.container.querySelectorAll(".anim-fade-in-up"))
+
+    workCardsFunc(data.next.container.querySelectorAll('.work-card'))
+
 });

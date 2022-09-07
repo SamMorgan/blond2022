@@ -1,12 +1,12 @@
 {
-    "key": "group_6302d9b94bebb",
-    "title": "Thumbnail background Colour",
+    "key": "group_6317240be121e",
+    "title": "Privacy Policy",
     "fields": [
         {
-            "key": "field_6302d9c710288",
-            "label": "Thumbnail background Colour",
-            "name": "thumb_bg",
-            "type": "color_picker",
+            "key": "field_63172422bae98",
+            "label": "Privacy Policy",
+            "name": "privacy_policy",
+            "type": "wysiwyg",
             "instructions": "",
             "required": 0,
             "conditional_logic": 0,
@@ -16,27 +16,31 @@
                 "id": ""
             },
             "default_value": "",
-            "enable_opacity": 0,
-            "return_format": "string"
+            "tabs": "all",
+            "toolbar": "formatted_text",
+            "media_upload": 0,
+            "delay": 0
         }
     ],
     "location": [
         [
             {
-                "param": "post_type",
+                "param": "page_template",
                 "operator": "==",
-                "value": "work"
+                "value": "template-privacy-policy.php"
             }
         ]
     ],
     "menu_order": 0,
-    "position": "side",
+    "position": "normal",
     "style": "default",
     "label_placement": "top",
     "instruction_placement": "label",
-    "hide_on_screen": "",
+    "hide_on_screen": [
+        "the_content"
+    ],
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1661131461
+    "modified": 1662461102
 }

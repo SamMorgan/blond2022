@@ -40,10 +40,10 @@ get_header(); ?>
                 endwhile; 
             endif; ?>
         </div> 
-        <div id="clients" class="info-section clients">
+        <div id="clients" class="info-section clients anim-fade-in-up">
             <?php the_field('clients');?>
         </div>  
-        <div id="awards" class="info-section awards">
+        <div id="awards" class="info-section awards anim-fade-in-up">
             <?php 
                 if( have_rows('awards') ):
                     while( have_rows('awards') ) : the_row();?>
@@ -53,7 +53,7 @@ get_header(); ?>
                 endif;
             ?>
         </div>
-        <div id="press" class="info-section press">
+        <div id="press" class="info-section press anim-fade-in-up">
             <?php the_field('press');?>
         </div>        
     </div> 

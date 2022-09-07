@@ -7,18 +7,18 @@ if( have_rows('content') ):
             $image = get_sub_field('image');
             if($image) :
                 $ratio = $image['width']/$image['height'];
-                echo '<div class="module-full-width-img"><img class="lazy" data-src="'.$image['url'].'" style="aspect-ratio:'.$ratio.'"></div>';
+                echo '<div class="module-full-width-img anim-fade-in-up"><img class="lazy" data-src="'.$image['url'].'" style="aspect-ratio:'.$ratio.'"></div>';
             endif;
 
         elseif( get_row_layout() == 'two_images' ): 
             $image_1 = get_sub_field('image_1');
             $image_2 = get_sub_field('image_2');
-            echo '<div class="module-two-imgs"><div class="imgwrap">';
+            echo '<div class="module-two-imgs"><div class="imgwrap anim-fade-in-up">';
                 if($image_1) :
                     $ratio_1 = $image_1['width']/$image_1['height'];
                     echo '<img class="lazy" data-src="'.$image_1['url'].'" style="aspect-ratio:'.$ratio_1.'">';
                 endif;
-            echo '</div><div class="imgwrap">';
+            echo '</div><div class="imgwrap anim-fade-in-up">';
                 if($image_2):
                     $ratio_2 = $image_2['width']/$image_2['height'];
                     echo '<img class="lazy" data-src="'.$image_2['url'].'" style="aspect-ratio:'.$ratio_2.'">';
@@ -29,17 +29,17 @@ if( have_rows('content') ):
             $image_1 = get_sub_field('image_1');
             $image_2 = get_sub_field('image_2');
             $image_3 = get_sub_field('image_3'); 
-            echo '<div class="module-three-imgs"><div class="imgwrap">';
+            echo '<div class="module-three-imgs"><div class="imgwrap anim-fade-in-up">';
                 if($image_1):
                     $ratio_1 = $image_1['width']/$image_1['height'];
                     echo '<img class="lazy" data-src="'.$image_1['url'].'" style="aspect-ratio:'.$ratio_1.'">';
                 endif;
-            echo '</div><div class="imgwrap">';
+            echo '</div><div class="imgwrap anim-fade-in-up">';
                 if($image_2):
                     $ratio_2 = $image_2['width']/$image_2['height'];
                     echo '<img class="lazy" data-src="'.$image_2['url'].'" style="aspect-ratio:'.$ratio_2.'">';
                 endif; 
-            echo '</div><div class="imgwrap">';
+            echo '</div><div class="imgwrap anim-fade-in-up">';
                 if($image_3):
                     $ratio_3 = $image_3['width']/$image_3['height'];
                     echo '<img class="lazy" data-src="'.$image_3['url'].'" style="aspect-ratio:'.$ratio_3.'">';
@@ -47,25 +47,25 @@ if( have_rows('content') ):
             echo '</div></div>';          
 
         elseif( get_row_layout() == 'text' ): 
-            echo '<div class="module-text">';
+            echo '<div class="module-text anim-fade-in-up">';
             the_sub_field('text');
             echo '</div>';
 
-        elseif( get_row_layout() == 'text_3_columns' ): 
-            echo '<div class="module-text-3-cols"><div class="col-1of3">';
-            the_sub_field('column_1');
-            echo '</div><div class="col-1of3">';
-            the_sub_field('column_2');
-            echo '</div><div class="col-1of3">';
-            the_sub_field('column_3');
-            echo '</div></div>';
+        // elseif( get_row_layout() == 'text_3_columns' ): 
+        //     echo '<div class="module-text-3-cols"><div class="col-1of3">';
+        //     the_sub_field('column_1');
+        //     echo '</div><div class="col-1of3">';
+        //     the_sub_field('column_2');
+        //     echo '</div><div class="col-1of3">';
+        //     the_sub_field('column_3');
+        //     echo '</div></div>';
 
         elseif( get_row_layout() == 'space' ): 
             echo '<div class="module-space"></div>';
             
         elseif( get_row_layout() == 'video' ): 
             $video_type = get_sub_field('video_type');
-            echo '<div class="module-video">';
+            echo '<div class="module-video anim-fade-in-up">';
                 if($video_type === "link"){
                     $video_link = get_sub_field('link');
                     echo '<video class="lazy" data-src="'.$video_link.'" playsinline muted loop autoplay></video>';

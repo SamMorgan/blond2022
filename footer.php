@@ -1,5 +1,5 @@
 	</main> 
-	<footer class="site-footer info-section" id="contact">
+	<footer class="site-footer info-section anim-fade-in-up" id="contact">
 		<div>
 			<?php the_field('address','option');?>
         </div>
@@ -12,7 +12,7 @@
                     <button type="submit">Submit</button>
                 </form>    
             </div>    
-            <div class="privacy-link"><a href="">Privacy Policy</a></div>
+            <div class="privacy-link"><a href="<?php echo home_url('/privacy-policy/');?>">Privacy Policy</a></div>
 			<span class="copy">&copy; <?php echo date('Y');?> <?php bloginfo('name');?></span>
 		</div>			
 	</footer>

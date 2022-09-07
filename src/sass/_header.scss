@@ -1,8 +1,5 @@
 @import "vars";
 
-$transitionDur: .5s;
-$transitionDelay: .3s;
-
 .site-header {
     position: fixed;
     width: 100%;
@@ -46,6 +43,7 @@ $transitionDelay: .3s;
         opacity: 0;
         visibility: hidden;
         transition: opacity $transitionDur, visibility 0s $transitionDur;
+        pointer-events: none;
         .show-menu {
             cursor: pointer;
         }
@@ -66,6 +64,7 @@ $transitionDelay: .3s;
 .show-secondary-header {
     .site-header {
         &.main-header {
+            pointer-events: none;
             h1,
             ul {
                 opacity: 0;
@@ -74,6 +73,7 @@ $transitionDelay: .3s;
             }
         }    
         &.secondary-header {
+            pointer-events: all;
             opacity: 1;
             visibility: visible;
             transition: opacity $transitionDur $transitionDelay, visibility 0s $transitionDelay;

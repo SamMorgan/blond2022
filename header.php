@@ -31,7 +31,7 @@
     }elseif(is_page('info')){   
         echo 'info';              
     }else{
-        echo 'home';
+        echo $post->post_name;
     }    
 ?>"> 
 <header class="site-header main-header">

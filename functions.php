@@ -111,8 +111,16 @@
 
         // Edit the "Full" toolbar and remove 'code'
         // - delet from array code from http://stackoverflow.com/questions/7225070/php-array-delete-by-value-not-key
-        if( ($key = array_search('code' , $toolbars['Full' ][2])) !== false )
-        {
+        if( ($key = array_search('code' , $toolbars['Full' ][2])) !== false ){
+            unset( $toolbars['Full' ][2][$key] );
+        }
+
+		$toolbars['Formatted Text' ] = array();
+        $toolbars['Formatted Text' ][1] = array('link', 'unlink', 'bold', 'bullist');
+
+        // Edit the "Full" toolbar and remove 'code'
+        // - delet from array code from http://stackoverflow.com/questions/7225070/php-array-delete-by-value-not-key
+        if( ($key = array_search('code' , $toolbars['Full' ][2])) !== false ){
             unset( $toolbars['Full' ][2][$key] );
         }
 
@@ -188,7 +196,7 @@ function work_post_type() {
 		'label'                 => __( 'Work', 'text_domain' ),
 		'description'           => __( 'Work', 'text_domain' ),
 		'labels'                => $labels,
-		'supports'              => array( 'title', 'thumbnail' ),
+		'supports'              => array( 'title' ),
 		'hierarchical'          => true,
 		'public'                => true,
 		'show_ui'               => true,
@@ -287,7 +295,7 @@ function labs_post_type() {
 		'label'                 => __( 'Labs', 'text_domain' ),
 		'description'           => __( 'Labs', 'text_domain' ),
 		'labels'                => $labels,
-		'supports'              => array( 'title', 'thumbnail' ),
+		'supports'              => array( 'title' ),
 		'hierarchical'          => true,
 		'public'                => true,
 		'show_ui'               => true,
