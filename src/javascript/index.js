@@ -201,16 +201,26 @@ barba.init({
                 window.addEventListener('scroll',secondaryNavScroll)
                 secondaryNavClick(data.next.container.querySelector('.show-menu'))
 
+                let workIndex = data.next.container.querySelector('.work-index')
+
                 ScrollTrigger.create({
-                    trigger: data.next.container.querySelector('.work-index'),
-                    start: "top top",
-                    end: "bottom bottom",
+                    trigger: workIndex,
+                    start: "top center",
+                    // end: "bottom bottom",
                     onEnter: () => {
                         data.next.container.querySelector('.single-work-header').classList.add('index-inview')
+                        gsap.to(window,{
+                            scrollTo: workIndex.offsetTop, 
+                            duration: .5,
+                            onComplete: ()=>{
+                                data.next.container.querySelector('.work-wrap').remove()
+                                window.scrollTo(0,0)
+                            }
+                        })
                     },
-                    onEnterBack: () => {
-                        data.next.container.querySelector('.single-work-header').classList.remove('index-inview')
-                    }
+                    // onEnterBack: () => {
+                    //     data.next.container.querySelector('.single-work-header').classList.remove('index-inview')
+                    // }
                 });
             },
             afterLeave() {    
@@ -226,7 +236,6 @@ barba.init({
                     let headerSlider = new Swiper(headerSlideEl, {
                         speed: 0,
                         loop: true,
-
                         lazy: {
                             loadPrevNext: true,
                         },
@@ -249,10 +258,11 @@ barba.init({
                             scrollTo: data.next.container.querySelector(navLink.getAttribute('href')).offsetTop, 
                             duration: 1
                         });
-                    });
+                    });  
                 })
 
                 document.querySelectorAll(".info-section").forEach((section, i) => {
+                    //let sectionRect = section.getBoundingClientRect()
                     ScrollTrigger.create({
                         trigger: section,
                         start: "top center",
@@ -263,6 +273,7 @@ barba.init({
                                 activeMenuItem.classList.remove('active')
                             }
                             data.next.container.querySelector('.scrollto-links a[href="#'+section.id+'"]').classList.add('active')
+
                         },
                         onEnterBack: () => {
                             let activeMenuItem = data.next.container.querySelector(".scrollto-links a.active")
@@ -271,6 +282,26 @@ barba.init({
                             }
                             data.next.container.querySelector('.scrollto-links a[href="#'+section.id+'"]').classList.add('active')
                         }
+                    });
+
+                    ScrollTrigger.create({
+                        trigger: section,
+                        start: "top center",
+                        //end: "bottom center",
+                        //markers:true,
+                        onEnter: () => {
+                            gsap.to(window,{
+                                scrollTo: section.offsetTop, 
+                                duration: .5
+                            });
+                        },
+                        // onEnterBack: () => {
+                        //     console.log('enter back',section)
+                        //     gsap.to(window,{
+                        //         scrollTo: sectionRect.bottom, 
+                        //         duration: .5
+                        //     });
+                        // }
                     });
                 });
 
@@ -454,5 +485,50 @@ barba.hooks.beforeEnter((data) => {
     fadeInUp(data.next.container.querySelectorAll(".anim-fade-in-up"))
 
     workCardsFunc(data.next.container.querySelectorAll('.work-card'))
+
+
+    /*
+    * Mailchimp AJAX form submit VanillaJS
+    * Vanilla JS
+    * Author: Michiel Vandewalle
+    * Github author: https://github.com/michiel-vandewalle
+    * Github project: https://github.com/michiel-vandewalle/Mailchimp-AJAX-form-submit-vanillaJS
+    */
+
+    (function () {
+        document.querySelector('#mc-embedded-subscribe-form')[0].addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            // Check for spam
+            if(document.getElementById('js-validate-robot').value !== '') { return false }
+
+            // Get url for mailchimp
+            var url = this.action.replace('/post?', '/post-json?');
+
+            // Add form data to object
+            var data = '';
+            var inputs = this.querySelectorAll('#mc-embedded-subscribe-form input');
+            for (var i = 0; i < inputs.length; i++) {
+                data += '&' + inputs[i].name + '=' + encodeURIComponent(inputs[i].value);
+            }
+
+            // Create & add post script to the DOM
+            var script = document.createElement('script');
+            script.src = url + data;
+            document.body.appendChild(script);
+
+            // Callback function
+            var callback = 'callback';
+            window[callback] = function(data) {
+
+                // Remove post script from the DOM
+                delete window[callback];
+                document.body.removeChild(script);
+
+                // Display response message
+                document.getElementById('js-subscribe-response').innerHTML = data.msg
+            };
+        });
+    })();
 
 });

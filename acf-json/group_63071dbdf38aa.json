@@ -381,7 +381,7 @@
             "collapsed": "",
             "min": 0,
             "max": 0,
-            "layout": "table",
+            "layout": "block",
             "button_label": "",
             "sub_fields": [
                 {
@@ -622,7 +622,7 @@
                         },
                         "layout_63172301e1001": {
                             "key": "layout_63172301e1001",
-                            "name": "text",
+                            "name": "formatted_text",
                             "label": "Formatted Text",
                             "display": "block",
                             "sub_fields": [
@@ -642,6 +642,35 @@
                                     "default_value": "",
                                     "tabs": "all",
                                     "toolbar": "formatted_text",
+                                    "media_upload": 0,
+                                    "delay": 0
+                                }
+                            ],
+                            "min": "",
+                            "max": ""
+                        },
+                        "layout_63188e362185a": {
+                            "key": "layout_63188e362185a",
+                            "name": "text_3_cols",
+                            "label": "Text 3 columns (1 column Mobile)",
+                            "display": "block",
+                            "sub_fields": [
+                                {
+                                    "key": "field_63188e362185b",
+                                    "label": "Text",
+                                    "name": "text",
+                                    "type": "wysiwyg",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "wrapper": {
+                                        "width": "",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "default_value": "",
+                                    "tabs": "all",
+                                    "toolbar": "very_simple",
                                     "media_upload": 0,
                                     "delay": 0
                                 }
@@ -714,5 +743,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1662460764
+    "modified": 1662553688
 }

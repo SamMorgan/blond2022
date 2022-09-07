@@ -1,5 +1,4 @@
-<?php /* Template Name: Labs */ 
-get_header();
+<?php get_header();
 
     $work_query = new WP_Query( array(
         'post_type' => 'labs',

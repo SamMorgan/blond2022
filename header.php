@@ -20,11 +20,11 @@
 <div data-barba="container" data-barba-namespace="<?php 
     if(is_home()){
         echo "home";
-    }elseif(is_page('work') || is_tax('work-category')){   
+    }elseif(is_page('work') || is_tax('work-category') || is_post_type_archive( 'work' )){   
         echo "work"; 
     }elseif(is_singular('work')){   
         echo "single-work"; 
-    }elseif(is_page('labs')){   
+    }elseif(is_page('labs') || is_post_type_archive( 'labs' )){   
         echo "labs";      
     }elseif(is_singular('labs')){   
         echo "single-labs";   
