@@ -472,31 +472,10 @@ const workCardsFunc = (workCards) => {
 }
 workCardsFunc(document.querySelectorAll('.work-card'))
 
-barba.hooks.beforeLeave((data) => {
-    scrollValues[data.current.url.href] =  window.scrollY;
-});
-
-barba.hooks.beforeEnter((data) => {
-    const scrollPos = scrollValues[data.next.url.href] ? scrollValues[data.next.url.href] : 0;
-    document.documentElement.scrollTop = scrollPos;
-
-    lazyImages()
-
-    fadeInUp(data.next.container.querySelectorAll(".anim-fade-in-up"))
-
-    workCardsFunc(data.next.container.querySelectorAll('.work-card'))
-
-
-    /*
-    * Mailchimp AJAX form submit VanillaJS
-    * Vanilla JS
-    * Author: Michiel Vandewalle
-    * Github author: https://github.com/michiel-vandewalle
-    * Github project: https://github.com/michiel-vandewalle/Mailchimp-AJAX-form-submit-vanillaJS
-    */
-
-    (function () {
-        document.querySelector('#mc-embedded-subscribe-form')[0].addEventListener('submit', function (e) {
+const subscribeForm = (form) => {
+    //let form = data.next.container.querySelector('#mc-embedded-subscribe-form')
+    if(form){
+        form.addEventListener('submit', function (e) {
             e.preventDefault();
 
             // Check for spam
@@ -507,7 +486,7 @@ barba.hooks.beforeEnter((data) => {
 
             // Add form data to object
             var data = '';
-            var inputs = this.querySelectorAll('#mc-embedded-subscribe-form input');
+            var inputs = this.querySelectorAll('input');
             for (var i = 0; i < inputs.length; i++) {
                 data += '&' + inputs[i].name + '=' + encodeURIComponent(inputs[i].value);
             }
@@ -529,6 +508,24 @@ barba.hooks.beforeEnter((data) => {
                 document.getElementById('js-subscribe-response').innerHTML = data.msg
             };
         });
-    })();
+    }
+} 
+subscribeForm(document.querySelector('#mc-embedded-subscribe-form'))
+
+barba.hooks.beforeLeave((data) => {
+    scrollValues[data.current.url.href] =  window.scrollY;
+});
+
+barba.hooks.beforeEnter((data) => {
+    const scrollPos = scrollValues[data.next.url.href] ? scrollValues[data.next.url.href] : 0;
+    document.documentElement.scrollTop = scrollPos;
+
+    lazyImages()
+
+    fadeInUp(data.next.container.querySelectorAll(".anim-fade-in-up"))
+
+    workCardsFunc(data.next.container.querySelectorAll('.work-card'))
+
+    subscribeForm(data.next.container.querySelector('#mc-embedded-subscribe-form'))
 
 });
