@@ -6,7 +6,7 @@ import { gsap } from "gsap";
 import { ScrollToPlugin } from "gsap/ScrollToPlugin.js";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Swiper, { Lazy, Pagination, Navigation, Autoplay} from 'swiper';
-import imagesLoaded from "imagesloaded";
+//import imagesLoaded from "imagesloaded";
 
 Swiper.use([Lazy, Pagination, Navigation, Autoplay]);
 
@@ -396,23 +396,91 @@ barba.init({
 
 
 const lazyImages = () => {
-    // let lazy = new LazyLoad({
-    //     callback_loaded: (el) => {
-    //         // let wrap = el.parentElement.parentElement.parentElement
-    //         // if(wrap && wrap.classList.contains('work-card')){
-    //         //     wrap.classList.add('animate-in')
-    //         //     wrap.classList.remove('loading')
-    //         //     setTimeout(()=>{
-    //         //         wrap.classList.remove('animate-in')
-    //         //     },1000);
-    //         // }
+    let lazy = new LazyLoad({
+        callback_loaded: (el) => {
+            let workCard = el.parentElement.parentElement.parentElement
+            if(workCard && workCard.classList.contains('work-card')){
+                workCard.classList.remove('loading')
+                
+                setTimeout(()=>{
+                    workCard.classList.add('loaded')
+                },1000);
 
-    //         // if(el.tagName === 'IFRAME'){
-    //         //     resizeVideos(el.parentElement)
-    //         // }
-    //     }
-    // })
-    let lazy = new LazyLoad()
+                const pxAdjust = () => {
+                    ctx.drawImage(img, 0, 0);
+                    let pixelArr = ctx.getImageData(0, 0, w, h).data;
+                    if(sample_size > 0){
+                        for (let y = 0; y < h; y += sample_size) {
+                            for (let x = 0; x < w; x += sample_size) {
+                                let p = (x + (y*w)) * 4;
+                                ctx.fillStyle = "rgba(" + pixelArr[p] + "," + pixelArr[p + 1] + "," + pixelArr[p + 2] + "," + pixelArr[p + 3] + ")";
+                                ctx.fillRect(x, y, sample_size, sample_size);
+                            }
+                        }
+                    }                        
+                }
+
+
+                let img = workCard.querySelector('img')
+                let c = document.createElement("canvas");
+                let ctx = c.getContext('2d');
+                img.remove();
+            
+                // let w = img1.width;
+                // let h = img1.height;
+                let w = img.width;
+                let h = img.height;
+            
+                c.width = w;
+                c.height = h;
+                //ctx.drawImage(img1, 0, 0);
+
+                let sample_size = 80;
+
+                pxAdjust()
+
+                workCard.querySelector('.thumbnail-wrap').appendChild(c);
+
+                let enterTimeout, leaveTimeout
+
+
+                const mouseEnterFunc = () => {
+                    clearTimeout(leaveTimeout)
+                    if(sample_size !== 0){
+                        enterTimeout = setTimeout(()=>{
+                            sample_size -= 10;
+                            pxAdjust()    
+                            if(sample_size >= 10){
+                                mouseEnterFunc()
+                            }
+                        },100) 
+                    } 
+                }
+
+                const mouseLeaveFunc = () => {
+                    clearTimeout(enterTimeout)
+                    if(sample_size < 80){
+                        leaveTimeout = setTimeout(()=>{
+                            sample_size += 10;
+                            pxAdjust()    
+                            if(sample_size < 80){
+                                mouseLeaveFunc()
+                            }
+                        },100) 
+                    } 
+                }
+
+                workCard.addEventListener('mouseenter',mouseEnterFunc)
+                workCard.addEventListener('mouseleave',mouseLeaveFunc)
+
+            }
+
+            // if(el.tagName === 'IFRAME'){
+            //     resizeVideos(el.parentElement)
+            // }
+        }
+    })
+    //let lazy = new LazyLoad()
 }  
 lazyImages()  
 
@@ -441,36 +509,103 @@ function fadeInUp(elems) {
 
 fadeInUp(document.querySelectorAll(".anim-fade-in-up"))
 
-const workCardsFunc = (workCards) => {
-    if(workCards){
-        workCards.forEach(workCard =>{
-            imagesLoaded( workCard, () => {
-                workCard.classList.remove('loading')
+// const workCardsFunc = (workCards) => {
+//     if(workCards){
+//         workCards.forEach(workCard =>{
+//             imagesLoaded( workCard, () => {
+//                 workCard.classList.remove('loading')
                 
-                setTimeout(()=>{
-                    workCard.classList.add('loaded')
-                },1000);
-            }) 
-        })
+//                 setTimeout(()=>{
+//                     workCard.classList.add('loaded')
+//                 },1000);
 
-        // gsap.set(workCards, {
-        //     y: 100,
-        //     opacity: 0,
-        // });
+//                 const pxAdjust = () => {
+//                     ctx.drawImage(img, 0, 0);
+//                     let pixelArr = ctx.getImageData(0, 0, w, h).data;
+//                     if(sample_size > 0){
+//                         for (let y = 0; y < h; y += sample_size) {
+//                             for (let x = 0; x < w; x += sample_size) {
+//                                 let p = (x + (y*w)) * 4;
+//                                 ctx.fillStyle = "rgba(" + pixelArr[p] + "," + pixelArr[p + 1] + "," + pixelArr[p + 2] + "," + pixelArr[p + 3] + ")";
+//                                 ctx.fillRect(x, y, sample_size, sample_size);
+//                             }
+//                         }
+//                     }                        
+//                 }
 
-        // ScrollTrigger.batch(workCards, {
-        //     onEnter: batch => gsap.to(batch, {opacity: 1, y: 0, stagger: 0.15}),
-        //     // onLeave: batch => gsap.to(batch, {opacity: 0, y: 24}),
-        //     // onEnterBack: batch => gsap.to(batch, {opacity: 1, y: 0, stagger: 0.15}),
-        //     // onLeaveBack: batch => gsap.to(batch, {opacity: 0, y: 24}),
+
+//                 let img = workCard.querySelector('img')
+//                 let c = document.createElement("canvas");
+//                 let ctx = c.getContext('2d');
+//                 img.remove();
+            
+//                 // let w = img1.width;
+//                 // let h = img1.height;
+//                 let w = img.width;
+//                 let h = img.height;
+            
+//                 c.width = w;
+//                 c.height = h;
+//                 //ctx.drawImage(img1, 0, 0);
+
+//                 let sample_size = 80;
+
+//                 pxAdjust()
+
+//                 workCard.querySelector('.thumbnail-wrap').appendChild(c);
+
+//                 let enterTimeout, leaveTimeout
+
+
+//                 const mouseEnterFunc = () => {
+//                     clearTimeout(leaveTimeout)
+//                     if(sample_size !== 0){
+//                         enterTimeout = setTimeout(()=>{
+//                             sample_size -= 10;
+//                             pxAdjust()    
+//                             if(sample_size >= 10){
+//                                 mouseEnterFunc()
+//                             }
+//                         },100) 
+//                     } 
+//                 }
+
+//                 const mouseLeaveFunc = () => {
+//                     clearTimeout(enterTimeout)
+//                     if(sample_size < 80){
+//                         leaveTimeout = setTimeout(()=>{
+//                             sample_size += 10;
+//                             pxAdjust()    
+//                             if(sample_size < 80){
+//                                 mouseLeaveFunc()
+//                             }
+//                         },100) 
+//                     } 
+//                 }
+
+//                 workCard.addEventListener('mouseenter',mouseEnterFunc)
+//                 workCard.addEventListener('mouseleave',mouseLeaveFunc)
+//             }) 
+//         })
+
+//         // gsap.set(workCards, {
+//         //     y: 100,
+//         //     opacity: 0,
+//         // });
+
+//         // ScrollTrigger.batch(workCards, {
+//         //     onEnter: batch => gsap.to(batch, {opacity: 1, y: 0, stagger: 0.15}),
+//         //     // onLeave: batch => gsap.to(batch, {opacity: 0, y: 24}),
+//         //     // onEnterBack: batch => gsap.to(batch, {opacity: 1, y: 0, stagger: 0.15}),
+//         //     // onLeaveBack: batch => gsap.to(batch, {opacity: 0, y: 24}),
           
-        //     start: "top 80%",
-        //     end: "bottom 20%",
-        //     //markers: true,
-        // });
-    }
-}
-workCardsFunc(document.querySelectorAll('.work-card'))
+//         //     start: "top 80%",
+//         //     end: "bottom 20%",
+//         //     //markers: true,
+//         // });
+//     }
+// }
+// workCardsFunc(document.querySelectorAll('.work-card'))
 
 const subscribeForm = (form) => {
     //let form = data.next.container.querySelector('#mc-embedded-subscribe-form')
