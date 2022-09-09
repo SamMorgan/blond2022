@@ -62,19 +62,38 @@ body {
     // }    
 }
 
+body > div,
+.site-header {
+    transition: background-color .4s, color .4s;  
+}
+.site-header a,
+.site-footer a {
+    transition: color .4s;  
+}
+
+[data-barba-namespace="work"],
 [data-barba-namespace="labs"],
 [data-barba-namespace="single-labs"],
+[data-barba-namespace="work"] .site-header,
 [data-barba-namespace="labs"] .site-header,
 [data-barba-namespace="single-labs"] .site-header {
     background:#000;
     color: $lightgrey;
 }
-[data-barba-namespace="labs"] .site-header h1 a,
-[data-barba-namespace="labs"] .site-header ul.menu li a,
-[data-barba-namespace="single-labs"] .site-header h1 a,
-[data-barba-namespace="single-labs"] .site-header ul.menu li a,
+// [data-barba-namespace="work"] .site-header h1 a,
+// [data-barba-namespace="work"] .site-header ul.menu li a,
+// [data-barba-namespace="labs"] .site-header h1 a,
+// [data-barba-namespace="labs"] .site-header ul.menu li a,
+// [data-barba-namespace="single-labs"] .site-header h1 a,
+// [data-barba-namespace="single-labs"] .site-header ul.menu li a,
+// [data-barba-namespace="labs"] .site-footer a,
+// [data-barba-namespace="single-labs"] .site-footer a {
+[data-barba-namespace="work"] .site-header a,
+[data-barba-namespace="work"] .site-footer a,
+[data-barba-namespace="labs"] .site-header a,
+[data-barba-namespace="single-labs"] .site-header a,
 [data-barba-namespace="labs"] .site-footer a,
-[data-barba-namespace="single-labs"] .site-footer a {
+[data-barba-namespace="single-labs"] .site-footer a {    
     color: $lightgrey;
 }
 

@@ -209,6 +209,7 @@ barba.init({
                     // end: "bottom bottom",
                     onEnter: () => {
                         data.next.container.querySelector('.single-work-header').classList.add('index-inview')
+                        data.next.container.setAttribute('data-barba-namespace','work')
                         gsap.to(window,{
                             scrollTo: workIndex.offsetTop, 
                             duration: .5,

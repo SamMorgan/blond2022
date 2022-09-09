@@ -12,19 +12,23 @@
     display: flex;
     justify-content: space-between;
     text-transform: lowercase;
-    h1 a {
+    a {
         color:$grey;
         transition: color .3;
     }
+    // h1 a {
+    //     color:$grey;
+    //     transition: color .3;
+    // }
     ul {
         display: flex;
         li {
             display: block;
             margin: 0 0 0 .5em;
-            a {
-                transition: color .3s;
-                color: $grey;
-            }
+            // a {
+            //     transition: color .3s;
+            //     color: $grey;
+            // }
             &.current-menu-item a,
             a.active {
                 color: $orange;
