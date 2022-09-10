@@ -132,6 +132,24 @@
     }
 }
 
+.intro-video {
+    position: fixed;
+    &.max-height {
+        width: 100%;
+        height: auto;
+        left:0;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+    &.max-width {
+        width: auto;
+        height: 100%;
+        left:50%;
+        top: 0;
+        transform: translateX(-50%);
+    }
+}
+
 .scrolled {
     .intro-wrap {
         overflow: hidden;

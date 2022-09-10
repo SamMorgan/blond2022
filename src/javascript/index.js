@@ -85,25 +85,61 @@ barba.init({
         {
             namespace: 'home',
             beforeEnter(data) {
-                let homeSlideEl = data.next.container.querySelector('.home-slider')
-                if(homeSlideEl){
-                    let homeSlider = new Swiper(homeSlideEl, {
-                        speed: 0,
-                        loop: true,
+                // let homeSlideEl = data.next.container.querySelector('.home-slider')
+                // if(homeSlideEl){
+                //     let homeSlider = new Swiper(homeSlideEl, {
+                //         speed: 0,
+                //         loop: true,
 
-                        lazy: {
-                            loadPrevNext: true,
-                        },
-                        navigation: {
-                            nextEl: ".swiper-button-next",
-                            prevEl: ".swiper-button-prev",
-                        }
-                    })  
-                }
+                //         lazy: {
+                //             loadPrevNext: true,
+                //         },
+                //         navigation: {
+                //             nextEl: ".swiper-button-next",
+                //             prevEl: ".swiper-button-prev",
+                //         }
+                //     })  
+                // }
                 
                 // let lazy = new LazyLoad({
                 //     elements_selector: ".intro-image"
                 // })
+
+                let video = data.next.container.querySelector('.intro-video')
+                video.addEventListener("loadedmetadata", (e) => {  
+                    let { h,w } = e.target  
+                    if(h/w > window.innerHeight/window.innerWidth){
+                        video.classList.add('max-height')
+                    }else{
+                        video.classList.add('max-width')                       
+                    } 
+
+
+                    let c = document.createElement("canvas");
+                    let ctx = c.getContext('2d')
+                    ctx.drawImage(video, 0, 0, w, h);
+                    // let pixelArr = ctx.getImageData(0, 0, w, h).data;
+                    // let sample_size = 80
+
+                    // for (let y = 0; y < h; y += sample_size) {
+                    //     for (let x = 0; x < w; x += sample_size) {
+                    //         let p = (x + (y*w)) * 4;
+                    //         ctx.fillStyle = "rgba(" + pixelArr[p] + "," + pixelArr[p + 1] + "," + pixelArr[p + 2] + "," + pixelArr[p + 3] + ")";
+                    //         ctx.fillRect(x, y, sample_size, sample_size);
+                    //     }
+                    // }
+                    data.next.container.querySelector('.intro-wrap').appendChild(c);
+            
+                })
+
+                // video.addEventListener('canplay', (e) => { 
+                //     let { h,w } = e.target  
+
+
+                // });
+                
+
+
 
                 //document.addEventListener('scroll', homePageScroll) 
                 let introWrap = data.next.container.querySelector('.intro-wrap')
@@ -144,7 +180,7 @@ barba.init({
                                               
                     customCursorWrap.addEventListener('mouseover',(e)=>{
                         if(e.target.classList.contains('intro-text') || e.target.nodeName === 'P' || e.target.nodeName === 'A'){
-                            customCursorOff()
+                            customCursorOff(e)
                         }else{
                             customCursorEl.style.display = "block"
                             document.body.style.cursor = 'none'
@@ -410,12 +446,12 @@ const lazyImages = () => {
                 const pxAdjust = () => {
                     ctx.drawImage(img, 0, 0);
                     let pixelArr = ctx.getImageData(0, 0, w, h).data;
-                    if(sample_size > 0){
-                        for (let y = 0; y < h; y += sample_size) {
-                            for (let x = 0; x < w; x += sample_size) {
+                    if(sampleSize > 0){
+                        for (let y = 0; y < h; y += sampleSize) {
+                            for (let x = 0; x < w; x += sampleSize) {
                                 let p = (x + (y*w)) * 4;
                                 ctx.fillStyle = "rgba(" + pixelArr[p] + "," + pixelArr[p + 1] + "," + pixelArr[p + 2] + "," + pixelArr[p + 3] + ")";
-                                ctx.fillRect(x, y, sample_size, sample_size);
+                                ctx.fillRect(x, y, sampleSize, sampleSize);
                             }
                         }
                     }                        
@@ -434,9 +470,11 @@ const lazyImages = () => {
             
                 c.width = w;
                 c.height = h;
+                let ogSampleSize = 100
+                let steps = 50
                 //ctx.drawImage(img1, 0, 0);
 
-                let sample_size = 80;
+                let sampleSize = ogSampleSize;
 
                 pxAdjust()
 
@@ -447,11 +485,11 @@ const lazyImages = () => {
 
                 const mouseEnterFunc = () => {
                     clearTimeout(leaveTimeout)
-                    if(sample_size !== 0){
+                    if(sampleSize !== 0){
                         enterTimeout = setTimeout(()=>{
-                            sample_size -= 10;
+                            sampleSize -= steps;
                             pxAdjust()    
-                            if(sample_size >= 10){
+                            if(sampleSize >= steps){
                                 mouseEnterFunc()
                             }
                         },100) 
@@ -460,11 +498,11 @@ const lazyImages = () => {
 
                 const mouseLeaveFunc = () => {
                     clearTimeout(enterTimeout)
-                    if(sample_size < 80){
+                    if(sampleSize < ogSampleSize){
                         leaveTimeout = setTimeout(()=>{
-                            sample_size += 10;
+                            sampleSize += steps;
                             pxAdjust()    
-                            if(sample_size < 80){
+                            if(sampleSize < ogSampleSize){
                                 mouseLeaveFunc()
                             }
                         },100) 

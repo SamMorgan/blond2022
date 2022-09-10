@@ -1,0 +1,41 @@
+{
+    "key": "group_631ace5706db5",
+    "title": "Video",
+    "fields": [
+        {
+            "key": "field_631ace630cb1c",
+            "label": "Video",
+            "name": "video",
+            "type": "url",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "placeholder": ""
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "page_type",
+                "operator": "==",
+                "value": "front_page"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "",
+    "show_in_rest": 0,
+    "modified": 1662701174
+}
