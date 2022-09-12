@@ -20,7 +20,7 @@
                 //echo '<div class="blond-img"'.$bg_css.' style="--imgsrc:url('.$thumb_data[0].');'.$bg_css.'"><div></div><div></div></div>';
             ?>
             <div class="thumbnail-wrap">
-                <img class="lazy" data-src="<?php echo $fc_image['url'];?>">
+                <img class="thumbnail" data-src="<?php echo $fc_image['url'];?>">
             </div>    
             <h3><?php 
                 $year = get_field('year');

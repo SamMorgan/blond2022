@@ -49,25 +49,115 @@ const secondaryNavClick = (btn) => {
     })
 }
 
-const resizeVideos = (doc) => {
-    const videos = doc.querySelectorAll('.vimeo-iframe')
-    if(videos){
-        videos.forEach(video => {
-            fetch('//vimeo.com/api/oembed.json?url=' + video.src)
-            .then((response) => response.json())
-            .then((data) => {
-                    video.setAttribute('height',data.height)
-                    video.setAttribute('width',data.width)
-                    video.style.aspectRatio = data.width/data.height
-                    if(data.width < data.height){
-                        video.classList.add('portrait')
-                    }
-                }
-            )
-        })
-    }
-}
+// const resizeVideos = (doc) => {
+//     const videos = doc.querySelectorAll('.vimeo-iframe')
+//     if(videos){
+//         videos.forEach(video => {
+//             fetch('//vimeo.com/api/oembed.json?url=' + video.src)
+//             .then((response) => response.json())
+//             .then((data) => {
+//                     video.setAttribute('height',data.height)
+//                     video.setAttribute('width',data.width)
+//                     video.style.aspectRatio = data.width/data.height
+//                     if(data.width < data.height){
+//                         video.classList.add('portrait')
+//                     }
+//                 }
+//             )
+//         })
+//     }
+// }
 
+
+const workCardsFunc = (nameSpace) => {
+    let lazy = new LazyLoad({
+        elements_selector: '.thumbnail',
+        callback_loaded: (el) => {
+            let workCard = el.parentElement.parentElement.parentElement
+            if(workCard && workCard.classList.contains('work-card')){
+                workCard.classList.remove('loading')
+
+                const pxAdjust = () => {
+
+                    let w = c.width/(sampleSize + 1)
+                    let h = c.height/(sampleSize + 1)
+                
+                    ctx.drawImage(img, 0, 0, w, h);
+                    ctx.mozImageSmoothingEnabled = false;
+                    ctx.imageSmoothingEnabled = false;
+                    ctx.drawImage(c, 0, 0, w, h, 0, 0, c.width, c.height);                      
+                }
+
+
+                let img = workCard.querySelector('img')
+                let c = document.createElement("canvas");
+                let ctx = c.getContext('2d');
+                c.width = img.width;;
+                c.height = img.height;
+                img.remove();
+            
+                let ogSampleSize = 150
+                let steps = ogSampleSize / 3
+                ctx.drawImage(img, 0, 0);
+
+                let sampleSize = ogSampleSize;
+
+                
+
+                workCard.querySelector('.thumbnail-wrap').appendChild(c);
+
+                let enterTimeout, leaveTimeout
+
+
+                const sharpenFunc = () => {
+                    clearTimeout(leaveTimeout)
+                    if(sampleSize !== 0){
+                        enterTimeout = setTimeout(()=>{
+                            sampleSize -= steps;
+                            pxAdjust()    
+                            if(sampleSize >= steps){
+                                sharpenFunc()
+                            }
+                        },100) 
+                    } 
+                }
+
+                const pixelateFunc = () => {
+                    clearTimeout(enterTimeout)
+                    if(sampleSize < ogSampleSize){
+                        leaveTimeout = setTimeout(()=>{
+                            sampleSize += steps;
+                            pxAdjust()    
+                            if(sampleSize < ogSampleSize){
+                                pixelateFunc()
+                            }
+                        },100) 
+                    } 
+                }
+
+                if(nameSpace === 'work'){
+                    workCard.addEventListener('mouseenter',pixelateFunc)
+                    workCard.addEventListener('mouseleave',sharpenFunc)
+
+                    pxAdjust()
+                    setTimeout(()=>{
+                        sharpenFunc()
+                    },1000);
+                }else{
+                    workCard.addEventListener('mouseenter',sharpenFunc)
+                    workCard.addEventListener('mouseleave',pixelateFunc)
+
+                    pxAdjust()
+                    // setTimeout(()=>{
+                    //     sharpenFunc()
+                    // },1000);                    
+                }    
+
+            }
+        }
+    })
+    
+}
 
 // const customCursorFunc = (e) => {
 //     customCursor(e)
@@ -225,6 +315,7 @@ barba.init({
             beforeEnter(data) {
                 window.addEventListener('scroll',secondaryNavScroll)
                 secondaryNavClick(data.next.container.querySelector('.show-menu'))
+                workCardsFunc('work')
             },
             afterLeave() {    
                 window.removeEventListener('scroll',secondaryNavScroll) 
@@ -265,6 +356,12 @@ barba.init({
                 document.body.classList.remove('show-secondary-header')
             } 
         },
+        {
+            namespace: 'labs',
+            beforeEnter(data) {
+                workCardsFunc('labs')
+            } 
+        }, 
         {
             namespace: 'info',
             beforeEnter(data) {
@@ -433,93 +530,7 @@ barba.init({
 
 
 const lazyImages = () => {
-    let lazy = new LazyLoad({
-        callback_loaded: (el) => {
-            let workCard = el.parentElement.parentElement.parentElement
-            if(workCard && workCard.classList.contains('work-card')){
-                workCard.classList.remove('loading')
-                
-                setTimeout(()=>{
-                    workCard.classList.add('loaded')
-                },1000);
-
-                const pxAdjust = () => {
-                    ctx.drawImage(img, 0, 0);
-                    let pixelArr = ctx.getImageData(0, 0, w, h).data;
-                    if(sampleSize > 0){
-                        for (let y = 0; y < h; y += sampleSize) {
-                            for (let x = 0; x < w; x += sampleSize) {
-                                let p = (x + (y*w)) * 4;
-                                ctx.fillStyle = "rgba(" + pixelArr[p] + "," + pixelArr[p + 1] + "," + pixelArr[p + 2] + "," + pixelArr[p + 3] + ")";
-                                ctx.fillRect(x, y, sampleSize, sampleSize);
-                            }
-                        }
-                    }                        
-                }
-
-
-                let img = workCard.querySelector('img')
-                let c = document.createElement("canvas");
-                let ctx = c.getContext('2d');
-                img.remove();
-            
-                // let w = img1.width;
-                // let h = img1.height;
-                let w = img.width;
-                let h = img.height;
-            
-                c.width = w;
-                c.height = h;
-                let ogSampleSize = 100
-                let steps = 50
-                //ctx.drawImage(img1, 0, 0);
-
-                let sampleSize = ogSampleSize;
-
-                pxAdjust()
-
-                workCard.querySelector('.thumbnail-wrap').appendChild(c);
-
-                let enterTimeout, leaveTimeout
-
-
-                const mouseEnterFunc = () => {
-                    clearTimeout(leaveTimeout)
-                    if(sampleSize !== 0){
-                        enterTimeout = setTimeout(()=>{
-                            sampleSize -= steps;
-                            pxAdjust()    
-                            if(sampleSize >= steps){
-                                mouseEnterFunc()
-                            }
-                        },100) 
-                    } 
-                }
-
-                const mouseLeaveFunc = () => {
-                    clearTimeout(enterTimeout)
-                    if(sampleSize < ogSampleSize){
-                        leaveTimeout = setTimeout(()=>{
-                            sampleSize += steps;
-                            pxAdjust()    
-                            if(sampleSize < ogSampleSize){
-                                mouseLeaveFunc()
-                            }
-                        },100) 
-                    } 
-                }
-
-                workCard.addEventListener('mouseenter',mouseEnterFunc)
-                workCard.addEventListener('mouseleave',mouseLeaveFunc)
-
-            }
-
-            // if(el.tagName === 'IFRAME'){
-            //     resizeVideos(el.parentElement)
-            // }
-        }
-    })
-    //let lazy = new LazyLoad()
+    let lazy = new LazyLoad()
 }  
 lazyImages()  
 
@@ -548,103 +559,7 @@ function fadeInUp(elems) {
 
 fadeInUp(document.querySelectorAll(".anim-fade-in-up"))
 
-// const workCardsFunc = (workCards) => {
-//     if(workCards){
-//         workCards.forEach(workCard =>{
-//             imagesLoaded( workCard, () => {
-//                 workCard.classList.remove('loading')
-                
-//                 setTimeout(()=>{
-//                     workCard.classList.add('loaded')
-//                 },1000);
-
-//                 const pxAdjust = () => {
-//                     ctx.drawImage(img, 0, 0);
-//                     let pixelArr = ctx.getImageData(0, 0, w, h).data;
-//                     if(sample_size > 0){
-//                         for (let y = 0; y < h; y += sample_size) {
-//                             for (let x = 0; x < w; x += sample_size) {
-//                                 let p = (x + (y*w)) * 4;
-//                                 ctx.fillStyle = "rgba(" + pixelArr[p] + "," + pixelArr[p + 1] + "," + pixelArr[p + 2] + "," + pixelArr[p + 3] + ")";
-//                                 ctx.fillRect(x, y, sample_size, sample_size);
-//                             }
-//                         }
-//                     }                        
-//                 }
-
-
-//                 let img = workCard.querySelector('img')
-//                 let c = document.createElement("canvas");
-//                 let ctx = c.getContext('2d');
-//                 img.remove();
-            
-//                 // let w = img1.width;
-//                 // let h = img1.height;
-//                 let w = img.width;
-//                 let h = img.height;
-            
-//                 c.width = w;
-//                 c.height = h;
-//                 //ctx.drawImage(img1, 0, 0);
-
-//                 let sample_size = 80;
-
-//                 pxAdjust()
-
-//                 workCard.querySelector('.thumbnail-wrap').appendChild(c);
-
-//                 let enterTimeout, leaveTimeout
-
-
-//                 const mouseEnterFunc = () => {
-//                     clearTimeout(leaveTimeout)
-//                     if(sample_size !== 0){
-//                         enterTimeout = setTimeout(()=>{
-//                             sample_size -= 10;
-//                             pxAdjust()    
-//                             if(sample_size >= 10){
-//                                 mouseEnterFunc()
-//                             }
-//                         },100) 
-//                     } 
-//                 }
-
-//                 const mouseLeaveFunc = () => {
-//                     clearTimeout(enterTimeout)
-//                     if(sample_size < 80){
-//                         leaveTimeout = setTimeout(()=>{
-//                             sample_size += 10;
-//                             pxAdjust()    
-//                             if(sample_size < 80){
-//                                 mouseLeaveFunc()
-//                             }
-//                         },100) 
-//                     } 
-//                 }
-
-//                 workCard.addEventListener('mouseenter',mouseEnterFunc)
-//                 workCard.addEventListener('mouseleave',mouseLeaveFunc)
-//             }) 
-//         })
-
-//         // gsap.set(workCards, {
-//         //     y: 100,
-//         //     opacity: 0,
-//         // });
-
-//         // ScrollTrigger.batch(workCards, {
-//         //     onEnter: batch => gsap.to(batch, {opacity: 1, y: 0, stagger: 0.15}),
-//         //     // onLeave: batch => gsap.to(batch, {opacity: 0, y: 24}),
-//         //     // onEnterBack: batch => gsap.to(batch, {opacity: 1, y: 0, stagger: 0.15}),
-//         //     // onLeaveBack: batch => gsap.to(batch, {opacity: 0, y: 24}),
-          
-//         //     start: "top 80%",
-//         //     end: "bottom 20%",
-//         //     //markers: true,
-//         // });
-//     }
-// }
-// workCardsFunc(document.querySelectorAll('.work-card'))
+//workCardsFunc(document.querySelectorAll('.work-card'))
 
 const subscribeForm = (form) => {
     //let form = data.next.container.querySelector('#mc-embedded-subscribe-form')
@@ -698,7 +613,7 @@ barba.hooks.beforeEnter((data) => {
 
     fadeInUp(data.next.container.querySelectorAll(".anim-fade-in-up"))
 
-    workCardsFunc(data.next.container.querySelectorAll('.work-card'))
+    //workCardsFunc(data.next.container.querySelectorAll('.work-card'))
 
     subscribeForm(data.next.container.querySelector('#mc-embedded-subscribe-form'))
 

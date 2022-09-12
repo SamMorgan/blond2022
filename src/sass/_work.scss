@@ -60,24 +60,25 @@
             height: 100%;
             position: absolute;
         }
-        .fc-img {
-            opacity: 0;
-            transition: opacity 1s;
-        }  
+        // .fc-img {
+        //     opacity: 0;
+        //     transition: opacity 1s;
+        // }  
         // .blond-img {
         //     transition: opacity 1s;
         // }     
     }
     &.loaded {
         transform: translateY(0);
-        .thumbnail-wrap {
-            .fc-img {
-                opacity: 1;
-            } 
-            // .blond-img {
-            //     opacity: 0;
-            // }
-        }        
+        opacity: 1;
+        // .thumbnail-wrap {
+        //     .fc-img {
+        //         opacity: 1;
+        //     } 
+        //     // .blond-img {
+        //     //     opacity: 0;
+        //     // }
+        // }        
     }
     // .blond-img div:last-child {
     //     display: none;
