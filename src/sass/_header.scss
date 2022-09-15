@@ -12,6 +12,7 @@
     display: flex;
     justify-content: space-between;
     text-transform: lowercase;
+    transition: background-color .4s, color .4s;
     a {
         color:$grey;
         transition: color .3;
@@ -46,7 +47,7 @@
     &.secondary-header {
         opacity: 0;
         visibility: hidden;
-        transition: opacity $transitionDur, visibility 0s $transitionDur;
+        transition: opacity $transitionDur, visibility 0s $transitionDur, background-color .4s, color .4s;
         pointer-events: none;
         .show-menu {
             cursor: pointer;
@@ -80,7 +81,7 @@
             pointer-events: all;
             opacity: 1;
             visibility: visible;
-            transition: opacity $transitionDur $transitionDelay, visibility 0s $transitionDelay;
+            transition: opacity $transitionDur $transitionDelay, visibility 0s $transitionDelay, background-color .4s, color .4s;
         }    
     }    
 }

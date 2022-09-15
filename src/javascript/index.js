@@ -76,88 +76,108 @@ const workCardsFunc = (nameSpace) => {
             let workCard = el.parentElement.parentElement.parentElement
             if(workCard && workCard.classList.contains('work-card')){
                 workCard.classList.remove('loading')
-
-                const pxAdjust = () => {
-
-                    let w = c.width/(sampleSize + 1)
-                    let h = c.height/(sampleSize + 1)
+                let confidential = false
+                if(workCard.classList.contains('confidential')){
+                    confidential = true
+                } 
                 
-                    ctx.drawImage(img, 0, 0, w, h);
-                    ctx.mozImageSmoothingEnabled = false;
-                    ctx.imageSmoothingEnabled = false;
-                    ctx.drawImage(c, 0, 0, w, h, 0, 0, c.width, c.height);                      
-                }
-
-
                 let img = workCard.querySelector('img')
                 let c = document.createElement("canvas");
                 let ctx = c.getContext('2d');
-                c.width = img.width;;
-                c.height = img.height;
-                img.remove();
-            
-                let ogSampleSize = 150
-                let steps = ogSampleSize / 3
-                ctx.drawImage(img, 0, 0);
 
-                let sampleSize = ogSampleSize;
+                c.width = img.naturalWidth;
+                c.height = img.naturalHeight;
+                //img.remove();
+                //c.style.aspectRatio = c.width/c.height
+
+                //const pxAdjust = () => {
+
+                    // let w = c.width/(sampleSize + 1)
+                    // let h = c.height/(sampleSize + 1)
+
+                    let w = 9
+                    let h = 6
+                    if(workCard.classList.contains('portrait')){
+                        w = 6
+                        h = 9
+                    }    
+                    ctx.drawImage(img, 0, 0, w, h);
+                    ctx.mozImageSmoothingEnabled = false;
+                    ctx.imageSmoothingEnabled = false;
+                    ctx.drawImage(c, 0, 0, w, h, 0, 0, c.width, c.height);
+                //}
+
+            
+                //let ogSampleSize = confidential ? 70 : 140
+                //let steps = ogSampleSize / 2
+                //let steps = ogSampleSize
+                //ctx.drawImage(img, 0, 0);
+
+                //let sampleSize = ogSampleSize;
 
                 
 
                 workCard.querySelector('.thumbnail-wrap').appendChild(c);
 
-                let enterTimeout, leaveTimeout
+                // let enterTimeout, leaveTimeout
 
 
-                const sharpenFunc = () => {
-                    clearTimeout(leaveTimeout)
-                    if(sampleSize !== 0){
-                        enterTimeout = setTimeout(()=>{
-                            sampleSize -= steps;
-                            pxAdjust()    
-                            if(sampleSize >= steps){
-                                sharpenFunc()
-                            }
-                        },100) 
-                    } 
-                }
+                // const sharpenFunc = () => {
+                //     clearTimeout(leaveTimeout)
+                //     if(sampleSize !== 0){
+                //         enterTimeout = setTimeout(()=>{
+                //             sampleSize -= steps;
+                //             pxAdjust()    
+                //             if(sampleSize >= steps){
+                //                 sharpenFunc()
+                //             }
+                //         },100) 
+                //     } 
+                // }
 
-                const pixelateFunc = () => {
-                    clearTimeout(enterTimeout)
-                    if(sampleSize < ogSampleSize){
-                        leaveTimeout = setTimeout(()=>{
-                            sampleSize += steps;
-                            pxAdjust()    
-                            if(sampleSize < ogSampleSize){
-                                pixelateFunc()
-                            }
-                        },100) 
-                    } 
-                }
+                // const pixelateFunc = () => {
+                //     clearTimeout(enterTimeout)
+                //     if(sampleSize < ogSampleSize){
+                //         leaveTimeout = setTimeout(()=>{
+                //             sampleSize += steps;
+                //             pxAdjust()    
+                //             if(sampleSize < ogSampleSize){
+                //                 pixelateFunc()
+                //             }
+                //         },100) 
+                //     } 
+                // }
 
-                if(nameSpace === 'work'){
-                    workCard.addEventListener('mouseenter',pixelateFunc)
-                    workCard.addEventListener('mouseleave',sharpenFunc)
+                // if(nameSpace === 'work'){
+                //     if(confidential){
+                //         workCard.addEventListener('mouseenter',sharpenFunc)
+                //         workCard.addEventListener('mouseleave',pixelateFunc)
+                //     }else{
+                //         workCard.addEventListener('mouseenter',pixelateFunc)
+                //         workCard.addEventListener('mouseleave',sharpenFunc)
 
-                    pxAdjust()
-                    setTimeout(()=>{
-                        sharpenFunc()
-                    },1000);
-                }else{
-                    workCard.addEventListener('mouseenter',sharpenFunc)
-                    workCard.addEventListener('mouseleave',pixelateFunc)
+                //         pxAdjust()
+                //         setTimeout(()=>{
+                //             sharpenFunc()
+                //         },1000);
+                //     }    
+                // }else{
+                //     workCard.addEventListener('mouseenter',sharpenFunc)
+                //     workCard.addEventListener('mouseleave',pixelateFunc)
 
-                    pxAdjust()
-                    // setTimeout(()=>{
-                    //     sharpenFunc()
-                    // },1000);                    
-                }    
+                //     pxAdjust()
+                //     // setTimeout(()=>{
+                //     //     sharpenFunc()
+                //     // },1000);                    
+                // }    
 
             }
         }
     })
     
 }
+
+
 
 // const customCursorFunc = (e) => {
 //     customCursor(e)
@@ -167,7 +187,18 @@ const spacer = (data) => {
     data.next.container.querySelector('.intro').style.marginBottom = data.next.container.querySelector('.intro-text').getBoundingClientRect().height + "px"
 }
 
-let scrollValues = {};
+var simulateClick = function (elem) {
+	// Create our event (with options)
+	var evt = new MouseEvent('click', {
+		bubbles: true,
+		cancelable: true,
+		view: window
+	});
+	// If cancelled, don't dispatch our event
+	var canceled = !elem.dispatchEvent(evt);
+};
+
+//let scrollValues = {};
 
 barba.init({
     debug:true,
@@ -195,54 +226,119 @@ barba.init({
                 //     elements_selector: ".intro-image"
                 // })
 
-                let video = data.next.container.querySelector('.intro-video')
-                video.addEventListener("loadedmetadata", (e) => {  
-                    let { h,w } = e.target  
+                let video = data.next.container.querySelector('video')
+                let videoCanvas = data.next.container.querySelector("canvas")
+                let ctx = videoCanvas.getContext('2d')
+                let w
+                let h
+                let sampleSize = 30
+                let steps = sampleSize
+
+                console.log(video, video.videoWidth, video.videoHeight)
+
+                const videoPxAdjust = () => {
+                    let cw = w/(sampleSize + 1)
+                    let ch = h/(sampleSize + 1)
+
+                    ctx.drawImage(video, 0, 0, cw, ch);
+                    ctx.mozImageSmoothingEnabled = false;
+                    ctx.imageSmoothingEnabled = false;
+                    ctx.drawImage(videoCanvas, 0, 0, cw, ch, 0, 0, w, h);                     
+                }
+                const sharpenVideoFunc = () => {
+                    setTimeout(()=>{
+                        sampleSize -= steps;
+                        videoPxAdjust()    
+                        if(sampleSize >= steps){
+                            sharpenVideoFunc()
+                        }else{
+                            //console.log(video.paused)
+                            videoCanvas.remove()
+                            video.play()
+                        }
+                    },100) 
+                }
+
+
+                const setupVideo = () => {
+                    w = video.videoWidth
+                    h = video.videoHeight
+
                     if(h/w > window.innerHeight/window.innerWidth){
-                        video.classList.add('max-height')
+                        video.parentElement.classList.add('max-height')
                     }else{
-                        video.classList.add('max-width')                       
-                    } 
+                        video.parentElement.classList.add('max-width')                       
+                    }
 
+                    videoCanvas.style.aspectRatio = w/h
 
-                    let c = document.createElement("canvas");
-                    let ctx = c.getContext('2d')
-                    ctx.drawImage(video, 0, 0, w, h);
-                    // let pixelArr = ctx.getImageData(0, 0, w, h).data;
-                    // let sample_size = 80
+                    ctx.canvas.width = w;
+                    ctx.canvas.height = h;
+                    
+                    // let cw = w/20
+                    // let ch = h/20
 
-                    // for (let y = 0; y < h; y += sample_size) {
-                    //     for (let x = 0; x < w; x += sample_size) {
-                    //         let p = (x + (y*w)) * 4;
-                    //         ctx.fillStyle = "rgba(" + pixelArr[p] + "," + pixelArr[p + 1] + "," + pixelArr[p + 2] + "," + pixelArr[p + 3] + ")";
-                    //         ctx.fillRect(x, y, sample_size, sample_size);
-                    //     }
-                    // }
-                    data.next.container.querySelector('.intro-wrap').appendChild(c);
-            
-                })
+                    // ctx.drawImage(video, 0, 0, cw, ch);
+                    // ctx.mozImageSmoothingEnabled = false;
+                    // ctx.imageSmoothingEnabled = false;
+                    // ctx.drawImage(videoCanvas, 0, 0, cw, ch, 0, 0, w, h); 
+                    videoPxAdjust()
 
-                // video.addEventListener('canplay', (e) => { 
-                //     let { h,w } = e.target  
+                    video.pause()
+                    
+                } 
+                if(video.videoWidth > 0 && video.videoHeight > 0){
+                    setupVideo()
+                }else{
+                    video.addEventListener("loadeddata", () => {  
 
+                        // w = video.videoWidth
+                        // h = video.videoHeight
+    
+                        // if(h/w > window.innerHeight/window.innerWidth){
+                        //     video.parentElement.classList.add('max-height')
+                        // }else{
+                        //     video.parentElement.classList.add('max-width')                       
+                        // }
+    
+                        // videoCanvas.style.aspectRatio = w/h
+    
+                        // ctx.canvas.width = w;
+                        // ctx.canvas.height = h;
+                        
+                        // // let cw = w/20
+                        // // let ch = h/20
+    
+                        // // ctx.drawImage(video, 0, 0, cw, ch);
+                        // // ctx.mozImageSmoothingEnabled = false;
+                        // // ctx.imageSmoothingEnabled = false;
+                        // // ctx.drawImage(videoCanvas, 0, 0, cw, ch, 0, 0, w, h); 
+                        // videoPxAdjust()
+    
+                        // video.pause()
+                        setupVideo()
+    
+                    },false) 
+                }           
 
-                // });
-                
-
+                            
 
 
                 //document.addEventListener('scroll', homePageScroll) 
                 let introWrap = data.next.container.querySelector('.intro-wrap')
-                introWrap.addEventListener('scroll',(e)=>{
+                introWrap.addEventListener('scroll',()=>{
                     let documentHeight = introWrap.scrollHeight;
                     let currentScroll = introWrap.scrollTop + window.innerHeight;
                     // When the user is [modifier]px from the bottom, fire the event.
                     let modifier = 10; 
                     if(currentScroll + modifier > documentHeight) {
                         document.body.classList.add('scrolled')
-                    }else{
-                        document.body.classList.remove('scrolled')
+
+                        sharpenVideoFunc() 
                     }
+                    // else{
+                    //     document.body.classList.remove('scrolled')
+                    // }
                 })
 
                 if(!is_touch_enabled()){
@@ -304,6 +400,11 @@ barba.init({
                 window.addEventListener('resize',spacer)
                   
             },
+            // afterEnter(data) {    
+            //     data.next.container.querySelector('video').onloadeddata = function() {
+            //         console.log('loaded data funct')
+            //     }; 
+            // },
             afterLeave() {    
                 //document.removeEventListener('scroll', homePageScroll) 
                 window.removeEventListener('resize',spacer)
@@ -316,8 +417,9 @@ barba.init({
                 window.addEventListener('scroll',secondaryNavScroll)
                 secondaryNavClick(data.next.container.querySelector('.show-menu'))
                 workCardsFunc('work')
+                document.body.classList.add('dark-bg')
             },
-            afterLeave() {    
+            afterLeave(data) {    
                 window.removeEventListener('scroll',secondaryNavScroll) 
                 document.body.classList.remove('show-secondary-header')
             } 
@@ -328,23 +430,28 @@ barba.init({
                 window.addEventListener('scroll',secondaryNavScroll)
                 secondaryNavClick(data.next.container.querySelector('.show-menu'))
 
-                let workIndex = data.next.container.querySelector('.work-index')
+                //let workIndex = data.next.container.querySelector('.work-index')
 
                 ScrollTrigger.create({
-                    trigger: workIndex,
+                    trigger: data.next.container.querySelector('.back-to-index'),
                     start: "top center",
                     // end: "bottom bottom",
                     onEnter: () => {
-                        data.next.container.querySelector('.single-work-header').classList.add('index-inview')
-                        data.next.container.setAttribute('data-barba-namespace','work')
-                        gsap.to(window,{
-                            scrollTo: workIndex.offsetTop, 
-                            duration: .5,
-                            onComplete: ()=>{
-                                data.next.container.querySelector('.work-wrap').remove()
-                                window.scrollTo(0,0)
-                            }
-                        })
+                        // data.next.container.querySelector('.single-work-header').classList.add('index-inview')
+                        // data.next.container.setAttribute('data-barba-namespace','work')
+                        // document.body.classList.add('dark-bg')
+                        // gsap.to(window,{
+                        //     scrollTo: workIndex.offsetTop, 
+                        //     duration: .5,
+                        //     onComplete: ()=>{
+                        //         data.next.container.querySelector('.work-wrap').remove()
+                        //         window.scrollTo(0,0)
+                        //         workCardsFunc('work')
+                        //         data.next.container.querySelector('.main-header ul li:first-child').classList.add('current-menu-item')
+                        //         //barba.history.add(data.next.container.querySelector('.main-header ul li:first-child a').href, 'barba');
+                        //     }
+                        // })
+                        simulateClick(data.next.container.querySelector('.main-header ul li:first-child a'))
                     },
                     // onEnterBack: () => {
                     //     data.next.container.querySelector('.single-work-header').classList.remove('index-inview')
@@ -360,7 +467,20 @@ barba.init({
             namespace: 'labs',
             beforeEnter(data) {
                 workCardsFunc('labs')
-            } 
+                document.body.classList.add('dark-bg')
+            }
+        }, 
+        {
+            namespace: 'single-labs',
+            beforeEnter(data) {
+                ScrollTrigger.create({
+                    trigger: data.next.container.querySelector('.back-to-index'),
+                    start: "top center",
+                    onEnter: () => {
+                        simulateClick(data.next.container.querySelector('.main-header ul li:nth-child(2n) a'))
+                    }
+                });
+            }
         }, 
         {
             namespace: 'info',
@@ -601,13 +721,17 @@ const subscribeForm = (form) => {
 } 
 subscribeForm(document.querySelector('#mc-embedded-subscribe-form'))
 
-barba.hooks.beforeLeave((data) => {
-    scrollValues[data.current.url.href] =  window.scrollY;
-});
+// barba.hooks.beforeLeave((data) => {
+//     scrollValues[data.current.url.href] =  window.scrollY;
+// });
 
 barba.hooks.beforeEnter((data) => {
-    const scrollPos = scrollValues[data.next.url.href] ? scrollValues[data.next.url.href] : 0;
-    document.documentElement.scrollTop = scrollPos;
+    // let scrollPos = 0;
+    // if(data.next.namespace !== "single-work" && data.next.namespace !== "single-labs"){
+    //     scrollPos = scrollValues[data.next.url.href] ? scrollValues[data.next.url.href] : 0;
+    // }
+    // document.documentElement.scrollTop = scrollPos;
+    document.documentElement.scrollTop = 0    
 
     lazyImages()
 
@@ -617,4 +741,10 @@ barba.hooks.beforeEnter((data) => {
 
     subscribeForm(data.next.container.querySelector('#mc-embedded-subscribe-form'))
 
+});
+
+barba.hooks.afterLeave((data) => {
+    if(data.next.namespace !== "labs" && data.next.namespace !== "work"){
+        document.body.classList.remove('dark-bg')
+    }
 });

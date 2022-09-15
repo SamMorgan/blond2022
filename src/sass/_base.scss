@@ -73,10 +73,10 @@ body > div,
 
 [data-barba-namespace="work"],
 [data-barba-namespace="labs"],
-[data-barba-namespace="single-labs"],
 [data-barba-namespace="work"] .site-header,
 [data-barba-namespace="labs"] .site-header,
-[data-barba-namespace="single-labs"] .site-header {
+.dark-bg,
+.dark-bg .site-header {
     background:#000;
     color: $lightgrey;
 }
@@ -91,9 +91,9 @@ body > div,
 [data-barba-namespace="work"] .site-header a,
 [data-barba-namespace="work"] .site-footer a,
 [data-barba-namespace="labs"] .site-header a,
-[data-barba-namespace="single-labs"] .site-header a,
 [data-barba-namespace="labs"] .site-footer a,
-[data-barba-namespace="single-labs"] .site-footer a {    
+.dark-bg .site-header a,
+.dark-bg .site-footer a {    
     color: $lightgrey;
 }
 
@@ -208,12 +208,17 @@ body > div,
     pointer-events: none;
 }
 
-img.lazy {
+img.lazy,
+img.thumbnail {
     opacity: 0;
     transition: opacity .4s;
     &.loaded {
         opacity: 1;
     }
+}
+
+.back-to-index {
+    height: 100vh;
 }
 
 @media (hover: hover) and (pointer: fine) {

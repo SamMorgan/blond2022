@@ -19,9 +19,34 @@
     top:0;
     left:0;
     position: absolute;
+    background: #000;
     .custom-cursor:after {
-        color:#fff;
+        color:$orange;
         content: "scroll";
+    }
+    video,
+    canvas {
+        position: fixed;
+    }
+    &.max-height {
+        video,
+        canvas {
+            width: 100%;
+            height: auto;
+            left:0;
+            top: 50%;
+            transform: translateY(-50%);
+        }    
+    }
+    &.max-width {
+        video,
+        canvas {
+            width: auto;
+            height: 100%;
+            left:50%;
+            top: 0;
+            transform: translateX(-50%);
+        }    
     }
 }
 
@@ -37,7 +62,7 @@
             margin: 0;
         }
         a {
-            color: #fff;
+            color: $orange;
         }
     }
     .scrolldown {
@@ -131,25 +156,6 @@
         } 
     }
 }
-
-.intro-video {
-    position: fixed;
-    &.max-height {
-        width: 100%;
-        height: auto;
-        left:0;
-        top: 50%;
-        transform: translateY(-50%);
-    }
-    &.max-width {
-        width: auto;
-        height: 100%;
-        left:50%;
-        top: 0;
-        transform: translateX(-50%);
-    }
-}
-
 .scrolled {
     .intro-wrap {
         overflow: hidden;
@@ -177,9 +183,9 @@
     //         }
     //     }
     // }
-    .custom-cursor:after {
-        content: "click";
-    }
+    // .custom-cursor:after {
+    //     content: "click";
+    // }
 }
 
 @media (hover: none) and (pointer: coarse) {
