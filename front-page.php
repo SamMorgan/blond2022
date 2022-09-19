@@ -7,8 +7,7 @@
             <div class="custom-cursor"></div>
             </div>
         </div>
-        <video class="intro-video" src="<?php the_field('video');?>" playsinline muted loop autoplay></video>
-        <canvas></canvas>
+        <video poster="<?php the_field('intro_image');?>" class="intro-video" src="<?php the_field('video');?>" playsinline muted loop></video>
     </div>
 <?php endwhile; endif;?>
 <?php include('includes/svg-filters.php');?>

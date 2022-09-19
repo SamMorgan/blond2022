@@ -69,7 +69,16 @@ const secondaryNavClick = (btn) => {
 // }
 
 
-// const workCardsFunc = (nameSpace) => {
+const workCardsFunc = () => {
+    data.next.container.querySelectorAll('.work-card').forEach(workCard => {
+        imagesLoaded( workCard, () => {
+            workCard.classList.remove('loading')
+            workCard.classList.add('anim-in')
+            setTimeout(()=>{
+                workCard.classList.remove('anim-in')
+            },1000)
+        })
+    })
 //     let lazy = new LazyLoad({
 //         elements_selector: '.thumbnail',
 //         callback_loaded: (el) => {
@@ -188,7 +197,7 @@ const secondaryNavClick = (btn) => {
 //         }
 //     })
     
-// }
+}
 
 /*!
  * Run a callback function after scrolling has stopped
@@ -266,104 +275,105 @@ barba.init({
                 //     elements_selector: ".intro-image"
                 // })
 
-                let video = data.next.container.querySelector('video')
-                let videoCanvas = data.next.container.querySelector("canvas")
-                let ctx = videoCanvas.getContext('2d')
-                let w
-                let h
-                let sampleSize = 30
-                let steps = sampleSize
+                // let video = data.next.container.querySelector('video')
+                // let videoCanvas = data.next.container.querySelector("canvas")
+                // let ctx = videoCanvas.getContext('2d')
+                // let w
+                // let h
+                // let sampleSize = 30
+                // let steps = sampleSize
 
-                const videoPxAdjust = () => {
-                    let cw = w/(sampleSize + 1)
-                    let ch = h/(sampleSize + 1)
+                // const videoPxAdjust = () => {
+                //     let cw = w/(sampleSize + 1)
+                //     let ch = h/(sampleSize + 1)
 
-                    ctx.drawImage(video, 0, 0, cw, ch);
-                    ctx.mozImageSmoothingEnabled = false;
-                    ctx.imageSmoothingEnabled = false;
-                    ctx.drawImage(videoCanvas, 0, 0, cw, ch, 0, 0, w, h);                     
-                }
-                const sharpenVideoFunc = () => {
-                    setTimeout(()=>{
-                        sampleSize -= steps;
-                        videoPxAdjust()    
-                        if(sampleSize >= steps){
-                            sharpenVideoFunc()
-                        }else{
-                            //console.log(video.paused)
-                            videoCanvas.remove()
-                            video.play()
-                        }
-                    },100) 
-                }
+                //     ctx.drawImage(video, 0, 0, cw, ch);
+                //     ctx.mozImageSmoothingEnabled = false;
+                //     ctx.imageSmoothingEnabled = false;
+                //     ctx.drawImage(videoCanvas, 0, 0, cw, ch, 0, 0, w, h);                     
+                // }
+                // const sharpenVideoFunc = () => {
+                //     setTimeout(()=>{
+                //         sampleSize -= steps;
+                //         videoPxAdjust()    
+                //         if(sampleSize >= steps){
+                //             sharpenVideoFunc()
+                //         }else{
+                //             //console.log(video.paused)
+                //             videoCanvas.remove()
+                //             video.play()
+                //         }
+                //     },100) 
+                // }
 
 
-                const setupVideo = () => {
-                    w = video.videoWidth
-                    h = video.videoHeight
+                // const setupVideo = () => {
+                //     w = video.videoWidth
+                //     h = video.videoHeight
 
-                    if(h/w > window.innerHeight/window.innerWidth){
-                        video.parentElement.classList.add('max-height')
-                    }else{
-                        video.parentElement.classList.add('max-width')                       
-                    }
+                //     if(h/w > window.innerHeight/window.innerWidth){
+                //         video.parentElement.classList.add('max-height')
+                //     }else{
+                //         video.parentElement.classList.add('max-width')                       
+                //     }
 
-                    videoCanvas.style.aspectRatio = w/h
+                //     videoCanvas.style.aspectRatio = w/h
 
-                    ctx.canvas.width = w;
-                    ctx.canvas.height = h;
+                //     ctx.canvas.width = w;
+                //     ctx.canvas.height = h;
                     
-                    // let cw = w/20
-                    // let ch = h/20
+                //     // let cw = w/20
+                //     // let ch = h/20
 
-                    // ctx.drawImage(video, 0, 0, cw, ch);
-                    // ctx.mozImageSmoothingEnabled = false;
-                    // ctx.imageSmoothingEnabled = false;
-                    // ctx.drawImage(videoCanvas, 0, 0, cw, ch, 0, 0, w, h); 
-                    videoPxAdjust()
+                //     // ctx.drawImage(video, 0, 0, cw, ch);
+                //     // ctx.mozImageSmoothingEnabled = false;
+                //     // ctx.imageSmoothingEnabled = false;
+                //     // ctx.drawImage(videoCanvas, 0, 0, cw, ch, 0, 0, w, h); 
+                //     videoPxAdjust()
 
-                    video.pause()
+                //     video.pause()
                     
-                } 
-                if(video.videoWidth > 0 && video.videoHeight > 0){
-                    setupVideo()
-                }else{
-                    video.addEventListener("loadeddata", () => {  
+                // } 
+                // if(video.videoWidth > 0 && video.videoHeight > 0){
+                //     setupVideo()
+                // }else{
+                //     video.addEventListener("loadeddata", () => {  
 
-                        // w = video.videoWidth
-                        // h = video.videoHeight
+                //         // w = video.videoWidth
+                //         // h = video.videoHeight
     
-                        // if(h/w > window.innerHeight/window.innerWidth){
-                        //     video.parentElement.classList.add('max-height')
-                        // }else{
-                        //     video.parentElement.classList.add('max-width')                       
-                        // }
+                //         // if(h/w > window.innerHeight/window.innerWidth){
+                //         //     video.parentElement.classList.add('max-height')
+                //         // }else{
+                //         //     video.parentElement.classList.add('max-width')                       
+                //         // }
     
-                        // videoCanvas.style.aspectRatio = w/h
+                //         // videoCanvas.style.aspectRatio = w/h
     
-                        // ctx.canvas.width = w;
-                        // ctx.canvas.height = h;
+                //         // ctx.canvas.width = w;
+                //         // ctx.canvas.height = h;
                         
-                        // // let cw = w/20
-                        // // let ch = h/20
+                //         // // let cw = w/20
+                //         // // let ch = h/20
     
-                        // // ctx.drawImage(video, 0, 0, cw, ch);
-                        // // ctx.mozImageSmoothingEnabled = false;
-                        // // ctx.imageSmoothingEnabled = false;
-                        // // ctx.drawImage(videoCanvas, 0, 0, cw, ch, 0, 0, w, h); 
-                        // videoPxAdjust()
+                //         // // ctx.drawImage(video, 0, 0, cw, ch);
+                //         // // ctx.mozImageSmoothingEnabled = false;
+                //         // // ctx.imageSmoothingEnabled = false;
+                //         // // ctx.drawImage(videoCanvas, 0, 0, cw, ch, 0, 0, w, h); 
+                //         // videoPxAdjust()
     
-                        // video.pause()
-                        setupVideo()
+                //         // video.pause()
+                //         setupVideo()
     
-                    },false) 
-                }           
+                //     },false) 
+                // }           
 
                             
 
 
                 //document.addEventListener('scroll', homePageScroll) 
                 let introWrap = data.next.container.querySelector('.intro-wrap')
+            
                 introWrap.addEventListener('scroll',()=>{
                     let documentHeight = introWrap.scrollHeight;
                     let currentScroll = introWrap.scrollTop + window.innerHeight;
@@ -372,7 +382,8 @@ barba.init({
                     if(currentScroll + modifier > documentHeight) {
                         document.body.classList.add('scrolled')
 
-                        sharpenVideoFunc() 
+                        //sharpenVideoFunc() 
+                        data.next.container.querySelector('video').play()
                     }
                     // else{
                     //     document.body.classList.remove('scrolled')
@@ -454,16 +465,7 @@ barba.init({
             beforeEnter(data) {
                 window.addEventListener('scroll',secondaryNavScroll)
                 secondaryNavClick(data.next.container.querySelector('.show-menu'))
-                //workCardsFunc('work')
-                data.next.container.querySelectorAll('.work-card').forEach(workCard => {
-                    imagesLoaded( workCard, () => {
-                        workCard.classList.remove('loading')
-                        workCard.classList.add('anim-in')
-                        setTimeout(()=>{
-                            workCard.classList.remove('anim-in')
-                        },1000)
-                    })
-                })    
+                workCardsFunc('work')    
                 document.body.classList.add('dark-bg')
                 data.next.container.querySelectorAll('.filters a').forEach((filter)=>{
                     filter.addEventListener('click',(e)=>{
@@ -501,7 +503,7 @@ barba.init({
 
                 let workIndex = data.next.container.querySelector('.work-index')
 
-                //workCardsFunc('work')
+                workCardsFunc('work')
 
                 ScrollTrigger.create({
                     trigger: workIndex,
@@ -572,7 +574,7 @@ barba.init({
                                 onComplete: ()=>{
                                     data.next.container.querySelector('.work-wrap').remove()
                                     window.scrollTo(0,0)
-                                    //workCardsFunc('work')
+                                    workCardsFunc('work')
                                     data.next.container.querySelector('.main-header ul li:nth-child(2n)').classList.add('current-menu-item')
                                 }
                             })

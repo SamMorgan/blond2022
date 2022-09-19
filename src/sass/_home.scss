@@ -24,29 +24,37 @@
         color:$orange;
         content: "scroll";
     }
-    video,
-    canvas {
+    // video,
+    // canvas {
+    //     position: fixed;
+    // }
+    // &.max-height {
+    //     video,
+    //     canvas {
+    //         width: 100%;
+    //         height: auto;
+    //         left:0;
+    //         top: 50%;
+    //         transform: translateY(-50%);
+    //     }    
+    // }
+    // &.max-width {
+    //     video,
+    //     canvas {
+    //         width: auto;
+    //         height: 100%;
+    //         left:50%;
+    //         top: 0;
+    //         transform: translateX(-50%);
+    //     }    
+    // }
+    video {
         position: fixed;
-    }
-    &.max-height {
-        video,
-        canvas {
-            width: 100%;
-            height: auto;
-            left:0;
-            top: 50%;
-            transform: translateY(-50%);
-        }    
-    }
-    &.max-width {
-        video,
-        canvas {
-            width: auto;
-            height: 100%;
-            left:50%;
-            top: 0;
-            transform: translateX(-50%);
-        }    
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        top:0;
+        left:0;
     }
 }
 

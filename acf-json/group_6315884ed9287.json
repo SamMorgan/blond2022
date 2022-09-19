@@ -7,7 +7,7 @@
             "label": "Intro Image",
             "name": "intro_image",
             "type": "image",
-            "instructions": "*Must match first image in gallery",
+            "instructions": "*Must match first frame in video",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -15,7 +15,7 @@
                 "class": "",
                 "id": ""
             },
-            "return_format": "array",
+            "return_format": "url",
             "preview_size": "medium",
             "library": "all",
             "min_width": "",
@@ -45,5 +45,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1662355822
+    "modified": 1663569647
 }
