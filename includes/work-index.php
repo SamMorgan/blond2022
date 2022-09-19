@@ -4,7 +4,7 @@ if(is_tax('work-category')){
     $curr_category = get_queried_object()->slug;
 }
 if($work_query->have_posts()) : while ( $work_query->have_posts() ) : $work_query->the_post();
-    $bleached_image = get_field('bleached_image');
+    $px_image = get_field('bleached_image');
     $fc_image = get_field('fc_image');
     $confidential = get_field('confidential') ? " confidential" : "";
     $format = $fc_image['width'] > $fc_image['height'] ? "landscape" : "portrait";
@@ -20,7 +20,7 @@ if($work_query->have_posts()) : while ( $work_query->have_posts() ) : $work_quer
                 }
             } 
             $data_cats = ' data-categories="'.implode (",",$categories_list).'"';  
-            
+
             if($curr_category){
                 if(in_array($curr_category,$categories_list) == false){
                     $hidden = " hidden";
@@ -31,7 +31,8 @@ if($work_query->have_posts()) : while ( $work_query->have_posts() ) : $work_quer
     <div class="work-card loading <?php echo $format.$confidential.$hidden;?>"<?php echo $data_cats;?>>
         <a href="<?php the_permalink();?>"> 
             <div class="thumbnail-wrap">
-                <?php echo '<img class="thumbnail" data-src="'.$fc_image['url'].'" width="'.$fc_image['width'].'" height="'.$fc_image['height'].'">';?>
+                <?php echo '<img class="thumbnail fc-img" src="'.$fc_image['url'].'">';?>
+                <?php echo '<img class="thumbnail px-img" src="'.$px_image['url'].'">';?>
             </div>    
             <h3><?php 
                 $year = get_field('year');

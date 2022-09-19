@@ -6,7 +6,7 @@ import { gsap } from "gsap";
 import { ScrollToPlugin } from "gsap/ScrollToPlugin.js";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Swiper, { Lazy, Pagination, Navigation, Autoplay} from 'swiper';
-//import imagesLoaded from "imagesloaded";
+import imagesLoaded from "imagesloaded";
 
 Swiper.use([Lazy, Pagination, Navigation, Autoplay]);
 
@@ -69,126 +69,126 @@ const secondaryNavClick = (btn) => {
 // }
 
 
-const workCardsFunc = (nameSpace) => {
-    let lazy = new LazyLoad({
-        elements_selector: '.thumbnail',
-        callback_loaded: (el) => {
-            let workCard = el.parentElement.parentElement.parentElement
-            if(workCard && workCard.classList.contains('work-card')){
-                workCard.classList.remove('loading')
-                let confidential = false
-                if(workCard.classList.contains('confidential')){
-                    confidential = true
-                } 
+// const workCardsFunc = (nameSpace) => {
+//     let lazy = new LazyLoad({
+//         elements_selector: '.thumbnail',
+//         callback_loaded: (el) => {
+//             let workCard = el.parentElement.parentElement.parentElement
+//             if(workCard && workCard.classList.contains('work-card')){
+//                 workCard.classList.remove('loading')
+//                 let confidential = false
+//                 if(workCard.classList.contains('confidential')){
+//                     confidential = true
+//                 } 
                 
-                let img = workCard.querySelector('img')
-                let c = document.createElement("canvas");
-                let ctx = c.getContext('2d');
+//                 let img = workCard.querySelector('img')
+//                 let c = document.createElement("canvas");
+//                 let ctx = c.getContext('2d');
 
-                c.width = img.width;
-                c.height = img.height;
+//                 c.width = img.width;
+//                 c.height = img.height;
 
-                //img.remove();
-                //c.style.aspectRatio = c.width/c.height
+//                 //img.remove();
+//                 //c.style.aspectRatio = c.width/c.height
 
-                //const pxAdjust = () => {
+//                 //const pxAdjust = () => {
 
-                    // let w = c.width/(sampleSize + 1)
-                    // let h = c.height/(sampleSize + 1)
+//                     // let w = c.width/(sampleSize + 1)
+//                     // let h = c.height/(sampleSize + 1)
 
-                    let w = 9
-                    let h = 6
-                    if(workCard.classList.contains('portrait')){
-                        w = 6
-                        h = 9
-                    }    
-                    ctx.drawImage(img, 0, 0, w, h);
-                    ctx.mozImageSmoothingEnabled    = false;
-                    ctx.oImageSmoothingEnabled      = false;
-                    ctx.webkitImageSmoothingEnabled = false;
-                    ctx.msImageSmoothingEnabled     = false;
-                    ctx.imageSmoothingEnabled       = false;
-                    ctx.drawImage(c, 0, 0, w, h, 0, 0, c.width, c.height);
+//                     let w = 9
+//                     let h = 6
+//                     if(workCard.classList.contains('portrait')){
+//                         w = 6
+//                         h = 9
+//                     }    
+//                     ctx.drawImage(img, 0, 0, w, h);
+//                     ctx.mozImageSmoothingEnabled    = false;
+//                     ctx.oImageSmoothingEnabled      = false;
+//                     ctx.webkitImageSmoothingEnabled = false;
+//                     ctx.msImageSmoothingEnabled     = false;
+//                     ctx.imageSmoothingEnabled       = false;
+//                     ctx.drawImage(c, 0, 0, w, h, 0, 0, c.width, c.height);
 
-                    //ctx.drawImage(img, 0, 0, w, h);
-                    // ctx.mozImageSmoothingEnabled = false;
-                    // ctx.imageSmoothingEnabled = false;
-                    // c.width = w;
-                    // c.height = h;
-                    // ctx.mozImageSmoothingEnabled = false;
-                    // ctx.imageSmoothingEnabled = false;
-                    // ctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, w, h);
-                //}
+//                     //ctx.drawImage(img, 0, 0, w, h);
+//                     // ctx.mozImageSmoothingEnabled = false;
+//                     // ctx.imageSmoothingEnabled = false;
+//                     // c.width = w;
+//                     // c.height = h;
+//                     // ctx.mozImageSmoothingEnabled = false;
+//                     // ctx.imageSmoothingEnabled = false;
+//                     // ctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, w, h);
+//                 //}
 
             
-                //let ogSampleSize = confidential ? 70 : 140
-                //let steps = ogSampleSize / 2
-                //let steps = ogSampleSize
-                //ctx.drawImage(img, 0, 0);
+//                 //let ogSampleSize = confidential ? 70 : 140
+//                 //let steps = ogSampleSize / 2
+//                 //let steps = ogSampleSize
+//                 //ctx.drawImage(img, 0, 0);
 
-                //let sampleSize = ogSampleSize;
+//                 //let sampleSize = ogSampleSize;
 
                 
 
-                workCard.querySelector('.thumbnail-wrap').appendChild(c);
+//                 workCard.querySelector('.thumbnail-wrap').appendChild(c);
 
-                // let enterTimeout, leaveTimeout
+//                 // let enterTimeout, leaveTimeout
 
 
-                // const sharpenFunc = () => {
-                //     clearTimeout(leaveTimeout)
-                //     if(sampleSize !== 0){
-                //         enterTimeout = setTimeout(()=>{
-                //             sampleSize -= steps;
-                //             pxAdjust()    
-                //             if(sampleSize >= steps){
-                //                 sharpenFunc()
-                //             }
-                //         },100) 
-                //     } 
-                // }
+//                 // const sharpenFunc = () => {
+//                 //     clearTimeout(leaveTimeout)
+//                 //     if(sampleSize !== 0){
+//                 //         enterTimeout = setTimeout(()=>{
+//                 //             sampleSize -= steps;
+//                 //             pxAdjust()    
+//                 //             if(sampleSize >= steps){
+//                 //                 sharpenFunc()
+//                 //             }
+//                 //         },100) 
+//                 //     } 
+//                 // }
 
-                // const pixelateFunc = () => {
-                //     clearTimeout(enterTimeout)
-                //     if(sampleSize < ogSampleSize){
-                //         leaveTimeout = setTimeout(()=>{
-                //             sampleSize += steps;
-                //             pxAdjust()    
-                //             if(sampleSize < ogSampleSize){
-                //                 pixelateFunc()
-                //             }
-                //         },100) 
-                //     } 
-                // }
+//                 // const pixelateFunc = () => {
+//                 //     clearTimeout(enterTimeout)
+//                 //     if(sampleSize < ogSampleSize){
+//                 //         leaveTimeout = setTimeout(()=>{
+//                 //             sampleSize += steps;
+//                 //             pxAdjust()    
+//                 //             if(sampleSize < ogSampleSize){
+//                 //                 pixelateFunc()
+//                 //             }
+//                 //         },100) 
+//                 //     } 
+//                 // }
 
-                // if(nameSpace === 'work'){
-                //     if(confidential){
-                //         workCard.addEventListener('mouseenter',sharpenFunc)
-                //         workCard.addEventListener('mouseleave',pixelateFunc)
-                //     }else{
-                //         workCard.addEventListener('mouseenter',pixelateFunc)
-                //         workCard.addEventListener('mouseleave',sharpenFunc)
+//                 // if(nameSpace === 'work'){
+//                 //     if(confidential){
+//                 //         workCard.addEventListener('mouseenter',sharpenFunc)
+//                 //         workCard.addEventListener('mouseleave',pixelateFunc)
+//                 //     }else{
+//                 //         workCard.addEventListener('mouseenter',pixelateFunc)
+//                 //         workCard.addEventListener('mouseleave',sharpenFunc)
 
-                //         pxAdjust()
-                //         setTimeout(()=>{
-                //             sharpenFunc()
-                //         },1000);
-                //     }    
-                // }else{
-                //     workCard.addEventListener('mouseenter',sharpenFunc)
-                //     workCard.addEventListener('mouseleave',pixelateFunc)
+//                 //         pxAdjust()
+//                 //         setTimeout(()=>{
+//                 //             sharpenFunc()
+//                 //         },1000);
+//                 //     }    
+//                 // }else{
+//                 //     workCard.addEventListener('mouseenter',sharpenFunc)
+//                 //     workCard.addEventListener('mouseleave',pixelateFunc)
 
-                //     pxAdjust()
-                //     // setTimeout(()=>{
-                //     //     sharpenFunc()
-                //     // },1000);                    
-                // }    
+//                 //     pxAdjust()
+//                 //     // setTimeout(()=>{
+//                 //     //     sharpenFunc()
+//                 //     // },1000);                    
+//                 // }    
 
-            }
-        }
-    })
+//             }
+//         }
+//     })
     
-}
+// }
 
 /*!
  * Run a callback function after scrolling has stopped
@@ -273,8 +273,6 @@ barba.init({
                 let h
                 let sampleSize = 30
                 let steps = sampleSize
-
-                console.log(video, video.videoWidth, video.videoHeight)
 
                 const videoPxAdjust = () => {
                     let cw = w/(sampleSize + 1)
@@ -456,7 +454,16 @@ barba.init({
             beforeEnter(data) {
                 window.addEventListener('scroll',secondaryNavScroll)
                 secondaryNavClick(data.next.container.querySelector('.show-menu'))
-                workCardsFunc('work')
+                //workCardsFunc('work')
+                data.next.container.querySelectorAll('.work-card').forEach(workCard => {
+                    imagesLoaded( workCard, () => {
+                        workCard.classList.remove('loading')
+                        workCard.classList.add('anim-in')
+                        setTimeout(()=>{
+                            workCard.classList.remove('anim-in')
+                        },1000)
+                    })
+                })    
                 document.body.classList.add('dark-bg')
                 data.next.container.querySelectorAll('.filters a').forEach((filter)=>{
                     filter.addEventListener('click',(e)=>{
@@ -536,7 +543,7 @@ barba.init({
         {
             namespace: 'labs',
             beforeEnter(data) {
-                workCardsFunc('labs')
+                //workCardsFunc('labs')
                 document.body.classList.add('dark-bg')
             }
         }, 
@@ -565,7 +572,7 @@ barba.init({
                                 onComplete: ()=>{
                                     data.next.container.querySelector('.work-wrap').remove()
                                     window.scrollTo(0,0)
-                                    workCardsFunc('work')
+                                    //workCardsFunc('work')
                                     data.next.container.querySelector('.main-header ul li:nth-child(2n)').classList.add('current-menu-item')
                                 }
                             })

@@ -62,25 +62,25 @@
             height: 100%;
             position: absolute;
         }
-        // .fc-img {
-        //     opacity: 0;
-        //     transition: opacity 1s;
-        // }  
-        // .blond-img {
-        //     transition: opacity 1s;
-        // }     
+        .fc-img {
+            opacity: 0;
+            //transition: opacity 1s;
+        }  
+        .px-img {
+            //transition: opacity 1s;
+        }     
     }
     // &.loaded {
     //     transform: translateY(0);
     //     opacity: 1;
-    //     // .thumbnail-wrap {
-    //     //     .fc-img {
-    //     //         opacity: 1;
-    //     //     } 
-    //     //     // .blond-img {
-    //     //     //     opacity: 0;
-    //     //     // }
-    //     // }        
+    //     .thumbnail-wrap {
+    //         .fc-img {
+    //             opacity: 1;
+    //         } 
+    //         .px-img {
+    //             opacity: 0;
+    //         }
+    //     }        
     // }
     // .blond-img div:last-child {
     //     display: none;
@@ -123,16 +123,14 @@
             //         opacity: 0;
             //     }
             // }
-            h3 {
-                position: absolute;
-                bottom: 0;
-                left:0;
-            }
             // .blond-img div:last-child {
             //     display: block;
             // } 
             // .blond-img div:last-child,
             h3 {
+                position: absolute;
+                bottom: 0;
+                left:0;
                 opacity: 0;
                 transition: opacity .4s;
             }
@@ -152,9 +150,9 @@
                 //         opacity: 0;
                 //         //transition: opacity 0s 1s;
                 //     } 
-                //     // .blond-img {
-                //     //     opacity: 1;
-                //     // }
+                //     .px-img {
+                //         opacity: 1;
+                //     }
                 // }       
             }
         }    
@@ -162,53 +160,61 @@
     [data-barba-namespace="work"]{ 
         .work-card {
             a {
-                canvas {
-                    display: none;
+                .fc-img {
+                    opacity: 1;
                 }
-                img {
-                    display: block;
+                .px-img {
+                    opacity: 0;
                 }    
                 &:hover {
-                    canvas {
-                        display: block;
+                    .fc-img {
+                        opacity: 0;
                     }
-                    img {
-                        display: none;
+                    .px-img {
+                        opacity: 1;
                     }
                 }    
             }
-            &.confidential a {
-                canvas {
-                    display: block;
+            &.anim-in a {
+                .fc-img {
+                    opacity: 0;
                 }
-                img {
-                    display: none;
+                .px-img {
+                    opacity: 1;
+                }
+            }
+            &.confidential a {
+                .fc-img {
+                    opacity: 0;
+                }
+                .px-img {
+                    opacity: 1;
                 }    
                 &:hover {
-                    canvas {
-                        display: none;
+                    .fc-img {
+                        opacity: 1;
                     }
-                    img {
-                        display: block;
-                    }
+                    .px-img {
+                        opacity: 0;
+                    } 
                 }                
             }
         }     
     }    
     [data-barba-namespace="labs"] .work-card a {
-        canvas {
-            display: block;
+        .fc-img {
+            opacity: 0;
         }
-        img {
-            display: none;
-        }    
+        .px-img {
+            opacity: 1;
+        }   
         &:hover {
-            canvas {
-                display: none;
+            .fc-img {
+                opacity: 1;
             }
-            img {
-                display: block;
-            }
+            .px-img {
+                opacity: 0;
+            } 
         }    
     }
 }
