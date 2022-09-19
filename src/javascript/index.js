@@ -85,8 +85,9 @@ const workCardsFunc = (nameSpace) => {
                 let c = document.createElement("canvas");
                 let ctx = c.getContext('2d');
 
-                c.width = img.naturalWidth;
-                c.height = img.naturalHeight;
+                c.width = img.width;
+                c.height = img.height;
+
                 //img.remove();
                 //c.style.aspectRatio = c.width/c.height
 
@@ -102,9 +103,21 @@ const workCardsFunc = (nameSpace) => {
                         h = 9
                     }    
                     ctx.drawImage(img, 0, 0, w, h);
-                    ctx.mozImageSmoothingEnabled = false;
-                    ctx.imageSmoothingEnabled = false;
+                    ctx.mozImageSmoothingEnabled    = false;
+                    ctx.oImageSmoothingEnabled      = false;
+                    ctx.webkitImageSmoothingEnabled = false;
+                    ctx.msImageSmoothingEnabled     = false;
+                    ctx.imageSmoothingEnabled       = false;
                     ctx.drawImage(c, 0, 0, w, h, 0, 0, c.width, c.height);
+
+                    //ctx.drawImage(img, 0, 0, w, h);
+                    // ctx.mozImageSmoothingEnabled = false;
+                    // ctx.imageSmoothingEnabled = false;
+                    // c.width = w;
+                    // c.height = h;
+                    // ctx.mozImageSmoothingEnabled = false;
+                    // ctx.imageSmoothingEnabled = false;
+                    // ctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, w, h);
                 //}
 
             
@@ -175,6 +188,33 @@ const workCardsFunc = (nameSpace) => {
         }
     })
     
+}
+
+/*!
+ * Run a callback function after scrolling has stopped
+ * (c) 2017 Chris Ferdinandi, MIT License, https://gomakethings.com
+ * @param  {Function} callback The callback function to run after scrolling
+ * @param  {Integer}  refresh  How long to wait between scroll events [optional]
+ */
+function scrollStop (callback, refresh = 66) {
+
+	// Make sure a valid callback was provided
+	if (!callback || typeof callback !== 'function') return;
+
+	// Setup scrolling variable
+	let isScrolling;
+
+	// Listen for scroll events
+	window.addEventListener('scroll', function (event) {
+
+		// Clear our timeout throughout the scroll
+		window.clearTimeout(isScrolling);
+
+		// Set a timeout to run after scrolling ends
+		isScrolling = setTimeout(callback, refresh);
+
+	}, false);
+
 }
 
 
@@ -418,6 +458,28 @@ barba.init({
                 secondaryNavClick(data.next.container.querySelector('.show-menu'))
                 workCardsFunc('work')
                 document.body.classList.add('dark-bg')
+                data.next.container.querySelectorAll('.filters a').forEach((filter)=>{
+                    filter.addEventListener('click',(e)=>{
+                        e.preventDefault()
+                        if(!filter.classList.contains('active')){
+                            data.next.container.querySelector('.filters a.active').classList.remove('active')
+                            filter.classList.add('active')
+                            window.history.pushState({}, '', filter.href);
+                            data.next.container.querySelectorAll('.work-card').forEach(workCard => {
+                                if(filter.dataset.slug){
+                                    let cats = workCard.dataset.categories.split(',')
+                                    if(cats.includes(filter.dataset.slug)){
+                                        workCard.classList.remove('hidden')
+                                    }else{
+                                        workCard.classList.add('hidden')
+                                    }
+                                }else{
+                                    workCard.classList.remove('hidden')
+                                }    
+                            })
+                        }    
+                    })
+                })
             },
             afterLeave(data) {    
                 window.removeEventListener('scroll',secondaryNavScroll) 
@@ -430,28 +492,36 @@ barba.init({
                 window.addEventListener('scroll',secondaryNavScroll)
                 secondaryNavClick(data.next.container.querySelector('.show-menu'))
 
-                //let workIndex = data.next.container.querySelector('.work-index')
+                let workIndex = data.next.container.querySelector('.work-index')
+
+                //workCardsFunc('work')
 
                 ScrollTrigger.create({
-                    trigger: data.next.container.querySelector('.back-to-index'),
+                    trigger: workIndex,
                     start: "top center",
                     // end: "bottom bottom",
                     onEnter: () => {
-                        // data.next.container.querySelector('.single-work-header').classList.add('index-inview')
-                        // data.next.container.setAttribute('data-barba-namespace','work')
-                        // document.body.classList.add('dark-bg')
-                        // gsap.to(window,{
-                        //     scrollTo: workIndex.offsetTop, 
-                        //     duration: .5,
-                        //     onComplete: ()=>{
-                        //         data.next.container.querySelector('.work-wrap').remove()
-                        //         window.scrollTo(0,0)
-                        //         workCardsFunc('work')
-                        //         data.next.container.querySelector('.main-header ul li:first-child').classList.add('current-menu-item')
-                        //         //barba.history.add(data.next.container.querySelector('.main-header ul li:first-child a').href, 'barba');
-                        //     }
-                        // })
-                        simulateClick(data.next.container.querySelector('.main-header ul li:first-child a'))
+                        //window.history.pushState({}, 'Work', data.next.container.querySelector('.main-header ul li:first-child a').href);
+                        data.next.container.querySelector('.single-work-header').classList.add('index-inview')
+                        //data.next.container.setAttribute('data-barba-namespace','work')
+                        document.body.classList.add('dark-bg')
+                        scrollStop(function () {
+                            gsap.to(window,{
+                                scrollTo: workIndex.offsetTop, 
+                                duration: .5,
+                                onComplete: ()=>{
+                                    data.next.container.querySelector('.work-wrap').remove()
+                                    window.scrollTo(0,0)
+                                    workCardsFunc('work')
+                                    data.next.container.querySelector('.main-header ul li:first-child').classList.add('current-menu-item')
+                                    //barba.history.add(data.next.container.querySelector('.main-header ul li:first-child a').href,'Work');
+                                    // setTimeout(()=>{
+                                    //     window.history.pushState({}, 'Work', data.next.container.querySelector('.main-header ul li:first-child a').href);
+                                    // },500)
+                                    // simulateClick(data.next.container.querySelector('.main-header ul li:first-child a'))
+                                }
+                            })
+                        })    
                     },
                     // onEnterBack: () => {
                     //     data.next.container.querySelector('.single-work-header').classList.remove('index-inview')
@@ -473,11 +543,33 @@ barba.init({
         {
             namespace: 'single-labs',
             beforeEnter(data) {
+                // ScrollTrigger.create({
+                //     trigger: data.next.container.querySelector('.back-to-index'),
+                //     start: "top center",
+                //     onEnter: () => {
+                //         simulateClick(data.next.container.querySelector('.main-header ul li:nth-child(2n) a'))
+                //     }
+                // });
+                let workIndex = data.next.container.querySelector('.work-index')
+
                 ScrollTrigger.create({
-                    trigger: data.next.container.querySelector('.back-to-index'),
+                    trigger: workIndex,
                     start: "top center",
                     onEnter: () => {
-                        simulateClick(data.next.container.querySelector('.main-header ul li:nth-child(2n) a'))
+                        data.next.container.querySelector('.single-work-header').classList.add('index-inview')
+                        document.body.classList.add('dark-bg')
+                        scrollStop(function () {
+                            gsap.to(window,{
+                                scrollTo: workIndex.offsetTop, 
+                                duration: .5,
+                                onComplete: ()=>{
+                                    data.next.container.querySelector('.work-wrap').remove()
+                                    window.scrollTo(0,0)
+                                    workCardsFunc('work')
+                                    data.next.container.querySelector('.main-header ul li:nth-child(2n)').classList.add('current-menu-item')
+                                }
+                            })
+                        })    
                     }
                 });
             }
@@ -721,9 +813,8 @@ const subscribeForm = (form) => {
 } 
 subscribeForm(document.querySelector('#mc-embedded-subscribe-form'))
 
-// barba.hooks.beforeLeave((data) => {
-//     scrollValues[data.current.url.href] =  window.scrollY;
-// });
+
+
 
 barba.hooks.beforeEnter((data) => {
     // let scrollPos = 0;
@@ -731,7 +822,12 @@ barba.hooks.beforeEnter((data) => {
     //     scrollPos = scrollValues[data.next.url.href] ? scrollValues[data.next.url.href] : 0;
     // }
     // document.documentElement.scrollTop = scrollPos;
-    document.documentElement.scrollTop = 0    
+
+    //document.documentElement.scrollTop = 0  
+    if ('scrollRestoration' in history) {
+        history.scrollRestoration = 'manual';
+    }
+    window.scrollTo(0,0); 
 
     lazyImages()
 

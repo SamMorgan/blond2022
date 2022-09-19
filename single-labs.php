@@ -26,18 +26,14 @@
     <?php endwhile; endif;?>
 </div> 
 <?php
-    // $work_query = new WP_Query( array(
-    //     'post_type' => 'labs',
-    //     'posts_per_page' => -1,
-    //     'orderby' => 'menu_order',
-    //     'order' => 'ASC'
-    // ) );
+    $work_query = new WP_Query( array(
+        'post_type' => 'labs',
+        'posts_per_page' => -1,
+        'orderby' => 'menu_order',
+        'order' => 'ASC'
+    ) );
 
-    // include('includes/work-index.php');
-?>   
-<div class="back-to-index"></div>
-</main> 
-</div>
-<?php wp_footer(); ?>
-</body>
-</html>
+    include('includes/work-index.php');
+
+
+get_footer();?>
