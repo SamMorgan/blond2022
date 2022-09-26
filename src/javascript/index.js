@@ -69,134 +69,30 @@ const secondaryNavClick = (btn) => {
 // }
 
 
-const workCardsFunc = () => {
+const workCardsFunc = (data) => {
     data.next.container.querySelectorAll('.work-card').forEach(workCard => {
         imagesLoaded( workCard, () => {
             workCard.classList.remove('loading')
-            workCard.classList.add('anim-in')
-            setTimeout(()=>{
-                workCard.classList.remove('anim-in')
-            },1000)
         })
     })
-//     let lazy = new LazyLoad({
-//         elements_selector: '.thumbnail',
-//         callback_loaded: (el) => {
-//             let workCard = el.parentElement.parentElement.parentElement
-//             if(workCard && workCard.classList.contains('work-card')){
-//                 workCard.classList.remove('loading')
-//                 let confidential = false
-//                 if(workCard.classList.contains('confidential')){
-//                     confidential = true
-//                 } 
-                
-//                 let img = workCard.querySelector('img')
-//                 let c = document.createElement("canvas");
-//                 let ctx = c.getContext('2d');
-
-//                 c.width = img.width;
-//                 c.height = img.height;
-
-//                 //img.remove();
-//                 //c.style.aspectRatio = c.width/c.height
-
-//                 //const pxAdjust = () => {
-
-//                     // let w = c.width/(sampleSize + 1)
-//                     // let h = c.height/(sampleSize + 1)
-
-//                     let w = 9
-//                     let h = 6
-//                     if(workCard.classList.contains('portrait')){
-//                         w = 6
-//                         h = 9
-//                     }    
-//                     ctx.drawImage(img, 0, 0, w, h);
-//                     ctx.mozImageSmoothingEnabled    = false;
-//                     ctx.oImageSmoothingEnabled      = false;
-//                     ctx.webkitImageSmoothingEnabled = false;
-//                     ctx.msImageSmoothingEnabled     = false;
-//                     ctx.imageSmoothingEnabled       = false;
-//                     ctx.drawImage(c, 0, 0, w, h, 0, 0, c.width, c.height);
-
-//                     //ctx.drawImage(img, 0, 0, w, h);
-//                     // ctx.mozImageSmoothingEnabled = false;
-//                     // ctx.imageSmoothingEnabled = false;
-//                     // c.width = w;
-//                     // c.height = h;
-//                     // ctx.mozImageSmoothingEnabled = false;
-//                     // ctx.imageSmoothingEnabled = false;
-//                     // ctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, w, h);
-//                 //}
-
-            
-//                 //let ogSampleSize = confidential ? 70 : 140
-//                 //let steps = ogSampleSize / 2
-//                 //let steps = ogSampleSize
-//                 //ctx.drawImage(img, 0, 0);
-
-//                 //let sampleSize = ogSampleSize;
-
-                
-
-//                 workCard.querySelector('.thumbnail-wrap').appendChild(c);
-
-//                 // let enterTimeout, leaveTimeout
-
-
-//                 // const sharpenFunc = () => {
-//                 //     clearTimeout(leaveTimeout)
-//                 //     if(sampleSize !== 0){
-//                 //         enterTimeout = setTimeout(()=>{
-//                 //             sampleSize -= steps;
-//                 //             pxAdjust()    
-//                 //             if(sampleSize >= steps){
-//                 //                 sharpenFunc()
-//                 //             }
-//                 //         },100) 
-//                 //     } 
-//                 // }
-
-//                 // const pixelateFunc = () => {
-//                 //     clearTimeout(enterTimeout)
-//                 //     if(sampleSize < ogSampleSize){
-//                 //         leaveTimeout = setTimeout(()=>{
-//                 //             sampleSize += steps;
-//                 //             pxAdjust()    
-//                 //             if(sampleSize < ogSampleSize){
-//                 //                 pixelateFunc()
-//                 //             }
-//                 //         },100) 
-//                 //     } 
-//                 // }
-
-//                 // if(nameSpace === 'work'){
-//                 //     if(confidential){
-//                 //         workCard.addEventListener('mouseenter',sharpenFunc)
-//                 //         workCard.addEventListener('mouseleave',pixelateFunc)
-//                 //     }else{
-//                 //         workCard.addEventListener('mouseenter',pixelateFunc)
-//                 //         workCard.addEventListener('mouseleave',sharpenFunc)
-
-//                 //         pxAdjust()
-//                 //         setTimeout(()=>{
-//                 //             sharpenFunc()
-//                 //         },1000);
-//                 //     }    
-//                 // }else{
-//                 //     workCard.addEventListener('mouseenter',sharpenFunc)
-//                 //     workCard.addEventListener('mouseleave',pixelateFunc)
-
-//                 //     pxAdjust()
-//                 //     // setTimeout(()=>{
-//                 //     //     sharpenFunc()
-//                 //     // },1000);                    
-//                 // }    
-
-//             }
-//         }
-//     })
-    
+  
+    ScrollTrigger.batch(".work-card", {
+        onEnter: batch => { 
+            //gsap.to(batch, {opacity: 1, y: 0, stagger: {each: 0.15, grid: [1, 3]}, overwrite: true})
+            gsap.to(batch, {stagger: {
+                each: 0.15, 
+                grid: [1, 3],
+                onComplete: function(){ 
+                    this._targets.forEach(el => {
+                        el.classList.remove('fade-in-up')
+                    })
+                }
+            }, overwrite: true })
+        },
+        onLeaveBack: batch => batch.forEach(el => {
+            el.classList.add('fade-in-up')
+        })
+    });    
 }
 
 /*!
@@ -248,6 +144,32 @@ var simulateClick = function (elem) {
 };
 
 //let scrollValues = {};
+const filterWork = (data) => {
+    data.next.container.querySelectorAll('.filters a').forEach((filter)=>{
+        filter.addEventListener('click',(e)=>{
+            e.preventDefault()
+            if(!filter.classList.contains('active')){
+                data.next.container.querySelector('.filters a.active').classList.remove('active')
+                filter.classList.add('active')
+                window.history.pushState({}, '', filter.href);
+                data.next.container.querySelectorAll('.work-card').forEach(workCard => {
+                    if(filter.dataset.slug){
+                        let cats = workCard.dataset.categories.split(',')
+                        if(cats.includes(filter.dataset.slug)){
+                            workCard.classList.remove('hidden')
+                        }else{
+                            workCard.classList.add('hidden')
+                        }
+                    }else{
+                        workCard.classList.remove('hidden')
+                    }    
+                })
+            }    
+        })
+    })
+}
+
+
 
 barba.init({
     debug:true,
@@ -255,124 +177,19 @@ barba.init({
         {
             namespace: 'home',
             beforeEnter(data) {
-                // let homeSlideEl = data.next.container.querySelector('.home-slider')
-                // if(homeSlideEl){
-                //     let homeSlider = new Swiper(homeSlideEl, {
-                //         speed: 0,
-                //         loop: true,
-
-                //         lazy: {
-                //             loadPrevNext: true,
-                //         },
-                //         navigation: {
-                //             nextEl: ".swiper-button-next",
-                //             prevEl: ".swiper-button-prev",
-                //         }
-                //     })  
-                // }
-                
-                // let lazy = new LazyLoad({
-                //     elements_selector: ".intro-image"
-                // })
-
-                // let video = data.next.container.querySelector('video')
-                // let videoCanvas = data.next.container.querySelector("canvas")
-                // let ctx = videoCanvas.getContext('2d')
-                // let w
-                // let h
-                // let sampleSize = 30
-                // let steps = sampleSize
-
-                // const videoPxAdjust = () => {
-                //     let cw = w/(sampleSize + 1)
-                //     let ch = h/(sampleSize + 1)
-
-                //     ctx.drawImage(video, 0, 0, cw, ch);
-                //     ctx.mozImageSmoothingEnabled = false;
-                //     ctx.imageSmoothingEnabled = false;
-                //     ctx.drawImage(videoCanvas, 0, 0, cw, ch, 0, 0, w, h);                     
-                // }
-                // const sharpenVideoFunc = () => {
-                //     setTimeout(()=>{
-                //         sampleSize -= steps;
-                //         videoPxAdjust()    
-                //         if(sampleSize >= steps){
-                //             sharpenVideoFunc()
-                //         }else{
-                //             //console.log(video.paused)
-                //             videoCanvas.remove()
-                //             video.play()
-                //         }
-                //     },100) 
-                // }
-
-
-                // const setupVideo = () => {
-                //     w = video.videoWidth
-                //     h = video.videoHeight
-
-                //     if(h/w > window.innerHeight/window.innerWidth){
-                //         video.parentElement.classList.add('max-height')
-                //     }else{
-                //         video.parentElement.classList.add('max-width')                       
-                //     }
-
-                //     videoCanvas.style.aspectRatio = w/h
-
-                //     ctx.canvas.width = w;
-                //     ctx.canvas.height = h;
-                    
-                //     // let cw = w/20
-                //     // let ch = h/20
-
-                //     // ctx.drawImage(video, 0, 0, cw, ch);
-                //     // ctx.mozImageSmoothingEnabled = false;
-                //     // ctx.imageSmoothingEnabled = false;
-                //     // ctx.drawImage(videoCanvas, 0, 0, cw, ch, 0, 0, w, h); 
-                //     videoPxAdjust()
-
-                //     video.pause()
-                    
-                // } 
-                // if(video.videoWidth > 0 && video.videoHeight > 0){
-                //     setupVideo()
-                // }else{
-                //     video.addEventListener("loadeddata", () => {  
-
-                //         // w = video.videoWidth
-                //         // h = video.videoHeight
-    
-                //         // if(h/w > window.innerHeight/window.innerWidth){
-                //         //     video.parentElement.classList.add('max-height')
-                //         // }else{
-                //         //     video.parentElement.classList.add('max-width')                       
-                //         // }
-    
-                //         // videoCanvas.style.aspectRatio = w/h
-    
-                //         // ctx.canvas.width = w;
-                //         // ctx.canvas.height = h;
-                        
-                //         // // let cw = w/20
-                //         // // let ch = h/20
-    
-                //         // // ctx.drawImage(video, 0, 0, cw, ch);
-                //         // // ctx.mozImageSmoothingEnabled = false;
-                //         // // ctx.imageSmoothingEnabled = false;
-                //         // // ctx.drawImage(videoCanvas, 0, 0, cw, ch, 0, 0, w, h); 
-                //         // videoPxAdjust()
-    
-                //         // video.pause()
-                //         setupVideo()
-    
-                //     },false) 
-                // }           
-
-                            
-
-
+          
                 //document.addEventListener('scroll', homePageScroll) 
                 let introWrap = data.next.container.querySelector('.intro-wrap')
+                let video = data.next.container.querySelector('video')
+                let customCursorEl = data.next.container.querySelector('.custom-cursor')
+ 
+                // if (video.readyState >= video.HAVE_FUTURE_DATA) {
+                //     gsap.to(video,{opacity:1,duration:.4})
+                // } else {
+                    // video.addEventListener('loadedmetadata', function () {
+                    //     gsap.to(video,{opacity:1,duration:.4})
+                    // });
+                //}  
             
                 introWrap.addEventListener('scroll',()=>{
                     let documentHeight = introWrap.scrollHeight;
@@ -383,7 +200,9 @@ barba.init({
                         document.body.classList.add('scrolled')
 
                         //sharpenVideoFunc() 
-                        data.next.container.querySelector('video').play()
+                        video.play()
+                        customCursorEl.remove()
+
                     }
                     // else{
                     //     document.body.classList.remove('scrolled')
@@ -392,7 +211,7 @@ barba.init({
 
                 if(!is_touch_enabled()){
 
-                    let customCursorEl = data.next.container.querySelector('.custom-cursor')
+                    //let customCursorEl = data.next.container.querySelector('.custom-cursor')
                     let customCursorWrap = data.next.container.querySelector('.custom-cursor-wrap') 
 
                     const customCursorOn = (e) => {
@@ -446,7 +265,7 @@ barba.init({
                 }
 
                 spacer(data)
-                window.addEventListener('resize',spacer)
+                window.addEventListener('resize',spacer(data))
                   
             },
             // afterEnter(data) {    
@@ -465,30 +284,9 @@ barba.init({
             beforeEnter(data) {
                 window.addEventListener('scroll',secondaryNavScroll)
                 secondaryNavClick(data.next.container.querySelector('.show-menu'))
-                workCardsFunc('work')    
-                document.body.classList.add('dark-bg')
-                data.next.container.querySelectorAll('.filters a').forEach((filter)=>{
-                    filter.addEventListener('click',(e)=>{
-                        e.preventDefault()
-                        if(!filter.classList.contains('active')){
-                            data.next.container.querySelector('.filters a.active').classList.remove('active')
-                            filter.classList.add('active')
-                            window.history.pushState({}, '', filter.href);
-                            data.next.container.querySelectorAll('.work-card').forEach(workCard => {
-                                if(filter.dataset.slug){
-                                    let cats = workCard.dataset.categories.split(',')
-                                    if(cats.includes(filter.dataset.slug)){
-                                        workCard.classList.remove('hidden')
-                                    }else{
-                                        workCard.classList.add('hidden')
-                                    }
-                                }else{
-                                    workCard.classList.remove('hidden')
-                                }    
-                            })
-                        }    
-                    })
-                })
+                workCardsFunc(data)    
+                document.body.classList.add('dark-bg') 
+                filterWork(data)   
             },
             afterLeave(data) {    
                 window.removeEventListener('scroll',secondaryNavScroll) 
@@ -502,86 +300,156 @@ barba.init({
                 secondaryNavClick(data.next.container.querySelector('.show-menu'))
 
                 let workIndex = data.next.container.querySelector('.work-index')
+                let workWrap = data.next.container.querySelector('.work-wrap')
 
-                workCardsFunc('work')
+                let workMenuBtn = data.next.container.querySelector('.main-header ul li:first-child')
+
+                workMenuBtn.classList.add('current-menu-item')
+
+
+                workCardsFunc(data) 
+                filterWork(data) 
+
+                gsap.to(document.body,{
+                    scrollTrigger: {
+                        id: "changeColor",
+                        trigger: workIndex,
+                        start: "top bottom",
+                        end: "top top",
+                        scrub: true
+                    },
+                    backgroundColor: "#000",
+                    color: "#DEDEDE"
+                })
 
                 ScrollTrigger.create({
+                    id: "backtowork",
                     trigger: workIndex,
-                    start: "top center",
+                    start: "top top",
                     // end: "bottom bottom",
                     onEnter: () => {
-                        //window.history.pushState({}, 'Work', data.next.container.querySelector('.main-header ul li:first-child a').href);
-                        data.next.container.querySelector('.single-work-header').classList.add('index-inview')
-                        //data.next.container.setAttribute('data-barba-namespace','work')
-                        document.body.classList.add('dark-bg')
                         scrollStop(function () {
-                            gsap.to(window,{
-                                scrollTo: workIndex.offsetTop, 
-                                duration: .5,
-                                onComplete: ()=>{
-                                    data.next.container.querySelector('.work-wrap').remove()
-                                    window.scrollTo(0,0)
-                                    workCardsFunc('work')
-                                    data.next.container.querySelector('.main-header ul li:first-child').classList.add('current-menu-item')
-                                    //barba.history.add(data.next.container.querySelector('.main-header ul li:first-child a').href,'Work');
-                                    // setTimeout(()=>{
-                                    //     window.history.pushState({}, 'Work', data.next.container.querySelector('.main-header ul li:first-child a').href);
-                                    // },500)
-                                    // simulateClick(data.next.container.querySelector('.main-header ul li:first-child a'))
-                                }
-                            })
+                            if(data.next.container.dataset.barbaNamespace === 'single-work'){
+                                let sPos = window.scrollY - workWrap.clientHeight
+                                data.next.container.setAttribute('data-barba-namespace','work')
+                                workWrap.remove()
+                                gsap.to(data.next.container.querySelector('.site-header.secondary-header h1'),{opacity:0,duration:.4,onComplete:()=>{
+                                    data.next.container.querySelector('.site-header.secondary-header h1').remove()
+                                    data.next.container.querySelector('.site-header.secondary-header .filters').style.display = "flex"
+                                    gsap.to(data.next.container.querySelector('.site-header.secondary-header .filters'),{opacity:1,duration:.4,onComplete:()=>{
+                                        data.next.container.querySelector('.site-header.secondary-header').classList.remove('single-work-header')
+                                    }})
+                                }})
+                                //setTimeout(()=>{
+                                window.scrollTo(0,sPos) 
+                                workMenuBtn.classList.add('current-menu-item')
+                                document.title = 'work | blond'
+                                window.history.pushState({}, 'Work', workMenuBtn.querySelector('a').href);
+                                //},0)
+                                ScrollTrigger.getById("changeColor").kill()
+                                document.body.classList.add('dark-bg')
+                                document.body.removeAttribute('style')
+                            }    
                         })    
-                    },
-                    // onEnterBack: () => {
-                    //     data.next.container.querySelector('.single-work-header').classList.remove('index-inview')
-                    // }
-                });
+                    }
+                })
             },
             afterLeave() {    
                 window.removeEventListener('scroll',secondaryNavScroll) 
                 document.body.classList.remove('show-secondary-header')
+                ScrollTrigger.getById("backtowork").kill()
             } 
         },
         {
             namespace: 'labs',
             beforeEnter(data) {
-                //workCardsFunc('labs')
+                workCardsFunc(data)
                 document.body.classList.add('dark-bg')
             }
         }, 
         {
             namespace: 'single-labs',
             beforeEnter(data) {
-                // ScrollTrigger.create({
-                //     trigger: data.next.container.querySelector('.back-to-index'),
-                //     start: "top center",
-                //     onEnter: () => {
-                //         simulateClick(data.next.container.querySelector('.main-header ul li:nth-child(2n) a'))
-                //     }
-                // });
+                window.addEventListener('scroll',secondaryNavScroll)
+                secondaryNavClick(data.next.container.querySelector('.show-menu'))
+                
                 let workIndex = data.next.container.querySelector('.work-index')
 
+                let labsMenuBtn = data.next.container.querySelector('.main-header ul li:nth-child(2n)')
+
+                labsMenuBtn.classList.add('current-menu-item')
+
+                workCardsFunc(data) 
+
+                gsap.to(document.body,{
+                    scrollTrigger: {
+                        id: "changeColor",
+                        trigger: workIndex,
+                        start: "top bottom",
+                        end: "top top",
+                        scrub: true
+                    },
+                    backgroundColor: "#000",
+                    color: "#DEDEDE"
+                })
+
                 ScrollTrigger.create({
+                    id: "backtowork",
                     trigger: workIndex,
-                    start: "top center",
+                    start: "top top",
+                    // end: "bottom bottom",
                     onEnter: () => {
-                        data.next.container.querySelector('.single-work-header').classList.add('index-inview')
-                        document.body.classList.add('dark-bg')
                         scrollStop(function () {
-                            gsap.to(window,{
-                                scrollTo: workIndex.offsetTop, 
-                                duration: .5,
-                                onComplete: ()=>{
-                                    data.next.container.querySelector('.work-wrap').remove()
-                                    window.scrollTo(0,0)
-                                    workCardsFunc('work')
-                                    data.next.container.querySelector('.main-header ul li:nth-child(2n)').classList.add('current-menu-item')
-                                }
-                            })
+                            if(data.next.container.dataset.barbaNamespace === 'single-labs'){
+                                let sPos = window.scrollY - workWrap.clientHeight
+                                data.next.container.setAttribute('data-barba-namespace','work')
+                                workWrap.remove()
+                                // gsap.to(data.next.container.querySelector('.site-header.secondary-header h1'),{opacity:0,duration:.4,onComplete:()=>{
+                                //     data.next.container.querySelector('.site-header.secondary-header h1').remove()
+                                //     // data.next.container.querySelector('.site-header.secondary-header .filters').style.display = "flex"
+                                //     // gsap.to(data.next.container.querySelector('.site-header.secondary-header .filters'),{opacity:1,duration:.4,onComplete:()=>{
+                                //     //     data.next.container.querySelector('.site-header.secondary-header').classList.remove('single-work-header')
+                                //     // }})
+                                // }})
+                                window.scrollTo(0,sPos) 
+                                labsMenuBtn.classList.add('current-menu-item')
+                                document.title = 'labs | blond'
+                                window.history.pushState({}, 'Work', labsMenuBtn.querySelector('a').href);
+                                ScrollTrigger.getById("changeColor").kill()
+                                document.body.classList.add('dark-bg')
+                                document.body.removeAttribute('style')
+                            }    
                         })    
                     }
-                });
-            }
+                })
+
+                let workWrap = data.next.container.querySelector('.work-wrap')
+                ScrollTrigger.create({
+                    id: "backtowork",
+                    trigger: workIndex,
+                    start: "top top",
+                    // end: "bottom bottom",
+                    onEnter: () => {
+                    document.body.classList.add('dark-bg')
+                        scrollStop(function () {
+                            if(data.next.container.dataset.barbaNamespace === 'single-labs'){
+                                let sPos = window.scrollY - workWrap.clientHeight
+                                data.next.container.setAttribute('data-barba-namespace','work')
+                                workWrap.remove()
+                                //setTimeout(()=>{
+                                    window.scrollTo(0,sPos) 
+                                    labsMenuBtn.classList.add('current-menu-item')
+                                    document.title = 'labs | blond'
+                                    window.history.pushState({}, 'Work', labsMenuBtn.querySelector('a').href);
+                                //},0)
+                            }    
+                        })    
+                    }
+                })
+            },
+            afterLeave() {    
+                ScrollTrigger.getById("backtowork").kill()
+            } 
         }, 
         {
             namespace: 'info',
@@ -616,7 +484,7 @@ barba.init({
                     });  
                 })
 
-                document.querySelectorAll(".info-section").forEach((section, i) => {
+                data.next.container.querySelectorAll(".info-section").forEach((section, i) => {
                     //let sectionRect = section.getBoundingClientRect()
                     ScrollTrigger.create({
                         trigger: section,
@@ -627,36 +495,17 @@ barba.init({
                             if(activeMenuItem){
                                 activeMenuItem.classList.remove('active')
                             }
+                            console.log("enter",section, section.id)
                             data.next.container.querySelector('.scrollto-links a[href="#'+section.id+'"]').classList.add('active')
-
                         },
                         onEnterBack: () => {
                             let activeMenuItem = data.next.container.querySelector(".scrollto-links a.active")
                             if(activeMenuItem){
                                 activeMenuItem.classList.remove('active')
                             }
+                            console.log("back",section, section.id)
                             data.next.container.querySelector('.scrollto-links a[href="#'+section.id+'"]').classList.add('active')
                         }
-                    });
-
-                    ScrollTrigger.create({
-                        trigger: section,
-                        start: "top center",
-                        //end: "bottom center",
-                        //markers:true,
-                        onEnter: () => {
-                            gsap.to(window,{
-                                scrollTo: section.offsetTop, 
-                                duration: .5
-                            });
-                        },
-                        // onEnterBack: () => {
-                        //     console.log('enter back',section)
-                        //     gsap.to(window,{
-                        //         scrollTo: sectionRect.bottom, 
-                        //         duration: .5
-                        //     });
-                        // }
                     });
                 });
 
@@ -846,6 +695,10 @@ barba.hooks.beforeEnter((data) => {
 
     subscribeForm(data.next.container.querySelector('#mc-embedded-subscribe-form'))
 
+});
+
+barba.hooks.afterEnter(() => {
+    window.scrollTo(0,0); 
 });
 
 barba.hooks.afterLeave((data) => {

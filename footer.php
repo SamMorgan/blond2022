@@ -1,5 +1,5 @@
 	</main> 
-	<footer class="site-footer info-section anim-fade-in-up" id="contact">
+	<footer class="site-footer info-section" id="contact">
 		<div>
 			<?php the_field('address','option');?>
         </div>

@@ -5,17 +5,18 @@
     width: 100%;
     padding: 0.5625rem 1.1875rem;
     min-height: 3.875rem;
-    background: #fff;
+    //background: #fff;
+    background: inherit;
     z-index: 2;
     top:0;
     left:0;
     display: flex;
     justify-content: space-between;
     text-transform: lowercase;
-    transition: background-color .4s, color .4s;
+    //transition: background-color .4s, color .4s;
     a {
-        color:$grey;
-        transition: color .3;
+        //color:$grey;
+        //transition: color .3;
     }
     // h1 a {
     //     color:$grey;
@@ -66,6 +67,7 @@
     }
 }
 
+
 .show-secondary-header {
     .site-header {
         &.main-header {
@@ -81,17 +83,21 @@
             pointer-events: all;
             opacity: 1;
             visibility: visible;
-            transition: opacity $transitionDur $transitionDelay, visibility 0s $transitionDelay, background-color .4s, color .4s;
-        }    
+            transition: opacity $transitionDur $transitionDelay, visibility 0s $transitionDelay, background-color $transitionDur, color $transitionDur;
+            &.single-work-header ul {
+                opacity: 0;
+                display: none;
+            }
+        }   
     }    
 }
 
 @media (hover: hover) and (pointer: fine) {
-    .site-header {
-        h1 a:hover,
-        ul.menu li a:hover {
-            color: $orange;
-        }
+
+    .site-header h1 a:hover,
+    .site-header ul.menu li a:hover,
+    .secondary-header a:hover {
+        color: $orange;
     }
 }
 

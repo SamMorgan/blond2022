@@ -6,6 +6,7 @@ body {
     flex-direction: column;
     height: auto;
     min-height: 100%;
+    background-color: #fff;
     & > div {
         flex: 1;
         display: flex;
@@ -14,7 +15,16 @@ body {
     .site-footer {
         margin-top: auto;
     }
+    &.dark-bg {
+        background-color: #000;
+        color: $lightgrey;
+    }
+    & > div {
+        background-color: inherit;
+        color: inherit;        
+    }
 }
+
 .blond-img {
     overflow: hidden;  
     div,
@@ -62,13 +72,13 @@ body {
     // }    
 }
 
-body > div,
-.site-header {
-    transition: background-color .4s, color .4s;  
-}
+// body,
+// .site-header {
+//     transition: background-color 1s, color 1s;  
+// }
 .site-header a,
 .site-footer a {
-    transition: color .4s;  
+    transition: color 1s;  
 }
 
 [data-barba-namespace="work"],
@@ -77,8 +87,10 @@ body > div,
 [data-barba-namespace="labs"] .site-header,
 .dark-bg,
 .dark-bg .site-header {
-    background:#000;
-    color: $lightgrey;
+    // background:#000;
+    // color: $lightgrey;
+    background-color: inherit;
+    color:inherit;
 }
 // [data-barba-namespace="work"] .site-header h1 a,
 // [data-barba-namespace="work"] .site-header ul.menu li a,
@@ -88,14 +100,16 @@ body > div,
 // [data-barba-namespace="single-labs"] .site-header ul.menu li a,
 // [data-barba-namespace="labs"] .site-footer a,
 // [data-barba-namespace="single-labs"] .site-footer a {
-[data-barba-namespace="work"] .site-header a,
-[data-barba-namespace="work"] .site-footer a,
-[data-barba-namespace="labs"] .site-header a,
-[data-barba-namespace="labs"] .site-footer a,
-.dark-bg .site-header a,
-.dark-bg .site-footer a {    
-    color: $lightgrey;
-}
+
+// [data-barba-namespace="work"] .site-header a,
+// [data-barba-namespace="work"] .site-footer a,
+// [data-barba-namespace="labs"] .site-header a,
+// [data-barba-namespace="labs"] .site-footer a,
+// .dark-bg .site-header a,
+// .dark-bg .site-footer a,
+// .dark-bg .site-footer {    
+//     color: $lightgrey;
+// }
 
 
 
@@ -290,6 +304,9 @@ img.thumbnail {
     .module-formatted-text,
     .module-text-3cols {
         padding: 0 .8125rem .5rem;
+    }
+    .module-text-3cols {
+        column-count: 1;
     }
     .privacy-policy-wrap {
         padding-top: 4.65rem;

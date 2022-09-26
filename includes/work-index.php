@@ -11,7 +11,7 @@ if($work_query->have_posts()) : while ( $work_query->have_posts() ) : $work_quer
     $data_cats = "";
     $hidden = "";?>
     <?php 
-        if(is_tax('work-category') || is_post_type_archive( 'work' )){
+        if(is_tax('work-category') || is_post_type_archive( 'work' ) || is_singular('work')){
             $categories = get_the_terms( get_the_ID(), 'work-category');
             $categories_list = array();
             if ( $categories && ! is_wp_error( $categories ) ) {
@@ -19,7 +19,7 @@ if($work_query->have_posts()) : while ( $work_query->have_posts() ) : $work_quer
                     $categories_list[] = $category->slug;
                 }
             } 
-            $data_cats = ' data-categories="'.implode (",",$categories_list).'"';  
+            $data_cats = implode (",",$categories_list);  
 
             if($curr_category){
                 if(in_array($curr_category,$categories_list) == false){
@@ -28,17 +28,24 @@ if($work_query->have_posts()) : while ( $work_query->have_posts() ) : $work_quer
             } 
         }   
     ?>
-    <div class="work-card loading <?php echo $format.$confidential.$hidden;?>"<?php echo $data_cats;?>>
+    <div class="work-card loading fade-in-up <?php echo $format.$confidential.$hidden;?>"<?php echo $data_cats;?> data-categories="<?php echo $data_cats;?>">
         <a href="<?php the_permalink();?>"> 
             <div class="thumbnail-wrap">
-                <?php echo '<img class="thumbnail fc-img" src="'.$fc_image['url'].'">';?>
-                <?php echo '<img class="thumbnail px-img" src="'.$px_image['url'].'">';?>
+                <?php 
+                    if($confidential == " confidential"){
+                        echo '<img src="'.$fc_image['url'].'">';
+                        echo '<img class="rollover-img" src="'.$px_image['url'].'">';
+                    }else{
+                        echo '<img src="'.$px_image['url'].'">';
+                        echo '<img class="rollover-img" src="'.$fc_image['url'].'">';
+                    }
+                ?>
             </div>    
             <h3><?php 
                 $year = get_field('year');
-                if($year){ echo $year.' '; }
+                if($year){ echo $year; }
                 $client = get_field('client');
-                if($client){ echo $client; }
+                if($client){ echo '<br>'.$client; }
                 if($year || $client){
                     echo ', ';
                 }

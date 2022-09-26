@@ -1,3 +1,4 @@
+@use "sass:math";
 @import 'vars';
 .work-index {
     display: flex;
@@ -5,6 +6,10 @@
     padding: 3.875rem 0.75rem 0;
 }
 .work-wrap {
+    min-height: 110vh;
+    padding-top: 3.875rem;
+}
+.work-index {
     min-height: 100vh;
 }
 .work-card {
@@ -13,90 +18,42 @@
     transition: all .8s;
     &.loading {
         opacity: 0;
-        //transform: translateY(50px);
+    }
+    &.fade-in-up {
+        opacity: 0;
+        transform: translateY(50px);
     }
     a {
         position: relative;
         display: block;
         overflow: hidden;  
         color: $lightgrey;
-        // img {
-        //     width: 100%;
-        //     height:100%;
-        //     object-fit: cover;
-        //     object-position: center;
-        //     position: absolute;
-        //     top:0;
-        //     left:0;
-        //     display: block;
-        //     filter:url('#bleach');  
-        // }
     }
-    // .blond-img {
-    //     position: relative;
-    //     overflow: hidden;
-    //     background: #000;
-    //     transition: background-color 1s;
-    //     img {
-    //         width: 100%;
-    //         height: 100%;
-    //         object-fit: cover;
-    //         object-position: center;
-    //         position: absolute;
-    //         mix-blend-mode: screen;
-    //         transition: filter 1s;
-    //     }
-    // }
     .thumbnail-wrap {
         position: relative;
         overflow: hidden;
         img {
             object-fit: cover;
             object-position: center;
-        }    
-        img,
-        canvas {    
             top:0;
             left:0;
             width: 100%;
             height: 100%;
             position: absolute;
-        }
-        .fc-img {
-            opacity: 0;
-            //transition: opacity 1s;
-        }  
-        .px-img {
-            //transition: opacity 1s;
-        }     
-    }
-    // &.loaded {
-    //     transform: translateY(0);
-    //     opacity: 1;
-    //     .thumbnail-wrap {
-    //         .fc-img {
-    //             opacity: 1;
-    //         } 
-    //         .px-img {
-    //             opacity: 0;
-    //         }
-    //     }        
-    // }
-    // .blond-img div:last-child {
-    //     display: none;
-    // }   
+        }       
+    }  
     &.landscape {
         width: calc(50% - 0.875rem);
         .thumbnail-wrap {
             //padding: 0 0 67.6659528907923%;
-            padding: 0 0 6/9*100%;
+            padding: 0 0 math.div(6,9)*100%;
         }
     }
     &.portrait {
         width: calc(33.33% - 0.875rem);
         .thumbnail-wrap {
             //padding: 0 0 150%;
-            padding: 0 0 9/6*100%;
+            padding: 0 0 math.div(9,6)*100%;
             position: relative;
         }
     }
@@ -104,29 +61,25 @@
         padding: 0.875rem;
     }
     &.hidden {
-        opacity: .25;
+        opacity: .15;
+        pointer-events: none;
     }
 }
 
-     
+@media (hover: none) and (pointer: coarse) {
+    .work-card a {
+        img {
+            opacity: 1;
+            &.rollover-img {
+                display: none;
+            } 
+        } 
+    }
+}       
 
 @media (hover: hover) and (pointer: fine) {
     .work-card {
         a {
-            // div:before,
-            // div:after {
-            //     transition: opacity .4s;
-            // }
-            // &:hover {
-            //     div:before,
-            //     div:after {
-            //         opacity: 0;
-            //     }
-            // }
-            // .blond-img div:last-child {
-            //     display: block;
-            // } 
-            // .blond-img div:last-child,
             h3 {
                 position: absolute;
                 bottom: 0;
@@ -134,89 +87,29 @@
                 opacity: 0;
                 transition: opacity .4s;
             }
+            img {
+                opacity: 1;
+                &.rollover-img {
+                    opacity: 0;
+                } 
+            } 
             &:hover {
-                // //.blond-img div:last-child,
-                // .blond-img {
-                //     background: #eb8351;
-                //     img {
-                //         filter: grayscale(1) contrast(1.8) brightness(10) blur(0.5rem);
-                //     }
-                // }
                 h3 {
                     opacity: 1;
                 }
-                // .thumbnail-wrap {
-                //     .fc-img {
-                //         opacity: 0;
-                //         //transition: opacity 0s 1s;
-                //     } 
-                //     .px-img {
-                //         opacity: 1;
-                //     }
-                // }       
-            }
-        }    
-    }
-    [data-barba-namespace="work"]{ 
-        .work-card {
-            a {
-                .fc-img {
+                img.rollover-img {
                     opacity: 1;
-                }
-                .px-img {
-                    opacity: 0;
-                }    
-                &:hover {
-                    .fc-img {
-                        opacity: 0;
-                    }
-                    .px-img {
-                        opacity: 1;
-                    }
-                }    
+                }     
             }
-            &.anim-in a {
-                .fc-img {
-                    opacity: 0;
-                }
-                .px-img {
-                    opacity: 1;
-                }
-            }
-            &.confidential a {
-                .fc-img {
-                    opacity: 0;
-                }
-                .px-img {
-                    opacity: 1;
-                }    
-                &:hover {
-                    .fc-img {
-                        opacity: 1;
-                    }
-                    .px-img {
-                        opacity: 0;
-                    } 
-                }                
-            }
-        }     
-    }    
-    [data-barba-namespace="labs"] .work-card a {
-        .fc-img {
-            opacity: 0;
         }
-        .px-img {
-            opacity: 1;
-        }   
-        &:hover {
-            .fc-img {
-                opacity: 1;
+        &.hidden a:hover {
+            img {
+                &.rollover-img {
+                    display: none;
+                } 
             }
-            .px-img {
-                opacity: 0;
-            } 
         }    
-    }
+    }    
 }
 
 @media only screen and (max-width: 750px) {

@@ -164,7 +164,7 @@
 function work_post_type() {
 
 	$labels = array(
-		'name'                  => _x( 'Work', 'Post Type General Name', 'text_domain' ),
+		'name'                  => _x( 'work', 'Post Type General Name', 'text_domain' ),
 		'singular_name'         => _x( 'Work', 'Post Type Singular Name', 'text_domain' ),
 		'menu_name'             => __( 'Work', 'text_domain' ),
 		'name_admin_bar'        => __( 'Work', 'text_domain' ),
@@ -196,7 +196,7 @@ function work_post_type() {
 		'label'                 => __( 'Work', 'text_domain' ),
 		'description'           => __( 'Work', 'text_domain' ),
 		'labels'                => $labels,
-		'supports'              => array( 'title', 'thumbnail'),
+		'supports'              => array( 'title'),
 		'hierarchical'          => true,
 		'public'                => true,
 		'show_ui'               => true,
@@ -222,7 +222,6 @@ add_action( 'init', 'work_post_type', 0 );
 
 
 function work_category() {
-
 	$labels = array(
 		'name'                       => _x( 'Work Category', 'Taxonomy General Name', 'text_domain' ),
 		'singular_name'              => _x( 'Work Category', 'Taxonomy Singular Name', 'text_domain' ),
@@ -263,7 +262,7 @@ add_action( 'init', 'work_category', 0 );
 function labs_post_type() {
 
 	$labels = array(
-		'name'                  => _x( 'Labs', 'Post Type General Name', 'text_domain' ),
+		'name'                  => _x( 'labs', 'Post Type General Name', 'text_domain' ),
 		'singular_name'         => _x( 'Labs', 'Post Type Singular Name', 'text_domain' ),
 		'menu_name'             => __( 'Labs', 'text_domain' ),
 		'name_admin_bar'        => __( 'Labs', 'text_domain' ),
@@ -295,7 +294,7 @@ function labs_post_type() {
 		'label'                 => __( 'Labs', 'text_domain' ),
 		'description'           => __( 'Labs', 'text_domain' ),
 		'labels'                => $labels,
-		'supports'              => array( 'title', 'thumbnail'),
+		'supports'              => array( 'title'),
 		'hierarchical'          => true,
 		'public'                => true,
 		'show_ui'               => true,

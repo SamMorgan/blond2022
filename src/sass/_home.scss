@@ -55,6 +55,10 @@
         object-fit: cover;
         top:0;
         left:0;
+        &[poster]{
+            height:100%;
+            width:100%;
+        }
     }
 }
 
@@ -69,7 +73,8 @@
         p:last-of-type {
             margin: 0;
         }
-        a {
+        strong {
+            font-weight: normal;
             color: $orange;
         }
     }
@@ -78,92 +83,92 @@
     }
 }
 
-.home-slider.swiper {
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    top:0;
-    left:0;
-    z-index: 1;
-    .swiper-slide {
-        // background: #eb8351;
-        // transition: background-color 1s;
-        img.swiper-lazy {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            object-position: center;
-            position: absolute;
-            top:0;
-            left:0;
-            // filter: grayscale(1) contrast(1.5) brightness(1) blur(0.5rem);
-            // mix-blend-mode: screen;
-            //transition: all 1s;
-        }
-        // div {
-        //     height: 100%;
-        //     background-size: cover;
-        //     background-position: center;
-        // }
-    }
-    // .blond-img {
-    //     div:before,
-    //     div:after {
-    //         transition: opacity .4s;
-    //     }
-    //     &:hover {
-    //         div:before,
-    //         div:after {
-    //             opacity: 0;
-    //         }
-    //     }    
-    // }
-    // .blond-img {
-    //     div:last-child {
-    //         transition: opacity 1s;
-    //     }
-    // }
-    .swiper-button-prev,
-    .swiper-button-next {
-        position: absolute;
-        height: 100%;
-        width: 50%;
-        top:0;
-        z-index: 2;
-    }
-    .swiper-button-prev {
-        left:0;
-    }
-    .swiper-button-next {
-        right:0;
-    }
-}
+// .home-slider.swiper {
+//     position: fixed;
+//     width: 100%;
+//     height: 100%;
+//     top:0;
+//     left:0;
+//     z-index: 1;
+//     .swiper-slide {
+//         // background: #eb8351;
+//         // transition: background-color 1s;
+//         img.swiper-lazy {
+//             width: 100%;
+//             height: 100%;
+//             object-fit: cover;
+//             object-position: center;
+//             position: absolute;
+//             top:0;
+//             left:0;
+//             // filter: grayscale(1) contrast(1.5) brightness(1) blur(0.5rem);
+//             // mix-blend-mode: screen;
+//             //transition: all 1s;
+//         }
+//         // div {
+//         //     height: 100%;
+//         //     background-size: cover;
+//         //     background-position: center;
+//         // }
+//     }
+//     // .blond-img {
+//     //     div:before,
+//     //     div:after {
+//     //         transition: opacity .4s;
+//     //     }
+//     //     &:hover {
+//     //         div:before,
+//     //         div:after {
+//     //             opacity: 0;
+//     //         }
+//     //     }    
+//     // }
+//     // .blond-img {
+//     //     div:last-child {
+//     //         transition: opacity 1s;
+//     //     }
+//     // }
+//     .swiper-button-prev,
+//     .swiper-button-next {
+//         position: absolute;
+//         height: 100%;
+//         width: 50%;
+//         top:0;
+//         z-index: 2;
+//     }
+//     .swiper-button-prev {
+//         left:0;
+//     }
+//     .swiper-button-next {
+//         right:0;
+//     }
+// }
 
-.intro-image {
-    position:fixed;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center;
-    top:0;
-    left:0;
-    transition: opacity 1s;
-    z-index: 2;
-    background: $orange;
-    img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        object-position: center;
-        top:0;
-        left:0;
-        transition: opacity .4s;
-        opacity: 0;
-        &.loaded {
-            opacity: 1;
-        } 
-    }
-}
+// .intro-image {
+//     position:fixed;
+//     width: 100%;
+//     height: 100%;
+//     object-fit: cover;
+//     object-position: center;
+//     top:0;
+//     left:0;
+//     transition: opacity 1s;
+//     z-index: 2;
+//     background: $orange;
+//     img {
+//         width: 100%;
+//         height: 100%;
+//         object-fit: cover;
+//         object-position: center;
+//         top:0;
+//         left:0;
+//         transition: opacity .4s;
+//         opacity: 0;
+//         &.loaded {
+//             opacity: 1;
+//         } 
+//     }
+// }
 .scrolled {
     .intro-wrap {
         overflow: hidden;
@@ -176,10 +181,10 @@
             opacity: 1;
         }
     }
-    .intro-image {
-        opacity: 0;
-        pointer-events: none;
-    }
+    // .intro-image {
+    //     opacity: 0;
+    //     pointer-events: none;
+    // }
     // .home-slider.swiper {
     //     // .blond-img  div:last-child {
     //     //     opacity: 0;    
@@ -198,11 +203,12 @@
 
 @media (hover: none) and (pointer: coarse) {
     .intro-wrap .custom-cursor {
-        display: none;
+        display: none !important;
         position: fixed;
     }
     .scrolled .intro-wrap .custom-cursor {
-        display: block;
+        //display: block;
+        display: none !important;
     }
 }    
 
