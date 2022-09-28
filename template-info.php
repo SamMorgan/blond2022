@@ -105,7 +105,7 @@ get_header(); ?>
 
         $secondary_header .= '</ul><span class="show-menu">menu</span></div>';
         
-        echo '<div class="info-wrap">';
+        echo '</div>';
         
         echo $secondary_header;
 

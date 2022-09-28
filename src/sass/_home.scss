@@ -56,9 +56,19 @@
         object-fit: cover;
         top:0;
         left:0;
+        opacity: 1;
+        transition: opacity .3s;
         &[poster]{
             height:100%;
             width:100%;
+        }
+    }
+    &.loading {
+        video {
+            display: none;
+        }
+        video,img {
+            opacity: 0;
         }
     }
 }

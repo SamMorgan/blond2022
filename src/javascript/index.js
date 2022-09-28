@@ -14,26 +14,12 @@ Swiper.use([Lazy, Pagination, Navigation, Autoplay]);
 gsap.registerPlugin(ScrollToPlugin);
 gsap.registerPlugin(ScrollTrigger);
 
-//let lazy = new LazyLoad();
 
 function is_touch_enabled() {
     return ( 'ontouchstart' in window ) ||
            ( navigator.maxTouchPoints > 0 ) ||
            ( navigator.msMaxTouchPoints > 0 );
 }
-
-// const homePageScroll = () => {
-//     let documentHeight = document.body.scrollHeight;
-//     let currentScroll = window.scrollY + window.innerHeight;
-//     // When the user is [modifier]px from the bottom, fire the event.
-//     let modifier = 10; 
-//     if(currentScroll + modifier > documentHeight) {
-//         document.body.classList.add('scrolled')
-//     }else{
-//         document.body.classList.remove('scrolled')
-//     }
-// }
-
 
 const secondaryNavScroll = () => {
     if(window.scrollY > 10){
@@ -69,12 +55,9 @@ const secondaryNavClick = (btn) => {
 // }
 
 function indexMinHeight(data){
-    data.next.container.querySelector('.work-index').style.minHeight = window.innerHeight - data.next.container.querySelector('.site-footer').offsetHeight + 1 + 'px'
-    window.addEventListener('load',()=>{
-        data.next.container.querySelector('.work-index').style.minHeight = window.innerHeight - data.next.container.querySelector('.site-footer').offsetHeight + 1 + 'px'
-    })
+    data.next.container.querySelector('.work-index').style.minHeight = window.innerHeight - data.next.container.querySelector('#contact').offsetHeight + 1 + 'px'
     window.addEventListener('resize',()=>{
-        data.next.container.querySelector('.work-index').style.minHeight = window.innerHeight - data.next.container.querySelector('.site-footer').offsetHeight + 1 + 'px'
+        data.next.container.querySelector('.work-index').style.minHeight = window.innerHeight - data.next.container.querySelector('#contact').offsetHeight + 1 + 'px'
     })
 }
 
@@ -193,22 +176,15 @@ barba.init({
                 let video = data.next.container.querySelector('video')
                 let customCursorEl = data.next.container.querySelector('.custom-cursor')
  
-                // if (video.readyState >= video.HAVE_FUTURE_DATA) {
-                // //     gsap.to(video,{opacity:1,duration:.4})
-                //     alert('can play video')
-                // } else {
-                //     video.addEventListener('loadedmetadata', function () {
-                //         //gsap.to(video,{opacity:1,duration:.4})
-                //         alert('can play video')
-                //     });
-                // } 
-                // alert('test') 
-                
-                // video.addEventListener('canplay', function () {
-                //     //gsap.to(video,{opacity:1,duration:.4})
-                //     video.pause()
-                //     alert('can play video')
-                // });
+                video.addEventListener('loadedmetadata', function () {
+                    video.pause()
+                });
+                let lazyIntro = new LazyLoad({
+                    elements_selector: '.intro-img',
+                    callback_loaded: (el) => {
+                        el.parentElement.classList.remove('loading')
+                    }
+                });
             
                 introWrap.addEventListener('scroll',()=>{
                     let documentHeight = introWrap.scrollHeight;
@@ -220,13 +196,11 @@ barba.init({
                         
                         customCursorEl.remove()
                         introWrap.querySelector('.intro').remove()
-                        //introWrap.querySelector('img').remove()
+                        introWrap.querySelector('img').remove()
                         document.body.style.cursor = 'auto'
                         video.play()
                     }
-                    // else{
-                    //     document.body.classList.remove('scrolled')
-                    // }
+
                 })
 
                 if(!is_touch_enabled()){
@@ -436,14 +410,15 @@ barba.init({
                     start: "top top",
                     // end: "bottom bottom",
                     onEnter: () => {
+                        window.removeEventListener('scroll',secondaryNavScroll)
+                        document.body.classList.remove('show-secondary-header')
                         scrollStop(function () {
                             if(data.next.container.dataset.barbaNamespace === 'single-labs'){
                                 let sPos = window.scrollY - workWrap.clientHeight
                                 data.next.container.setAttribute('data-barba-namespace','work')
                                 workWrap.remove()
                                 
-                                window.removeEventListener('scroll',secondaryNavScroll)
-                                document.body.classList.remove('show-secondary-header')
+                                
                                 gsap.to(data.next.container.querySelector('.site-header.secondary-header'),{opacity:0,duration:.4,onComplete:()=>{
                                     data.next.container.querySelector('.site-header.secondary-header').remove()
                                     // data.next.container.querySelector('.site-header.secondary-header .filters').style.display = "flex"
@@ -740,11 +715,13 @@ barba.hooks.beforeEnter((data) => {
 
     subscribeForm(data.next.container.querySelector('#mc-embedded-subscribe-form'))
 
+    for(var c = data.next.container.getElementsByTagName("a"), a = 0;a < c.length;a++) {
+        var b = c[a];
+        b.getAttribute("href") && b.hostname !== location.hostname && (b.target = "_blank")
+    }
+
 });
 
-// barba.hooks.beforeEnter(() => {
-//     window.scrollTo(0,0); 
-// });
 
 barba.hooks.afterLeave((data) => {
     if(data.next.namespace !== "labs" && data.next.namespace !== "work"){

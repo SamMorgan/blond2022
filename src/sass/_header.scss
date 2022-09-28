@@ -49,7 +49,7 @@
         background-color: inherit;
         opacity: 0;
         visibility: hidden;
-        transition: opacity $transitionDur, visibility 0s $transitionDur, background-color .4s, color .4s;
+        transition: opacity $transitionDur, visibility 0s $transitionDur;
         pointer-events: none;
         .show-menu {
             cursor: pointer;
