@@ -3,6 +3,25 @@
     "title": "Intro Image",
     "fields": [
         {
+            "key": "field_6331a71fd3577",
+            "label": "Intro Text",
+            "name": "intro_text",
+            "type": "wysiwyg",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "tabs": "all",
+            "toolbar": "very_simple",
+            "media_upload": 0,
+            "delay": 0
+        },
+        {
             "key": "field_63158855ba5c1",
             "label": "Intro Image",
             "name": "intro_image",
@@ -45,5 +64,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1663569647
+    "modified": 1664198446
 }

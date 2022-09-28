@@ -19,7 +19,8 @@ body {
         background-color: #000;
         color: $lightgrey;
     }
-    & > div {
+    & > div,
+    main {
         background-color: inherit;
         color: inherit;        
     }
@@ -87,10 +88,10 @@ body {
 [data-barba-namespace="labs"] .site-header,
 .dark-bg,
 .dark-bg .site-header {
-    // background:#000;
-    // color: $lightgrey;
-    background-color: inherit;
-    color:inherit;
+    background:#000;
+    color: $lightgrey;
+    // background-color: inherit;
+    // color:inherit;
 }
 // [data-barba-namespace="work"] .site-header h1 a,
 // [data-barba-namespace="work"] .site-header ul.menu li a,
@@ -157,7 +158,8 @@ body {
     }
 }
 .module-formatted-text {
-    color:#b7b7b7;
+    //color:#b7b7b7;
+    color: $lightgreyonwhite;
     strong {
         color: $grey;
     }
@@ -236,10 +238,26 @@ img.thumbnail {
     //background: linear-gradient(0deg, rgba(0,0,0,1) 0%, rgba(255,255,255,1) 100%);
 }
 
+.work-wrap {
+    min-height: 100vh;
+    padding-top: 3.875rem;
+    display: flex;
+    flex-direction: column;
+    .site-footer {
+        margin: auto 0 0;
+    }
+    .module-text a {
+        color: $lightgreyonwhite;
+    } 
+}     
+
 @media (hover: hover) and (pointer: fine) {
     .custom-cursor {
         display: none;
     }
+    .work-wrap .module-text a:hover {
+        color: $orange;
+    } 
 }  
 @media (hover: none) and (pointer: coarse) {
     .custom-cursor {
@@ -284,8 +302,6 @@ img.thumbnail {
     .content-wrap {
         padding: 3rem 0 0;
     }
-    .module-full-width-img,
-    .module-two-imgs,
     .module-three-imgs,
     .module-text-3-cols {
         padding: 0 .5rem .5rem;
@@ -302,13 +318,24 @@ img.thumbnail {
     }
     .module-text,
     .module-formatted-text,
-    .module-text-3cols {
-        padding: 0 .8125rem .5rem;
+    .module-text-3cols,
+    .module-video,
+    .module-full-width-img,
+    .module-two-imgs .imgwrap {
+        padding: 0 .8125rem .8125rem;
     }
     .module-text-3cols {
         column-count: 1;
     }
     .privacy-policy-wrap {
         padding-top: 4.65rem;
-    }    
+    } 
+    .module-two-imgs {
+        display: block;
+        padding: 0;
+        .imgwrap {
+            margin:0;
+            width: 100%;
+        }
+    }   
 }    

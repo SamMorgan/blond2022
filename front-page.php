@@ -2,12 +2,13 @@
 <?php if (have_posts()) : while (have_posts()) : the_post();?>
     <div class="intro-wrap">
         <div class="intro">
-            <div class="intro-text"><?php the_content();?></div>
+            <div class="intro-text"><?php the_field('intro_text');?></div>
             <div class="scrolldown custom-cursor-wrap">
             <div class="custom-cursor"></div>
             </div>
         </div>
-        <video poster="<?php the_field('intro_image');?>" class="intro-video" src="<?php the_field('video');?>" playsinline muted loop></video>
+        <video class="intro-video" poster="<?php the_field('intro_image');?>" src="<?php the_field('video');?>" playsinline muted loop></video>
+        <!-- <img class="lazy" data-src="<?php the_field('intro_image');?>"> -->
     </div>
 <?php endwhile; endif;?>
 <?php include('includes/svg-filters.php');?>

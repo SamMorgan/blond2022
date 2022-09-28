@@ -380,3 +380,50 @@ function vimeo_markup($iframe){
     return $iframe;
     //return '<iframe src="'.$src.'?muted=1&autoplay=1&loop=1&autopause=0&title=0&byline=0&portrait=0&sidedock=0&controls=0" width="640" height="360" frameborder="0" allow="autoplay" allowfullscreen></iframe>';
 }
+
+
+function columns_client($columns) {
+    $columns['client'] = 'Client';
+    return $columns;
+}
+add_filter('manage_work_posts_columns', 'columns_client');
+
+function client_column( $column, $post_id ) {
+	switch ( $column ) {
+		case 'client':
+            $client = get_post_meta( $post_id, 'client', true ); 
+            if($client){
+                echo '<a href="';
+                echo admin_url( 'edit.php?post_type=work&client=' . urlencode( $client ) );
+                echo '">';
+                echo $client;
+                echo '</a>';
+            }
+			break;
+	}
+}
+add_action( 'manage_work_posts_custom_column' , 'client_column', 10, 2 );
+
+
+
+
+function wpse331647_custom_query_vars_filter( $vars ) {
+    $vars[] .= 'client';
+    return $vars;
+}
+
+add_filter( 'query_vars', 'wpse331647_custom_query_vars_filter' );
+
+add_action( 'pre_get_posts', 'wpse331647_alter_query' );
+
+function wpse331647_alter_query( $query ) {
+
+    if ( !is_admin() || 'work' != $query->query['post_type'] )
+        return;
+
+    if ( $query->query_vars['client'] ) {
+        $query->set( 'meta_key', 'client' );
+        $query->set( 'meta_value', $query->query_vars['client'] );
+    }
+
+}

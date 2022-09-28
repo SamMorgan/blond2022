@@ -68,6 +68,16 @@ const secondaryNavClick = (btn) => {
 //     }
 // }
 
+function indexMinHeight(data){
+    data.next.container.querySelector('.work-index').style.minHeight = window.innerHeight - data.next.container.querySelector('.site-footer').offsetHeight + 1 + 'px'
+    window.addEventListener('load',()=>{
+        data.next.container.querySelector('.work-index').style.minHeight = window.innerHeight - data.next.container.querySelector('.site-footer').offsetHeight + 1 + 'px'
+    })
+    window.addEventListener('resize',()=>{
+        data.next.container.querySelector('.work-index').style.minHeight = window.innerHeight - data.next.container.querySelector('.site-footer').offsetHeight + 1 + 'px'
+    })
+}
+
 
 const workCardsFunc = (data) => {
     data.next.container.querySelectorAll('.work-card').forEach(workCard => {
@@ -89,9 +99,9 @@ const workCardsFunc = (data) => {
                 }
             }, overwrite: true })
         },
-        onLeaveBack: batch => batch.forEach(el => {
-            el.classList.add('fade-in-up')
-        })
+        // onLeaveBack: batch => batch.forEach(el => {
+        //     el.classList.add('fade-in-up')
+        // })
     });    
 }
 
@@ -184,25 +194,35 @@ barba.init({
                 let customCursorEl = data.next.container.querySelector('.custom-cursor')
  
                 // if (video.readyState >= video.HAVE_FUTURE_DATA) {
-                //     gsap.to(video,{opacity:1,duration:.4})
+                // //     gsap.to(video,{opacity:1,duration:.4})
+                //     alert('can play video')
                 // } else {
-                    // video.addEventListener('loadedmetadata', function () {
-                    //     gsap.to(video,{opacity:1,duration:.4})
-                    // });
-                //}  
+                //     video.addEventListener('loadedmetadata', function () {
+                //         //gsap.to(video,{opacity:1,duration:.4})
+                //         alert('can play video')
+                //     });
+                // } 
+                // alert('test') 
+                
+                // video.addEventListener('canplay', function () {
+                //     //gsap.to(video,{opacity:1,duration:.4})
+                //     video.pause()
+                //     alert('can play video')
+                // });
             
                 introWrap.addEventListener('scroll',()=>{
                     let documentHeight = introWrap.scrollHeight;
                     let currentScroll = introWrap.scrollTop + window.innerHeight;
                     // When the user is [modifier]px from the bottom, fire the event.
                     let modifier = 10; 
-                    if(currentScroll + modifier > documentHeight) {
+                    if(currentScroll + modifier > documentHeight && !document.body.classList.contains('scrolled')) {
                         document.body.classList.add('scrolled')
-
-                        //sharpenVideoFunc() 
-                        video.play()
+                        
                         customCursorEl.remove()
-
+                        introWrap.querySelector('.intro').remove()
+                        //introWrap.querySelector('img').remove()
+                        document.body.style.cursor = 'auto'
+                        video.play()
                     }
                     // else{
                     //     document.body.classList.remove('scrolled')
@@ -286,7 +306,10 @@ barba.init({
                 secondaryNavClick(data.next.container.querySelector('.show-menu'))
                 workCardsFunc(data)    
                 document.body.classList.add('dark-bg') 
-                filterWork(data)   
+                filterWork(data) 
+                indexMinHeight(data)
+                
+                 
             },
             afterLeave(data) {    
                 window.removeEventListener('scroll',secondaryNavScroll) 
@@ -296,6 +319,8 @@ barba.init({
         {
             namespace: 'single-work',
             beforeEnter(data) {
+                window.scrollTo(0,0)
+                document.body.classList.remove('dark-bg')
                 window.addEventListener('scroll',secondaryNavScroll)
                 secondaryNavClick(data.next.container.querySelector('.show-menu'))
 
@@ -306,9 +331,10 @@ barba.init({
 
                 workMenuBtn.classList.add('current-menu-item')
 
-
                 workCardsFunc(data) 
                 filterWork(data) 
+                indexMinHeight(data)
+                
 
                 gsap.to(document.body,{
                     scrollTrigger: {
@@ -346,9 +372,11 @@ barba.init({
                                 document.title = 'work | blond'
                                 window.history.pushState({}, 'Work', workMenuBtn.querySelector('a').href);
                                 //},0)
+                                workCardsFunc(data) 
                                 ScrollTrigger.getById("changeColor").kill()
                                 document.body.classList.add('dark-bg')
                                 document.body.removeAttribute('style')
+                                fadeInUp(data.next.container.querySelectorAll(".anim-fade-in-up"))
                             }    
                         })    
                     }
@@ -357,7 +385,11 @@ barba.init({
             afterLeave() {    
                 window.removeEventListener('scroll',secondaryNavScroll) 
                 document.body.classList.remove('show-secondary-header')
+                document.body.removeAttribute('style')
                 ScrollTrigger.getById("backtowork").kill()
+                if(ScrollTrigger.getById("changeColor") !== undefined){
+                    ScrollTrigger.getById("changeColor").kill()
+                }
             } 
         },
         {
@@ -365,6 +397,8 @@ barba.init({
             beforeEnter(data) {
                 workCardsFunc(data)
                 document.body.classList.add('dark-bg')
+                indexMinHeight(data)
+                
             }
         }, 
         {
@@ -380,6 +414,9 @@ barba.init({
                 labsMenuBtn.classList.add('current-menu-item')
 
                 workCardsFunc(data) 
+                indexMinHeight(data)
+                
+
 
                 gsap.to(document.body,{
                     scrollTrigger: {
@@ -404,17 +441,22 @@ barba.init({
                                 let sPos = window.scrollY - workWrap.clientHeight
                                 data.next.container.setAttribute('data-barba-namespace','work')
                                 workWrap.remove()
-                                // gsap.to(data.next.container.querySelector('.site-header.secondary-header h1'),{opacity:0,duration:.4,onComplete:()=>{
-                                //     data.next.container.querySelector('.site-header.secondary-header h1').remove()
-                                //     // data.next.container.querySelector('.site-header.secondary-header .filters').style.display = "flex"
-                                //     // gsap.to(data.next.container.querySelector('.site-header.secondary-header .filters'),{opacity:1,duration:.4,onComplete:()=>{
-                                //     //     data.next.container.querySelector('.site-header.secondary-header').classList.remove('single-work-header')
-                                //     // }})
-                                // }})
+                                
+                                window.removeEventListener('scroll',secondaryNavScroll)
+                                document.body.classList.remove('show-secondary-header')
+                                gsap.to(data.next.container.querySelector('.site-header.secondary-header'),{opacity:0,duration:.4,onComplete:()=>{
+                                    data.next.container.querySelector('.site-header.secondary-header').remove()
+                                    // data.next.container.querySelector('.site-header.secondary-header .filters').style.display = "flex"
+                                    // gsap.to(data.next.container.querySelector('.site-header.secondary-header .filters'),{opacity:1,duration:.4,onComplete:()=>{
+                                    //     data.next.container.querySelector('.site-header.secondary-header').classList.remove('single-work-header')
+                                    // }})
+                                }})
+
                                 window.scrollTo(0,sPos) 
                                 labsMenuBtn.classList.add('current-menu-item')
                                 document.title = 'labs | blond'
                                 window.history.pushState({}, 'Work', labsMenuBtn.querySelector('a').href);
+                                workCardsFunc(data) 
                                 ScrollTrigger.getById("changeColor").kill()
                                 document.body.classList.add('dark-bg')
                                 document.body.removeAttribute('style')
@@ -442,6 +484,7 @@ barba.init({
                                     document.title = 'labs | blond'
                                     window.history.pushState({}, 'Work', labsMenuBtn.querySelector('a').href);
                                 //},0)
+                                fadeInUp(data.next.container.querySelectorAll(".anim-fade-in-up"))
                             }    
                         })    
                     }
@@ -449,6 +492,7 @@ barba.init({
             },
             afterLeave() {    
                 ScrollTrigger.getById("backtowork").kill()
+                //ScrollTrigger.getById("changeColor").kill()
             } 
         }, 
         {
@@ -610,8 +654,9 @@ function fadeInUp(elems) {
     elems.forEach(function(elem) {
 
         gsap.set(elems, {
-            y: 100,
+            y: 50,
             opacity: 0,
+            duration: 1
         });
 
         ScrollTrigger.batch(elems, {
@@ -620,8 +665,8 @@ function fadeInUp(elems) {
             // onEnterBack: batch => gsap.to(batch, {opacity: 1, y: 0, stagger: 0.15}),
             // onLeaveBack: batch => gsap.to(batch, {opacity: 0, y: 24}),
           
-            start: "top 80%",
-            end: "bottom 20%",
+            start: "top bottom",
+            //end: "bottom 20%",
             //markers: true,
         });
     });
@@ -697,9 +742,9 @@ barba.hooks.beforeEnter((data) => {
 
 });
 
-barba.hooks.afterEnter(() => {
-    window.scrollTo(0,0); 
-});
+// barba.hooks.beforeEnter(() => {
+//     window.scrollTo(0,0); 
+// });
 
 barba.hooks.afterLeave((data) => {
     if(data.next.namespace !== "labs" && data.next.namespace !== "work"){

@@ -32,13 +32,8 @@ if($work_query->have_posts()) : while ( $work_query->have_posts() ) : $work_quer
         <a href="<?php the_permalink();?>"> 
             <div class="thumbnail-wrap">
                 <?php 
-                    if($confidential == " confidential"){
-                        echo '<img src="'.$fc_image['url'].'">';
-                        echo '<img class="rollover-img" src="'.$px_image['url'].'">';
-                    }else{
-                        echo '<img src="'.$px_image['url'].'">';
-                        echo '<img class="rollover-img" src="'.$fc_image['url'].'">';
-                    }
+                    echo '<img src="'.$px_image['url'].'">';
+                    echo '<img class="rollover-img" src="'.$fc_image['url'].'">';
                 ?>
             </div>    
             <h3><?php 
