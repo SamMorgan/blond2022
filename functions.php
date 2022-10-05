@@ -203,7 +203,7 @@
     }
 
 
-    add_editor_style( 'custom-editor-style.css' );
+    add_editor_style();
 
 
     // function get_content_by_id($postid){
