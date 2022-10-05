@@ -21,7 +21,7 @@ if($work_query->have_posts()) : while ( $work_query->have_posts() ) : $work_quer
             } 
             $data_cats = implode (",",$categories_list);  
 
-            if($curr_category){
+            if(isset($curr_category)){
                 if(in_array($curr_category,$categories_list) == false){
                     $hidden = " hidden";
                 }
@@ -37,14 +37,19 @@ if($work_query->have_posts()) : while ( $work_query->have_posts() ) : $work_quer
                 ?>
             </div>    
             <h3><?php 
-                $year = get_field('year');
-                if($year){ echo $year; }
-                $client = get_field('client');
-                if($client){ echo '<br>'.$client; }
-                if($year || $client){
-                    echo ', ';
-                }
-                the_title();
+                $caption = get_field('thumbnail_caption');
+                if($caption){
+                    echo $caption;
+                }else{    
+                    $year = get_field('year');
+                    if($year){ echo $year; }
+                    $client = get_field('client');
+                    if($client){ echo '<br>'.$client; }
+                    if($year || $client){
+                        echo ', ';
+                    }
+                    the_title();
+                }    
             ?></h3>
         </a>        
     </div>           

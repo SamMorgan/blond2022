@@ -1,6 +1,6 @@
 <?php get_header(); ?>
 <?php if (have_posts()) : while (have_posts()) : the_post();?>
-    <div class="intro-wrap loading">
+    <div class="intro-wrap loading" style="background-color:<?php the_field('background_colour');?>">
         <div class="intro">
             <div class="intro-text"><?php the_field('intro_text');?></div>
             <div class="scrolldown custom-cursor-wrap">

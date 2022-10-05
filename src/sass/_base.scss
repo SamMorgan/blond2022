@@ -122,7 +122,8 @@ body {
 .module-text-3-cols {
     padding: 0 0.75rem 1rem;
     display: flex;
-    img {
+    img,
+    video {
         width: 100%;
         height: auto;  
         display: block;     
@@ -156,6 +157,12 @@ body {
     p:last-of-type {
         margin: 0;
     }
+    // p + p {
+    //     text-indent: 1em;
+    // }
+    // p {
+    //     margin: 0;
+    // }
 }
 .module-formatted-text {
     //color:#b7b7b7;

@@ -11,18 +11,32 @@ if( have_rows('content') ):
             endif;
 
         elseif( get_row_layout() == 'two_images' ): 
-            $image_1 = get_sub_field('image_1');
-            $image_2 = get_sub_field('image_2');
             echo '<div class="module-two-imgs"><div class="imgwrap anim-fade-in-up">';
-                if($image_1) :
-                    $ratio_1 = $image_1['width']/$image_1['height'];
-                    echo '<img class="lazy" data-src="'.$image_1['url'].'" style="aspect-ratio:'.$ratio_1.'">';
-                endif;
+                if(get_sub_field('is_video_1')){
+                    $video_1 = get_sub_field('video_1');
+                    if($video_1){
+                        echo '<video playsinline muted loop autoplay src="'.$video_1.'"></video>';
+                    }
+                }else{
+                    $image_1 = get_sub_field('image_1');
+                    if($image_1) :
+                        $ratio_1 = $image_1['width']/$image_1['height'];
+                        echo '<img class="lazy" data-src="'.$image_1['url'].'" style="aspect-ratio:'.$ratio_1.'">';
+                    endif;
+                }    
             echo '</div><div class="imgwrap anim-fade-in-up">';
-                if($image_2):
-                    $ratio_2 = $image_2['width']/$image_2['height'];
-                    echo '<img class="lazy" data-src="'.$image_2['url'].'" style="aspect-ratio:'.$ratio_2.'">';
-                endif;
+                if(get_sub_field('is_video_2')){
+                    $video_2 = get_sub_field('video_2');
+                    if($video_2){
+                        echo '<video playsinline muted loop autoplay src="'.$video_2.'"></video>';
+                    }
+                }else{ 
+                    $image_2 = get_sub_field('image_2');   
+                    if($image_2):
+                        $ratio_2 = $image_2['width']/$image_2['height'];
+                        echo '<img class="lazy" data-src="'.$image_2['url'].'" style="aspect-ratio:'.$ratio_2.'">';
+                    endif;
+                }    
             echo '</div></div>';
 
         elseif( get_row_layout() == 'three_images' ): 

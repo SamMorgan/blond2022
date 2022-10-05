@@ -92,22 +92,93 @@
     }
 
 
+    // add_action( 'after_setup_theme', 'wpse3882_after_setup_theme' );
+    // function wpse3882_after_setup_theme()
+    // {
+    //     add_editor_style();
+    // }
+
+    // add_filter('mce_buttons_2', 'wpse3882_mce_buttons_2');
+    // function wpse3882_mce_buttons_2($buttons)
+    // {
+    //     array_unshift($buttons, 'styleselect');
+    //     return $buttons;
+    // }
+
+    // add_filter('tiny_mce_before_init', 'wpse3882_tiny_mce_before_init');
+    // function wpse3882_tiny_mce_before_init($settings)
+    // {
+    //     //$settings['theme_advanced_blockformats'] = 'p,h1,h2,h3,h4';
+
+    //     // From http://tinymce.moxiecode.com/examples/example_24.php
+    //     $style_formats = array(
+    //         array('title' => 'Intented Paragraph', 'block' => 'div', 'styles' => array('color' => '#ff0000')),
+    //     );
+    //     // Before 3.1 you needed a special trick to send this array to the configuration.
+    //     // See this post history for previous versions.
+    //     $settings['style_formats'] = json_encode( $style_formats );
+
+    //     return $settings;
+    // }
+
+
+
+    /*
+    * Callback function to filter the MCE settings
+    */
+
+    // Callback function to insert 'styleselect' into the $buttons array
+    function my_mce_buttons_2($buttons) {
+        array_unshift($buttons, 'styleselect');
+        return $buttons;
+    }
+
+    // Register our callback to the appropriate filter
+    add_filter('mce_buttons_2', 'my_mce_buttons_2');
+
+    function my_mce_before_init_insert_formats($init_array) {
+    // Define the style_formats array
+        $style_formats = array(
+            // Each array child is a format with it's own settings
+            array(
+                'title' => 'Indented Paragraphs',
+                'block' => 'div',
+                'classes' => 'indented'
+            ),
+        );
+        // Insert the array, JSON ENCODED, into 'style_formats'
+        $init_array['style_formats'] = json_encode($style_formats);
+        return $init_array;
+    }
+
+    // Attach callback to 'tiny_mce_before_init' 
+    add_filter('tiny_mce_before_init', 'my_mce_before_init_insert_formats');
 
     
     add_filter( 'acf/fields/wysiwyg/toolbars' , 'my_toolbars'  );
     function my_toolbars( $toolbars ){
         // Uncomment to view format of $toolbars
-        /*
-        echo '< pre >';
-            print_r($toolbars);
-        echo '< /pre >';
-        die;
-        */
+    
+        // echo '< pre >';
+        //     print_r($toolbars);
+        // echo '< /pre >';
+        // die;
+
 
         // Add a new toolbar called "Very Simple"
         // - this toolbar has only 1 row of buttons
-        $toolbars['Very Simple' ] = array();
-        $toolbars['Very Simple' ][1] = array('link', 'unlink');
+        $style_formats = array(  
+            array(
+                'title' => 'My style',
+                'block' => 'span',
+                'classes' => 'mystyle',
+                'wrapper' => true,
+            ),
+        );
+
+        $toolbars['Very Simple'] = array();
+        $toolbars['Very Simple'][1] = array('link', 'unlink', 'removeformat', 'styleselect');
+        $toolbars['Very Simple'][1]['styleselect'] = json_encode( $style_formats );
 
         // Edit the "Full" toolbar and remove 'code'
         // - delet from array code from http://stackoverflow.com/questions/7225070/php-array-delete-by-value-not-key
@@ -132,13 +203,16 @@
     }
 
 
-    function get_content_by_id($postid){
-        $content_post = get_post($postid);
-        $content = $content_post->post_content;
-        $content = apply_filters('the_content', $content);
-        $content = str_replace(']]>', ']]&gt;', $content);
-        echo $content; 
-    } 
+    add_editor_style( 'custom-editor-style.css' );
+
+
+    // function get_content_by_id($postid){
+    //     $content_post = get_post($postid);
+    //     $content = $content_post->post_content;
+    //     $content = apply_filters('the_content', $content);
+    //     $content = str_replace(']]>', ']]&gt;', $content);
+    //     echo $content; 
+    // } 
   
     
 // add_action('admin_head', 'custom_admin_css');
@@ -196,7 +270,7 @@ function work_post_type() {
 		'label'                 => __( 'Work', 'text_domain' ),
 		'description'           => __( 'Work', 'text_domain' ),
 		'labels'                => $labels,
-		'supports'              => array( 'title'),
+		'supports'              => array( 'title', 'page-attributes'),
 		'hierarchical'          => true,
 		'public'                => true,
 		'show_ui'               => true,
@@ -294,7 +368,7 @@ function labs_post_type() {
 		'label'                 => __( 'Labs', 'text_domain' ),
 		'description'           => __( 'Labs', 'text_domain' ),
 		'labels'                => $labels,
-		'supports'              => array( 'title'),
+		'supports'              => array( 'title', 'page-attributes'),
 		'hierarchical'          => true,
 		'public'                => true,
 		'show_ui'               => true,
@@ -421,9 +495,18 @@ function wpse331647_alter_query( $query ) {
     if ( !is_admin() || 'work' != $query->query['post_type'] )
         return;
 
-    if ( $query->query_vars['client'] ) {
+    if ( isset($query->query_vars['client']) ) {
         $query->set( 'meta_key', 'client' );
         $query->set( 'meta_value', $query->query_vars['client'] );
     }
 
 }
+
+
+// Disable WordPress image scaling and compression 
+add_filter( 'big_image_size_threshold', '__return_false' );
+
+add_filter( 'wp_editor_set_quality', function( $arg ) {
+    return 100;
+});
+

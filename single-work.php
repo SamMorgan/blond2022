@@ -2,15 +2,20 @@
 <?php if (have_posts()) : while (have_posts()) : the_post();?>
 <div class="secondary-header site-header single-work-header">
     <h1><?php 
-        $sep = "";
-        $year = get_field('year');
-        if($year){ echo $year; $sep = " "; }
-        $client = get_field('client');
-        if($client){ echo $sep.$client; }
-        if($year || $client){
-            echo ', ';
-        }
-        the_title();
+        $nav_bar_title = get_field('nav_bar_title');
+        if($nav_bar_title){
+            echo $nav_bar_title;
+        }else{
+            $sep = "";
+            $year = get_field('year');
+            if($year){ echo $year; $sep = " "; }
+            $client = get_field('client');
+            if($client){ echo $sep.$client; }
+            if($year || $client){
+                echo ', ';
+            }
+            the_title();
+        }    
     ?></h1>
     <?php include('includes/work-filters.php');?>
     <span class="show-menu">menu</span>

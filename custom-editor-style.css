@@ -1,0 +1,7 @@
+.indented + .indented {
+    text-indent:1em;
+    margin: 0;
+}
+.indented p {
+    margin: 0;
+}

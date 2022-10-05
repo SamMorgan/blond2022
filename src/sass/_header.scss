@@ -12,7 +12,6 @@
     left:0;
     display: flex;
     justify-content: space-between;
-    text-transform: lowercase;
     //transition: background-color .4s, color .4s;
     a {
         //color:$grey;
@@ -24,6 +23,7 @@
     // }
     ul {
         display: flex;
+        text-transform: lowercase;
         li {
             display: block;
             margin: 0 0 0 .5em;
