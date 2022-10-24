@@ -1,6 +1,6 @@
 import '../sass/styles.scss';
 
-import LazyLoad from "vanilla-lazyload";
+//import LazyLoad from "vanilla-lazyload";
 import barba from '@barba/core';
 import { gsap } from "gsap";
 import { ScrollToPlugin } from "gsap/ScrollToPlugin.js";
@@ -33,6 +33,28 @@ const secondaryNavClick = (btn) => {
     btn.addEventListener('click',()=>{
         document.body.classList.remove('show-secondary-header')
     })
+}
+
+const customCursorOnScroll = () => {
+    const customCursorWrap = document.querySelector('.custom-cursor-wrap')
+    const customCursorEl = document.querySelector('.custom-cursor')
+    if(customCursorWrap && customCursorEl){
+        let elRect = customCursorWrap.getBoundingClientRect()
+        let cursorRect = customCursorEl.getBoundingClientRect()
+        if(elRect.top > cursorRect.top || elRect.bottom < cursorRect.bottom){
+            customCursorEl.style.visibility = "hidden"
+            document.body.style.cursor = "default"
+        }else{
+            customCursorEl.style.visibility = "visible"
+            document.body.style.cursor = "none"            
+        }
+    }
+}
+const moveCursor = (e) => {
+    const mouseY = e.clientY;
+    const mouseX = e.clientX;
+    const customCursorEl = document.querySelector('.custom-cursor')
+    customCursorEl.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0)`;
 }
 
 // const resizeVideos = (doc) => {
@@ -125,16 +147,16 @@ const spacer = (data) => {
     data.next.container.querySelector('.intro').style.marginBottom = data.next.container.querySelector('.intro-text').getBoundingClientRect().height + "px"
 }
 
-var simulateClick = function (elem) {
-	// Create our event (with options)
-	var evt = new MouseEvent('click', {
-		bubbles: true,
-		cancelable: true,
-		view: window
-	});
-	// If cancelled, don't dispatch our event
-	var canceled = !elem.dispatchEvent(evt);
-};
+// var simulateClick = function (elem) {
+// 	// Create our event (with options)
+// 	var evt = new MouseEvent('click', {
+// 		bubbles: true,
+// 		cancelable: true,
+// 		view: window
+// 	});
+// 	// If cancelled, don't dispatch our event
+// 	var canceled = !elem.dispatchEvent(evt);
+// };
 
 //let scrollValues = {};
 const filterWork = (data) => {
@@ -157,15 +179,26 @@ const filterWork = (data) => {
                         workCard.classList.remove('hidden')
                     }    
                 })
-            }    
+            } 
+            gsap.to(window,{
+                scrollTo: 0, 
+                duration: .5
+            });   
         })
     })
 }
 
+const playVideos = (data) => {
+    data.next.container.querySelectorAll('video[autoplay]').forEach((v)=>{
+        v.play()
+    })   
+}
 
+let workTitle = 'blond — Industrial Design and Product Design — Consultancy — Work'
+let labsTitle = 'blond — Industrial Design and Product Design — Studio — Labs'
 
 barba.init({
-    debug:true,
+    //debug:true,
     views: [
         {
             namespace: 'home',
@@ -179,12 +212,17 @@ barba.init({
                 video.addEventListener('loadedmetadata', function () {
                     video.pause()
                 });
-                let lazyIntro = new LazyLoad({
-                    elements_selector: '.intro-img',
-                    callback_loaded: (el) => {
-                        el.parentElement.classList.remove('loading')
-                    }
-                });
+                // let lazyIntro = new LazyLoad({
+                //     elements_selector: '.intro-img',
+                //     callback_loaded: (el) => {
+                //         el.parentElement.parentElement.classList.remove('loading')
+                //     }
+                // });
+
+                    imagesLoaded( introWrap, () => {
+                        introWrap.classList.remove('loading')
+                    })
+   
             
                 introWrap.addEventListener('scroll',()=>{
                     let documentHeight = introWrap.scrollHeight;
@@ -217,14 +255,17 @@ barba.init({
                         // }else{
                         //     customCursorEl.innerHTML = "scroll"
                         // }
+                        customCursorEl.style.display = "block"
+                        document.body.style.cursor = 'none'
     
-                        customCursorEl.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0)`;
+                        customCursorEl.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0)`; 
                     }
                     const customCursorOff = (e) => {
                         customCursorEl.style.display = "none"
                         document.body.style.cursor = 'default'
                         e.target.removeEventListener('mousemove',customCursorOn)
                     } 
+
                                               
                     customCursorWrap.addEventListener('mouseover',(e)=>{
                         if(e.target.classList.contains('intro-text') || e.target.nodeName === 'P' || e.target.nodeName === 'A'){
@@ -236,6 +277,8 @@ barba.init({
                             customCursorWrap.addEventListener('mousemove',customCursorOn)
                             
                             customCursorWrap.addEventListener('mouseleave',customCursorOff)
+
+
                         }
                         
                         customCursorEl.style.display = "block"
@@ -244,6 +287,8 @@ barba.init({
                         customCursorWrap.addEventListener('mousemove',customCursorOn)
 
                         customCursorWrap.addEventListener('mouseleave',customCursorOff)
+
+                        
                     })
                     customCursorWrap.addEventListener('mouseleave',customCursorOff)
    
@@ -262,15 +307,9 @@ barba.init({
                 window.addEventListener('resize',spacer(data))
                   
             },
-            // afterEnter(data) {    
-            //     data.next.container.querySelector('video').onloadeddata = function() {
-            //         console.log('loaded data funct')
-            //     }; 
-            // },
             afterLeave() {    
-                //document.removeEventListener('scroll', homePageScroll) 
                 window.removeEventListener('resize',spacer)
-                document.body.classList.remove('scrolled')
+                document.body.classList.remove('scrolled') 
             }     
         },
         {
@@ -283,7 +322,7 @@ barba.init({
                 filterWork(data) 
                 indexMinHeight(data)
                 
-                 
+                workTitle = document.title
             },
             afterLeave(data) {    
                 window.removeEventListener('scroll',secondaryNavScroll) 
@@ -300,17 +339,19 @@ barba.init({
 
                 let workIndex = data.next.container.querySelector('.work-index')
                 let workWrap = data.next.container.querySelector('.work-wrap')
-
                 let workMenuBtn = data.next.container.querySelector('.main-header ul li:first-child')
+                let mainHeader = data.next.container.querySelector('.main-header')
+                let secondaryHeader = data.next.container.querySelector('.secondary-header')
 
                 workMenuBtn.classList.add('current-menu-item')
 
                 workCardsFunc(data) 
                 filterWork(data) 
                 indexMinHeight(data)
+                playVideos(data)
                 
 
-                gsap.to(document.body,{
+                gsap.to([document.body, secondaryHeader, mainHeader],{
                     scrollTrigger: {
                         id: "changeColor",
                         trigger: workIndex,
@@ -329,30 +370,37 @@ barba.init({
                     // end: "bottom bottom",
                     onEnter: () => {
                         scrollStop(function () {
-                            if(data.next.container.dataset.barbaNamespace === 'single-work'){
+                            if(data.next.container.dataset.barbaNamespace === 'single-work' && workIndex.getBoundingClientRect().top <= 0){
                                 let sPos = window.scrollY - workWrap.clientHeight
                                 data.next.container.setAttribute('data-barba-namespace','work')
                                 workWrap.remove()
-                                gsap.to(data.next.container.querySelector('.site-header.secondary-header h1'),{opacity:0,duration:.4,onComplete:()=>{
-                                    data.next.container.querySelector('.site-header.secondary-header h1').remove()
-                                    data.next.container.querySelector('.site-header.secondary-header .filters').style.display = "flex"
-                                    gsap.to(data.next.container.querySelector('.site-header.secondary-header .filters'),{opacity:1,duration:.4,onComplete:()=>{
-                                        data.next.container.querySelector('.site-header.secondary-header').classList.remove('single-work-header')
+                                let h1 = secondaryHeader.querySelector('h1')
+                                let filters = secondaryHeader.querySelector('.filters')
+
+                                gsap.to(h1,{opacity:0,duration:.4,onComplete:()=>{
+                                    h1.remove()
+                                    filters.style.display = "flex"
+                                    gsap.to(filters,{opacity:1,duration:.4,onComplete:()=>{
+                                        secondaryHeader.classList.remove('single-work-header')
                                     }})
                                 }})
                                 //setTimeout(()=>{
                                 window.scrollTo(0,sPos) 
                                 workMenuBtn.classList.add('current-menu-item')
-                                document.title = 'work | blond'
-                                window.history.pushState({}, 'Work', workMenuBtn.querySelector('a').href);
+                                document.title = workTitle
+                                window.history.pushState({}, 'work', workMenuBtn.querySelector('a').href);
                                 //},0)
                                 workCardsFunc(data) 
                                 ScrollTrigger.getById("changeColor").kill()
                                 document.body.classList.add('dark-bg')
-                                document.body.removeAttribute('style')
+                                //document.body.removeAttribute('style')
+                                let els = [document.body, secondaryHeader, mainHeader]
+                                els.forEach(el => {
+                                    el.removeAttribute('style')
+                                })
                                 fadeInUp(data.next.container.querySelectorAll(".anim-fade-in-up"))
                             }    
-                        })    
+                        },200)    
                     }
                 })
             },
@@ -372,27 +420,31 @@ barba.init({
                 workCardsFunc(data)
                 document.body.classList.add('dark-bg')
                 indexMinHeight(data)
-                
+                labsTitle = document.title
             }
         }, 
         {
             namespace: 'single-labs',
             beforeEnter(data) {
+                document.body.classList.remove('dark-bg')
                 window.addEventListener('scroll',secondaryNavScroll)
                 secondaryNavClick(data.next.container.querySelector('.show-menu'))
                 
                 let workIndex = data.next.container.querySelector('.work-index')
-
+                let workWrap = data.next.container.querySelector('.work-wrap')
                 let labsMenuBtn = data.next.container.querySelector('.main-header ul li:nth-child(2n)')
+                let mainHeader = data.next.container.querySelector('.main-header')
+                let secondaryHeader = data.next.container.querySelector('.secondary-header')
 
                 labsMenuBtn.classList.add('current-menu-item')
 
                 workCardsFunc(data) 
                 indexMinHeight(data)
+                playVideos(data)
                 
 
 
-                gsap.to(document.body,{
+                gsap.to([document.body, secondaryHeader, mainHeader],{
                     scrollTrigger: {
                         id: "changeColor",
                         trigger: workIndex,
@@ -413,14 +465,14 @@ barba.init({
                         window.removeEventListener('scroll',secondaryNavScroll)
                         document.body.classList.remove('show-secondary-header')
                         scrollStop(function () {
-                            if(data.next.container.dataset.barbaNamespace === 'single-labs'){
+                            if(data.next.container.dataset.barbaNamespace === 'single-labs' && workIndex.getBoundingClientRect().top <= 0){
                                 let sPos = window.scrollY - workWrap.clientHeight
                                 data.next.container.setAttribute('data-barba-namespace','work')
                                 workWrap.remove()
                                 
                                 
-                                gsap.to(data.next.container.querySelector('.site-header.secondary-header'),{opacity:0,duration:.4,onComplete:()=>{
-                                    data.next.container.querySelector('.site-header.secondary-header').remove()
+                                gsap.to(secondaryHeader,{opacity:0,duration:.4,onComplete:()=>{
+                                    secondaryHeader.remove()
                                     // data.next.container.querySelector('.site-header.secondary-header .filters').style.display = "flex"
                                     // gsap.to(data.next.container.querySelector('.site-header.secondary-header .filters'),{opacity:1,duration:.4,onComplete:()=>{
                                     //     data.next.container.querySelector('.site-header.secondary-header').classList.remove('single-work-header')
@@ -429,45 +481,25 @@ barba.init({
 
                                 window.scrollTo(0,sPos) 
                                 labsMenuBtn.classList.add('current-menu-item')
-                                document.title = 'labs | blond'
-                                window.history.pushState({}, 'Work', labsMenuBtn.querySelector('a').href);
+                                document.title = labsTitle
+                                window.history.pushState({}, 'labs', labsMenuBtn.querySelector('a').href);
                                 workCardsFunc(data) 
                                 ScrollTrigger.getById("changeColor").kill()
                                 document.body.classList.add('dark-bg')
-                                document.body.removeAttribute('style')
-                            }    
-                        })    
-                    }
-                })
-
-                let workWrap = data.next.container.querySelector('.work-wrap')
-                ScrollTrigger.create({
-                    id: "backtowork",
-                    trigger: workIndex,
-                    start: "top top",
-                    // end: "bottom bottom",
-                    onEnter: () => {
-                    document.body.classList.add('dark-bg')
-                        scrollStop(function () {
-                            if(data.next.container.dataset.barbaNamespace === 'single-labs'){
-                                let sPos = window.scrollY - workWrap.clientHeight
-                                data.next.container.setAttribute('data-barba-namespace','work')
-                                workWrap.remove()
-                                //setTimeout(()=>{
-                                    window.scrollTo(0,sPos) 
-                                    labsMenuBtn.classList.add('current-menu-item')
-                                    document.title = 'labs | blond'
-                                    window.history.pushState({}, 'Work', labsMenuBtn.querySelector('a').href);
-                                //},0)
-                                fadeInUp(data.next.container.querySelectorAll(".anim-fade-in-up"))
-                            }    
-                        })    
+                                let els = [document.body, secondaryHeader, mainHeader]
+                                els.forEach(el => {
+                                    el.removeAttribute('style')
+                                })
+                            }       
+                        },200)    
                     }
                 })
             },
             afterLeave() {    
                 ScrollTrigger.getById("backtowork").kill()
-                //ScrollTrigger.getById("changeColor").kill()
+                if(ScrollTrigger.getById("changeColor") !== undefined){
+                    ScrollTrigger.getById("changeColor").kill()
+                }
             } 
         }, 
         {
@@ -484,6 +516,10 @@ barba.init({
                         navigation: {
                             nextEl: ".swiper-button-next",
                             prevEl: ".swiper-button-prev",
+                        },
+                        pagination: {
+                            el: ".swiper-pagination",
+                            clickable: true,
                         }
                     })  
                 }
@@ -514,7 +550,6 @@ barba.init({
                             if(activeMenuItem){
                                 activeMenuItem.classList.remove('active')
                             }
-                            console.log("enter",section, section.id)
                             data.next.container.querySelector('.scrollto-links a[href="#'+section.id+'"]').classList.add('active')
                         },
                         onEnterBack: () => {
@@ -522,7 +557,6 @@ barba.init({
                             if(activeMenuItem){
                                 activeMenuItem.classList.remove('active')
                             }
-                            console.log("back",section, section.id)
                             data.next.container.querySelector('.scrollto-links a[href="#'+section.id+'"]').classList.add('active')
                         }
                     });
@@ -552,6 +586,61 @@ barba.init({
 
                     let customCursorWrap = data.next.container.querySelector('.custom-cursor-wrap')
                     let customCursorEl = customCursorWrap.querySelector('.custom-cursor')
+                    customCursorEl.style.display = "block"
+                    const customCursorOn = (e) => {
+                        document.body.style.cursor = "none"
+                        customCursorEl.style.visibility = "visible";
+                        customCursorWrap.addEventListener('mousemove',customCursorOn)
+                    }
+                    const customCursorOff = (e) => {
+                        customCursorEl.style.visibility = "hidden"
+                        document.body.style.cursor = ""
+                        customCursorWrap.removeEventListener('mousemove',customCursorOn)
+                    }    
+                    
+                    customCursorWrap.addEventListener('mouseover',customCursorOn)
+                    
+                    customCursorWrap.addEventListener('mouseleave',customCursorOff)
+
+                    window.addEventListener('scroll',customCursorOnScroll)
+                    window.addEventListener('mousemove',moveCursor)
+                }
+            },
+            afterLeave() {    
+                window.removeEventListener('scroll',secondaryNavScroll) 
+                if(!is_touch_enabled()){
+                    window.removeEventListener('scroll',customCursorOnScroll)
+                    window.removeEventListener('mousemove',moveCursor)
+                }    
+                document.body.classList.remove('show-secondary-header')
+            } 
+        },
+        {
+            namespace: 'default',
+            beforeEnter(data) {
+                let headerSlideEl = data.next.container.querySelector('.info-slider')
+                if(headerSlideEl){
+                    let headerSlider = new Swiper(headerSlideEl, {
+                        speed: 0,
+                        loop: true,
+                        lazy: {
+                            loadPrevNext: true,
+                        },
+                        navigation: {
+                            nextEl: ".swiper-button-next",
+                            prevEl: ".swiper-button-prev",
+                        }
+                    })  
+                }
+
+                window.addEventListener('scroll',secondaryNavScroll)
+                secondaryNavClick(data.next.container.querySelector('.show-menu'))
+
+
+                if(!is_touch_enabled()){
+
+                    let customCursorWrap = data.next.container.querySelector('.custom-cursor-wrap')
+                    let customCursorEl = customCursorWrap.querySelector('.custom-cursor')
 
                     const customCursorOn = (e) => {
                         const mouseY = e.clientY;
@@ -576,7 +665,8 @@ barba.init({
                 window.removeEventListener('scroll',secondaryNavScroll) 
                 document.body.classList.remove('show-secondary-header')
             } 
-        }          
+        }
+
     ],
     transitions: [
         {
@@ -618,10 +708,10 @@ barba.init({
 
 
 
-const lazyImages = () => {
-    let lazy = new LazyLoad()
-}  
-lazyImages()  
+// const lazyImages = () => {
+//     let lazy = new LazyLoad()
+// }  
+// lazyImages()  
 
 
 // Parallax //
@@ -654,11 +744,28 @@ fadeInUp(document.querySelectorAll(".anim-fade-in-up"))
 const subscribeForm = (form) => {
     //let form = data.next.container.querySelector('#mc-embedded-subscribe-form')
     if(form){
+        
+        let emailInput = form.querySelector('input[type="email"]') 
+        emailInput.addEventListener('change',()=>{
+            if(emailInput.value.length > 0){
+                form.parentElement.classList.add('active')
+            }
+        })
+        emailInput.addEventListener('focus',()=>{
+            form.parentElement.classList.add('active')
+        })
+        emailInput.addEventListener('blur',()=>{
+            if(emailInput.value.length === 0){
+                form.parentElement.classList.remove('active')
+            }
+        })
+
         form.addEventListener('submit', function (e) {
             e.preventDefault();
 
             // Check for spam
-            if(document.getElementById('js-validate-robot').value !== '') { return false }
+            //if(document.getElementById('js-validate-robot').value !== '') { return false }
+            if(form.querySelector('.js-validate-robot').value !== '') { return false }
 
             // Get url for mailchimp
             var url = this.action.replace('/post?', '/post-json?');
@@ -684,14 +791,58 @@ const subscribeForm = (form) => {
                 document.body.removeChild(script);
 
                 // Display response message
-                document.getElementById('js-subscribe-response').innerHTML = data.msg
+                //document.getElementById('js-subscribe-response').innerHTML = data.msg
+                // console.log(data)
+                // form.querySelector('.js-subscribe-response').innerHTML = data.msg
+                if(data.result === "success"){
+                    form.parentElement.classList.add('submitted') 
+                    setTimeout(()=>{
+                        form.parentElement.className = "newsletter"
+                        form.reset();
+                    },5000)
+                }else{
+                    alert(data.msg)
+                }
             };
         });
+        // form.addEventListener("submit", (e) => {
+        //     e.preventDefault();
+          
+        //     fetch(e.target.action, {
+        //         method: e.target.method,
+        //         mode: "no-cors",
+        //         headers: {
+        //             "Content-Type": "application/json"
+        //         }
+        //     })
+        //     .then((response) => {
+        //         if (!response.ok) {
+        //             throw new Error("Request failed.");  // Custom message on the error to throw
+        //         } else {
+        //             return response.json();  // Call .json() only on good responses
+        //         }
+        //     })
+        //     .then((data) => {
+        //         console.log("data: " + data);
+        //     })
+        //     .catch((error) => {  // Catch the error here
+        //         console.log("error: "+error);
+        //     });
+        // });
     }
 } 
-subscribeForm(document.querySelector('#mc-embedded-subscribe-form'))
+document.querySelectorAll('.mc-embedded-subscribe-form').forEach(form=>{
+    subscribeForm(form)
+})
 
-
+function fadeInImgs(doc){
+    doc.querySelectorAll('.imgwrap img').forEach(img => {
+        imagesLoaded( img.parentElement, () => {
+            img.classList.add('loaded')
+        })
+    })
+}
+fadeInImgs(document)    
 
 
 barba.hooks.beforeEnter((data) => {
@@ -707,18 +858,22 @@ barba.hooks.beforeEnter((data) => {
     }
     window.scrollTo(0,0); 
 
-    lazyImages()
+    //lazyImages()
 
     fadeInUp(data.next.container.querySelectorAll(".anim-fade-in-up"))
 
     //workCardsFunc(data.next.container.querySelectorAll('.work-card'))
 
-    subscribeForm(data.next.container.querySelector('#mc-embedded-subscribe-form'))
+    data.next.container.querySelectorAll('.mc-embedded-subscribe-form').forEach(form=>{
+        subscribeForm(form)
+    })
 
     for(var c = data.next.container.getElementsByTagName("a"), a = 0;a < c.length;a++) {
         var b = c[a];
         b.getAttribute("href") && b.hostname !== location.hostname && (b.target = "_blank")
     }
+
+    fadeInImgs(data.next.container)   
 
 });
 

@@ -2,7 +2,7 @@
 <html <?php language_attributes(); ?> prefix="og: http://ogp.me/ns#">
 <head>
     <meta charset="<?php bloginfo( 'charset' ); ?>" />
-    <title><?php wp_title(' | ','true','right'); ?><?php bloginfo('name'); ?></title>
+    <title><?php wp_title(''); ?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">     
     <link rel="profile" href="http://gmpg.org/xfn/11" />
     <meta name="format-detection" content="telephone=no"> 
@@ -18,7 +18,7 @@
 </head>
 <body data-barba="wrapper">
 <div data-barba="container" data-barba-namespace="<?php 
-    if(is_home()){
+    if(is_home() || is_front_page()){
         echo "home";
     }elseif(is_tax('work-category') || is_post_type_archive( 'work' )){   
         echo "work";     
@@ -29,9 +29,10 @@
     }elseif(is_singular('labs')){   
         echo "single-labs";   
     }elseif(is_page('info')){   
-        echo 'info';              
+        echo 'info';                  
     }else{
-        echo $post->post_name;
+        //echo $post->post_name;
+        echo 'default';
     }    
 ?>"> 
 <header class="site-header main-header">

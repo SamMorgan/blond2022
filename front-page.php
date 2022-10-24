@@ -7,8 +7,25 @@
             <div class="custom-cursor"></div>
             </div>
         </div>
-        <video class="intro-video" src="<?php the_field('video');?>" playsinline muted loop autoplay></video>
-        <img class="intro-img" data-src="<?php the_field('intro_image');?>">
+        <video class="intro-video" playsinline muted loop autoplay>
+            <?php 
+                $mob_vid = get_field('video_mobile');
+                if($mob_vid){
+                    echo '<source src="'.$mob_vid.'" media="(orientation: portrait)">';
+                }
+            ?>  
+            <source src="<?php the_field('video');?>"> 
+        </video>
+        <picture>
+            <?php 
+                $mob_img = get_field('intro_image_mobile');
+                if($mob_img){
+                    echo '<source media="(orientation: portrait)" srcset="'.$mob_img.'">';
+                }
+            ?>    
+            <img class="intro-img" src="<?php the_field('intro_image');?>">
+        </picture>
+        <!-- <img class="intro-img" data-src="<?php the_field('intro_image');?>"> -->
     </div>
 <?php endwhile; endif;?>
 <?php include('includes/svg-filters.php');?>

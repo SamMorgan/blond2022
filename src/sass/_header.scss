@@ -38,8 +38,7 @@
         }
     }
     &.main-header {
-        h1,
-        ul {
+        h1 {
             opacity: 1;
             visibility: visible;
             transition: opacity $transitionDur $transitionDelay, visibility 0s $transitionDelay;
@@ -51,8 +50,13 @@
         visibility: hidden;
         transition: opacity $transitionDur, visibility 0s $transitionDur;
         pointer-events: none;
+        width: auto;
+        h1 {
+            padding-right: 1em;
+        }
         .show-menu {
             cursor: pointer;
+            display: none;
         }
         ul {
             display: flex;
@@ -78,9 +82,8 @@
 .show-secondary-header {
     .site-header {
         &.main-header {
-            pointer-events: none;
-            h1,
-            ul {
+            h1 {
+                pointer-events: none;
                 opacity: 0;
                 visibility: hidden;
                 transition: opacity $transitionDur, visibility 0s $transitionDur;            
@@ -108,5 +111,32 @@
     .site-header {
         padding: 0.4375rem $mobile-margin;
         min-height: 3rem;
+        &.main-header {
+            h1,
+            ul {
+                opacity: 1;
+                visibility: visible;
+                transition: opacity $transitionDur $transitionDelay, visibility 0s $transitionDelay;
+            }               
+        }
+        &.secondary-header {
+            width: 100%;
+            .show-menu {
+                display: block;
+            }
+        }    
+    }
+    .show-secondary-header {
+        .site-header {
+            &.main-header {
+                pointer-events: none;
+                h1,
+                ul {
+                    opacity: 0;
+                    visibility: hidden;
+                    transition: opacity $transitionDur, visibility 0s $transitionDur;            
+                }
+            }     
+        }    
     }
 }    

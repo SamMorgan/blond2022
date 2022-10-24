@@ -43,8 +43,38 @@
     &:first-child {
         padding-top: 0;
     }
+    .module-text {
+        a {
+            color: $lightgreyonwhite;
+        }
+    }
+    &#press .module-text a {
+        color: $grey;
+    }
 }
+.hide-mobile {
+    display: block;
+}
+.hide-desktop {
+    display: none;
+}
+@media (hover: hover) and (pointer: fine) {
+    .info-section {
+        .module-text,
+        &#press .module-text {
+            a:hover {
+                color: $orange;
+            }
+        }    
+    }
+}    
 @media only screen and (max-width: 750px) {
+    .hide-mobile {
+        display: none;
+    }
+    .hide-desktop {
+        display: block;
+    }
     .info-slider-wrap {
         padding: 3rem $mobile-margin 0;
         margin: 0 0 .5rem;

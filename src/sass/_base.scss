@@ -148,7 +148,13 @@ body {
 .module-two-imgs {
     .imgwrap {
         width: calc(50% - 0.875rem);
-    }    
+    }  
+    .left {
+        margin-right: auto;
+    } 
+    .right {
+        margin-left: auto;
+    }  
 }
 .module-three-imgs .imgwrap {
     width: calc(33.33% - 0.875rem);
@@ -163,11 +169,18 @@ body {
     // p {
     //     margin: 0;
     // }
+    .indented + .indented {
+        text-indent:2em;
+        margin: 0;
+    }
+    .indented p {
+        margin: 0;
+    }
 }
 .module-formatted-text {
     //color:#b7b7b7;
     color: $lightgreyonwhite;
-    strong {
+    strong, b {
         color: $grey;
     }
     ul {
@@ -215,6 +228,29 @@ body {
             opacity: 1;
         }
     }
+    .swiper-pagination {
+        display: none;
+        position: absolute;
+        text-align: center;
+        transition: .3s opacity;
+        transform: translate3d(0,0,0);
+        z-index: 10;
+        bottom: 1.5rem;
+        width: 100%;
+        justify-content: center;
+    }
+    .swiper-pagination-bullet {
+        width: 5px;
+        height: 5px;
+        background-color: $grey;
+        margin: 0 4px;
+        display: block;
+        border-radius: 50%;
+        transition: background-color .2s;
+        &.swiper-pagination-bullet-active {
+            background-color: $orange;
+        }
+    }
 } 
 // .custom-cursor-wrap {
 //     cursor: none;
@@ -232,7 +268,8 @@ body {
 }
 
 img.lazy,
-img.thumbnail {
+img.thumbnail,
+.imgwrap img {
     opacity: 0;
     transition: opacity .4s;
     &.loaded {
@@ -257,7 +294,15 @@ img.thumbnail {
         color: $lightgreyonwhite;
     } 
 }     
-
+.page-wrap,
+.work-wrap {
+    padding-top: 3.875rem;
+}
+.page-wrap {
+    .info-slider-wrap {
+        padding: 0 1.1875rem .875rem;
+    }    
+}
 @media (hover: hover) and (pointer: fine) {
     .custom-cursor {
         display: none;
@@ -344,5 +389,13 @@ img.thumbnail {
             margin:0;
             width: 100%;
         }
-    }   
+    } 
+    .swiper {
+        .swiper-pagination {
+            display: flex;
+        } 
+    }
+    .info-slider-wrap .custom-cursor {
+        display: none !important;
+    }     
 }    

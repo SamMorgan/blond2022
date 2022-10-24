@@ -1,5 +1,5 @@
 .indented + .indented {
-    text-indent:1em;
+    text-indent:2em;
     margin: 0;
 }
 .indented p {

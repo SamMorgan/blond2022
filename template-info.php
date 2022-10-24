@@ -21,7 +21,7 @@ get_header(); ?>
                         $image = get_sub_field('image');
                         if($image) :
                             $ratio = $image['width']/$image['height'];
-                            echo '<div class="module-full-width-img anim-fade-in-up"><img class="lazy" data-src="'.$image['url'].'" style="aspect-ratio:'.$ratio.'"></div>';
+                            echo '<div class="module-full-width-img anim-fade-in-up"><img src="'.$image['url'].'" style="aspect-ratio:'.$ratio.'"></div>';
                         endif;
             
                     elseif( get_row_layout() == 'two_images' ): 
@@ -30,12 +30,12 @@ get_header(); ?>
                         echo '<div class="module-two-imgs"><div class="imgwrap anim-fade-in-up">';
                             if($image_1) :
                                 $ratio_1 = $image_1['width']/$image_1['height'];
-                                echo '<img class="lazy" data-src="'.$image_1['url'].'" style="aspect-ratio:'.$ratio_1.'">';
+                                echo '<img src="'.$image_1['url'].'" style="aspect-ratio:'.$ratio_1.'">';
                             endif;
                         echo '</div><div class="imgwrap anim-fade-in-up">';
                             if($image_2):
                                 $ratio_2 = $image_2['width']/$image_2['height'];
-                                echo '<img class="lazy" data-src="'.$image_2['url'].'" style="aspect-ratio:'.$ratio_2.'">';
+                                echo '<img src="'.$image_2['url'].'" style="aspect-ratio:'.$ratio_2.'">';
                             endif;
                         echo '</div></div>';
                         
@@ -46,29 +46,43 @@ get_header(); ?>
                         echo '<div class="module-three-imgs"><div class="imgwrap anim-fade-in-up">';
                             if($image_1):
                                 $ratio_1 = $image_1['width']/$image_1['height'];
-                                echo '<img class="lazy" data-src="'.$image_1['url'].'" style="aspect-ratio:'.$ratio_1.'">';
+                                echo '<img src="'.$image_1['url'].'" style="aspect-ratio:'.$ratio_1.'">';
                             endif;
                         echo '</div><div class="imgwrap anim-fade-in-up">';
                             if($image_2):
                                 $ratio_2 = $image_2['width']/$image_2['height'];
-                                echo '<img class="lazy" data-src="'.$image_2['url'].'" style="aspect-ratio:'.$ratio_2.'">';
+                                echo '<img src="'.$image_2['url'].'" style="aspect-ratio:'.$ratio_2.'">';
                             endif; 
                         echo '</div><div class="imgwrap anim-fade-in-up">';
                             if($image_3):
                                 $ratio_3 = $image_3['width']/$image_3['height'];
-                                echo '<img class="lazy" data-src="'.$image_3['url'].'" style="aspect-ratio:'.$ratio_3.'">';
+                                echo '<img src="'.$image_3['url'].'" style="aspect-ratio:'.$ratio_3.'">';
                             endif; 
                         echo '</div></div>';    
                         
                     elseif( get_row_layout() == 'text' ): 
-                        echo '<div class="module-text anim-fade-in-up">';
-                        the_sub_field('text');
-                        echo '</div>';                    
+                        $mob_text = get_sub_field('text_mobile');
+                        $desktop_text = get_sub_field('text');
+                        if($mob_text){
+                            echo '<div class="module-text anim-fade-in-up">
+                                  <div class="hide-mobile">'.$desktop_text.'</div>
+                                  <div class="hide-desktop">'.$mob_text.'</div>
+                                  </div>'; 
+                        }else{
+                            echo '<div class="module-text anim-fade-in-up">'.$desktop_text.'</div>';  
+                        }                      
                         
                     elseif( get_row_layout() == 'formatted_text' ): 
-                        echo '<div class="module-formatted-text anim-fade-in-up">';
-                        the_sub_field('text');
-                        echo '</div>'; 
+                        $mob_text = get_sub_field('text_mobile');
+                        $desktop_text = get_sub_field('text');
+                        if($mob_text){
+                            echo '<div class="module-formatted-text anim-fade-in-up">
+                                  <div class="hide-mobile">'.$desktop_text.'</div>
+                                  <div class="hide-desktop">'.$mob_text.'</div>
+                                  </div>';   
+                        }else{
+                            echo '<div class="module-formatted-text anim-fade-in-up">'.$desktop_text.'</div>';  
+                        } 
 
                     elseif( get_row_layout() == 'text_3_cols' ): 
                         echo '<div class="module-text-3cols anim-fade-in-up">';
@@ -77,23 +91,50 @@ get_header(); ?>
 
                     elseif( get_row_layout() == 'gallery' ):
 
-                        $images = get_sub_field('gallery');
-                        if( $images ): ?>
+                        if( have_rows('gallery_with_mobile') ): ?>
                             <div class="info-slider-wrap custom-cursor-wrap">
                                 <div class="swiper info-slider">
                                     <div class="swiper-wrapper">
-                                        <?php foreach( $images as $image ): ?>
+                                        <?php while( have_rows('gallery_with_mobile') ) : the_row();
+                                            $img = get_sub_field('image');
+                                            $img_mob = get_sub_field('image_mobile');?>
                                             <div class="swiper-slide">
-                                                <img class="swiper-lazy" data-src="<?php echo $image['url'];?>">
+                                                <picture>
+                                                    <source media="(orientation: landscape)" srcset="<?php echo $img['url'];?>">
+                                                    <?php if($img_mob){
+                                                        echo '<source media="(orientation: portrait)" srcset="'.$img_mob['url'].'">';
+                                                    } ?>
+                                                    <img src="<?php echo $img['url'];?>">
+                                                </picture>
                                             </div>
-                                        <?php endforeach; ?>
+                                        <?php endwhile;?>
                                     </div>
                                     <div class="swiper-button-prev"></div>
                                     <div class="swiper-button-next"></div>
+                                    <div class="swiper-pagination"></div>
                                 </div>
                                 <div class="custom-cursor">click</div>
                             </div>
                         <?php endif;
+                            // else :
+                            // $images = get_sub_field('gallery');
+                            // if( $images ): ?>
+                                <!-- <div class="info-slider-wrap custom-cursor-wrap">
+                                    <div class="swiper info-slider">
+                                        <div class="swiper-wrapper">
+                                            <?php //foreach( $images as $image ): ?>
+                                                <div class="swiper-slide">
+                                                    <img class="swiper-lazy" data-src="<?php //echo $image['url'];?>">
+                                                </div>
+                                            <?php //endforeach; ?>
+                                        </div>
+                                        <div class="swiper-button-prev"></div>
+                                        <div class="swiper-button-next"></div>
+                                    </div>
+                                    <div class="custom-cursor">click</div>
+                                </div> -->
+                            <?php //endif;
+                        //endif;
                     
                     endif;
                 
