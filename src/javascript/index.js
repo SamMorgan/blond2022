@@ -285,6 +285,19 @@ function defaultPageFunctions(data){
 }
 
 function backToIndex(data){
+    let workIndex = data.next.container.querySelector('.work-index')
+    let workWrap = data.next.container.querySelector('.work-wrap')
+    let mainHeader = data.next.container.querySelector('.main-header')
+    let secondaryHeader = data.next.container.querySelector('.secondary-header')
+    let btn = data.next.container.querySelector('.main-header ul li:first-child')
+    //let labsMenuBtn = data.next.container.querySelector('.main-header ul li:nth-child(2n)')
+
+    if(data.next.container.dataset.barbaNamespace === 'single-labs'){
+        btn = data.next.container.querySelector('.main-header ul li:nth-child(2n)')
+    }
+    btn.classList.add('current-menu-item')
+
+
     gsap.to([document.body, secondaryHeader, mainHeader],{
         scrollTrigger: {
             id: "changeColor",
@@ -306,7 +319,7 @@ function backToIndex(data){
             window.removeEventListener('scroll',secondaryNavScroll)
             document.body.classList.remove('show-secondary-header')
             scrollStop(function () {
-                if(data.next.container.dataset.barbaNamespace === 'single-work' && workIndex.getBoundingClientRect().top <= 0){
+                if(data.next.container.dataset.barbaNamespace === 'single-work' || data.next.container.dataset.barbaNamespace === 'single-labs' && workIndex.getBoundingClientRect().top <= 0){
                     let sPos = window.scrollY - workWrap.clientHeight
                     data.next.container.setAttribute('data-barba-namespace','work')
                     workWrap.remove()
@@ -315,16 +328,18 @@ function backToIndex(data){
 
                     gsap.to(h1,{opacity:0,duration:.4,onComplete:()=>{
                         h1.remove()
-                        filters.style.display = "flex"
-                        gsap.to(filters,{opacity:1,duration:.4,onComplete:()=>{
-                            secondaryHeader.classList.remove('single-work-header')
-                        }})
+                        if(filters){
+                            filters.style.display = "flex"
+                            gsap.to(filters,{opacity:1,duration:.4,onComplete:()=>{
+                                secondaryHeader.classList.remove('single-work-header')
+                            }})
+                        }    
                     }})
                     //setTimeout(()=>{
                     window.scrollTo(0,sPos) 
-                    workMenuBtn.classList.add('current-menu-item')
+                    btn.classList.add('current-menu-item')
                     document.title = workTitle
-                    window.history.pushState({}, 'work', workMenuBtn.querySelector('a').href);
+                    window.history.pushState({}, 'work', btn.querySelector('a').href);
                     //},0)
                     workCardsFunc(data) 
                     ScrollTrigger.getById("changeColor").kill()
@@ -335,33 +350,7 @@ function backToIndex(data){
                         el.removeAttribute('style')
                     })
                     fadeInUp(data.next.container.querySelectorAll(".anim-fade-in-up"))
-                }
-                if(data.next.container.dataset.barbaNamespace === 'single-labs' && workIndex.getBoundingClientRect().top <= 0){
-                    let sPos = window.scrollY - workWrap.clientHeight
-                    data.next.container.setAttribute('data-barba-namespace','work')
-                    workWrap.remove()
-                    
-                    
-                    gsap.to(secondaryHeader,{opacity:0,duration:.4,onComplete:()=>{
-                        secondaryHeader.remove()
-                        // data.next.container.querySelector('.site-header.secondary-header .filters').style.display = "flex"
-                        // gsap.to(data.next.container.querySelector('.site-header.secondary-header .filters'),{opacity:1,duration:.4,onComplete:()=>{
-                        //     data.next.container.querySelector('.site-header.secondary-header').classList.remove('single-work-header')
-                        // }})
-                    }})
-
-                    window.scrollTo(0,sPos) 
-                    labsMenuBtn.classList.add('current-menu-item')
-                    document.title = labsTitle
-                    window.history.pushState({}, 'labs', labsMenuBtn.querySelector('a').href);
-                    workCardsFunc(data) 
-                    ScrollTrigger.getById("changeColor").kill()
-                    document.body.classList.add('dark-bg')
-                    let els = [document.body, secondaryHeader, mainHeader]
-                    els.forEach(el => {
-                        el.removeAttribute('style')
-                    })
-                }       
+                }      
             },200)    
         }
     })
@@ -522,73 +511,20 @@ barba.init({
                 window.addEventListener('scroll',secondaryNavScroll)
                 secondaryNavClick(data.next.container.querySelector('.show-menu'))
 
-                let workIndex = data.next.container.querySelector('.work-index')
-                let workWrap = data.next.container.querySelector('.work-wrap')
-                let workMenuBtn = data.next.container.querySelector('.main-header ul li:first-child')
-                let mainHeader = data.next.container.querySelector('.main-header')
-                let secondaryHeader = data.next.container.querySelector('.secondary-header')
+                // let workIndex = data.next.container.querySelector('.work-index')
+                // let workWrap = data.next.container.querySelector('.work-wrap')
+                // let mainHeader = data.next.container.querySelector('.main-header')
+                // let secondaryHeader = data.next.container.querySelector('.secondary-header')
 
-                workMenuBtn.classList.add('current-menu-item')
+                // let workMenuBtn = data.next.container.querySelector('.main-header ul li:first-child')
+
+                // workMenuBtn.classList.add('current-menu-item')
 
                 workCardsFunc(data) 
                 filterWork(data) 
                 indexMinHeight(data.next.container)
                 window.addEventListener('resize',indexMinHeight)
                 playVideos(data)
-                
-
-                // gsap.to([document.body, secondaryHeader, mainHeader],{
-                //     scrollTrigger: {
-                //         id: "changeColor",
-                //         trigger: workIndex,
-                //         start: "top bottom",
-                //         end: "top top",
-                //         scrub: true
-                //     },
-                //     backgroundColor: "#000",
-                //     color: "#DEDEDE"
-                // })
-
-                // ScrollTrigger.create({
-                //     id: "backtowork",
-                //     trigger: workIndex,
-                //     start: "top top",
-                //     // end: "bottom bottom",
-                //     onEnter: () => {
-                //         scrollStop(function () {
-                //             if(data.next.container.dataset.barbaNamespace === 'single-work' && workIndex.getBoundingClientRect().top <= 0){
-                //                 let sPos = window.scrollY - workWrap.clientHeight
-                //                 data.next.container.setAttribute('data-barba-namespace','work')
-                //                 workWrap.remove()
-                //                 let h1 = secondaryHeader.querySelector('h1')
-                //                 let filters = secondaryHeader.querySelector('.filters')
-
-                //                 gsap.to(h1,{opacity:0,duration:.4,onComplete:()=>{
-                //                     h1.remove()
-                //                     filters.style.display = "flex"
-                //                     gsap.to(filters,{opacity:1,duration:.4,onComplete:()=>{
-                //                         secondaryHeader.classList.remove('single-work-header')
-                //                     }})
-                //                 }})
-                //                 //setTimeout(()=>{
-                //                 window.scrollTo(0,sPos) 
-                //                 workMenuBtn.classList.add('current-menu-item')
-                //                 document.title = workTitle
-                //                 window.history.pushState({}, 'work', workMenuBtn.querySelector('a').href);
-                //                 //},0)
-                //                 workCardsFunc(data) 
-                //                 ScrollTrigger.getById("changeColor").kill()
-                //                 document.body.classList.add('dark-bg')
-                //                 //document.body.removeAttribute('style')
-                //                 let els = [document.body, secondaryHeader, mainHeader]
-                //                 els.forEach(el => {
-                //                     el.removeAttribute('style')
-                //                 })
-                //                 fadeInUp(data.next.container.querySelectorAll(".anim-fade-in-up"))
-                //             }    
-                //         },200)    
-                //     }
-                // })
                 backToIndex(data)
             },
             afterLeave() {    
@@ -628,11 +564,12 @@ barba.init({
                 window.addEventListener('scroll',secondaryNavScroll)
                 secondaryNavClick(data.next.container.querySelector('.show-menu'))
                 
-                let workIndex = data.next.container.querySelector('.work-index')
-                let workWrap = data.next.container.querySelector('.work-wrap')
+                // let workIndex = data.next.container.querySelector('.work-index')
+                // let workWrap = data.next.container.querySelector('.work-wrap')
+                // let mainHeader = data.next.container.querySelector('.main-header')
+                // let secondaryHeader = data.next.container.querySelector('.secondary-header')
+
                 let labsMenuBtn = data.next.container.querySelector('.main-header ul li:nth-child(2n)')
-                let mainHeader = data.next.container.querySelector('.main-header')
-                let secondaryHeader = data.next.container.querySelector('.secondary-header')
 
                 labsMenuBtn.classList.add('current-menu-item')
 
@@ -640,59 +577,6 @@ barba.init({
                 indexMinHeight(data.next.container)
                 window.addEventListener('resize',indexMinHeight)
                 playVideos(data)
-                
-
-
-                // gsap.to([document.body, secondaryHeader, mainHeader],{
-                //     scrollTrigger: {
-                //         id: "changeColor",
-                //         trigger: workIndex,
-                //         start: "top bottom",
-                //         end: "top top",
-                //         scrub: true
-                //     },
-                //     backgroundColor: "#000000",
-                //     color: "#DEDEDE"
-                // })
-
-                // ScrollTrigger.create({
-                //     id: "backtowork",
-                //     trigger: workIndex,
-                //     start: "top top",
-                //     // end: "bottom bottom",
-                //     onEnter: () => {
-                //         window.removeEventListener('scroll',secondaryNavScroll)
-                //         document.body.classList.remove('show-secondary-header')
-                //         scrollStop(function () {
-                //             if(data.next.container.dataset.barbaNamespace === 'single-labs' && workIndex.getBoundingClientRect().top <= 0){
-                //                 let sPos = window.scrollY - workWrap.clientHeight
-                //                 data.next.container.setAttribute('data-barba-namespace','work')
-                //                 workWrap.remove()
-                                
-                                
-                //                 gsap.to(secondaryHeader,{opacity:0,duration:.4,onComplete:()=>{
-                //                     secondaryHeader.remove()
-                //                     // data.next.container.querySelector('.site-header.secondary-header .filters').style.display = "flex"
-                //                     // gsap.to(data.next.container.querySelector('.site-header.secondary-header .filters'),{opacity:1,duration:.4,onComplete:()=>{
-                //                     //     data.next.container.querySelector('.site-header.secondary-header').classList.remove('single-work-header')
-                //                     // }})
-                //                 }})
-
-                //                 window.scrollTo(0,sPos) 
-                //                 labsMenuBtn.classList.add('current-menu-item')
-                //                 document.title = labsTitle
-                //                 window.history.pushState({}, 'labs', labsMenuBtn.querySelector('a').href);
-                //                 workCardsFunc(data) 
-                //                 ScrollTrigger.getById("changeColor").kill()
-                //                 document.body.classList.add('dark-bg')
-                //                 let els = [document.body, secondaryHeader, mainHeader]
-                //                 els.forEach(el => {
-                //                     el.removeAttribute('style')
-                //                 })
-                //             }       
-                //         },200)    
-                //     }
-                // })
                 backToIndex(data)
             },
             beforeLeave(){
