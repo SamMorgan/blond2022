@@ -7,14 +7,16 @@
             <div class="custom-cursor"></div>
             </div>
         </div>
-        <video class="intro-video" playsinline muted loop autoplay>
+        <video class="intro-video" playsinline muted loop autoplay
             <?php 
+                $desktop_vid = get_field('video');
                 $mob_vid = get_field('video_mobile');
                 if($mob_vid){
-                    echo '<source src="'.$mob_vid.'" media="(orientation: portrait)">';
+                    //echo '<source src="'.$mob_vid.'" media="(orientation: portrait)">';
+                    echo ' data-vmobile="'.$mob_vid.'"';
                 }
-            ?>  
-            <source src="<?php the_field('video');?>"> 
+                echo ' data-vdesktop="'.$desktop_vid.'"'; 
+            ?> src="<?php echo $desktop_vid;?>"> 
         </video>
         <picture>
             <?php 

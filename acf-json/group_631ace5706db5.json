@@ -17,6 +17,25 @@
             },
             "default_value": "",
             "placeholder": ""
+        },
+        {
+            "key": "field_63593d7584439",
+            "label": "video_mobile",
+            "name": "video_mobile",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": "",
+            "maxlength": ""
         }
     ],
     "location": [
@@ -37,5 +56,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1662701174
+    "modified": 1666792830
 }
